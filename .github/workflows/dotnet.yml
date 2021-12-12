@@ -17,6 +17,10 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.x
+    - name: Npm install DexieWrapper
+      run: npm install DexieWrapper
+    - name: Npm install DexieWrapper.Test
+      run: npm install DexieWrapperr.Test
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
