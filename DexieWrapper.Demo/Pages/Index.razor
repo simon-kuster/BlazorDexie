@@ -1,0 +1,36 @@
+﻿@page "/"
+
+<PageTitle>Nothies.Blazor.DexieWrapper Demo</PageTitle>
+<h1>Nothies.Blazor.DexieWrapper Demo</h1>
+
+<button @onclick="CreatePersonClicked">Create Person</button>
+
+<button @onclick="ReadPersonClicked">Read Person</button>
+
+<button @onclick="UpdatePersonClicked">Update Person</button>
+
+<button @onclick="DeletePersonClicked">Delete Person</button>
+
+<br /><br /><br />
+
+@if(_person != null) {
+    <table>
+        <tbody>
+            <tr>
+                <td>First Name:</td>
+                <td>@_person.FirstName</td>
+             </tr>
+            <tr>
+                <td>Second Name:</td>
+                <td>@_person.SecondName</td>
+            </tr>
+            <tr>
+                <td>Birthday:</td>
+                @if (_person.Birthday > DateTime.MinValue)
+                {
+                    <td>@_person.Birthday.ToString("d")</td>
+                }
+            </tr>
+        </tbody>
+    </table>
+}

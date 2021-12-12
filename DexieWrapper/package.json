@@ -1,0 +1,13 @@
+{
+  "type": "module",
+  "name": "dexiewrapper",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "dexie": "^3.2.0"
+  },
+  "devDependencies": {}
+}
