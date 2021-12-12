@@ -6,8 +6,19 @@
   "author": "",
   "license": "ISC",
   "description": "",
+  "scripts": {
+    "postinstall": "copy-files-from-to"
+  },
+  "copyFiles": [
+    {
+      "from": "node_modules/dexie/dist/modern/dexie.mjs",
+      "to": "wwwroot/lib/dexie.mjs"
+    }
+  ],
   "dependencies": {
     "dexie": "^3.2.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "copy-files-from-to": "3.2.2"
+  }
 }

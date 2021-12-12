@@ -1,4 +1,4 @@
-import Dexie from './dexie.mjs';
+import Dexie from './lib/dexie.mjs';
 
 export const db = new Dexie('MyDatabase');
 
