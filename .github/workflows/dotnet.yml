@@ -18,9 +18,11 @@ jobs:
       with:
         dotnet-version: 6.0.x
     - name: Npm install DexieWrapper
-      run: npm install DexieWrapper
+      run: npm install 
+      working-directory: DexieWrapper
     - name: Npm install DexieWrapper.Test
-      run: npm install DexieWrapperr.Test
+      run: npm install 
+      working-directory: DexieWrapper.Test
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
