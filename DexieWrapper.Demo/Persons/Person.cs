@@ -1,4 +1,4 @@
-﻿namespace DexieWrapper.Persons
+﻿namespace DexieWrapper.Demo.Persons
 {
     public class Person
     {

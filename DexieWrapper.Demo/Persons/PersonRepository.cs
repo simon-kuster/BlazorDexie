@@ -1,6 +1,6 @@
 ﻿using DexieWrapper.JsModule;
 
-namespace DexieWrapper.Persons
+namespace DexieWrapper.Demo.Persons
 {
     public class PersonRepository
     {

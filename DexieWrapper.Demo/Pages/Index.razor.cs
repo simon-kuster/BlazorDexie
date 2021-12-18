@@ -1,4 +1,4 @@
-﻿using DexieWrapper.Persons;
+﻿using DexieWrapper.Demo.Persons;
 using Microsoft.AspNetCore.Components;
 
 namespace DexieWrapper.Demo.Pages
