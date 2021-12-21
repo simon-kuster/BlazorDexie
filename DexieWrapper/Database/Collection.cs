@@ -31,9 +31,14 @@ namespace DexieWrapper.Database
             CurrentCommands.Add(new Command(command, parameters));
         }
 
-        public async Task<T[]?> ToArray()
+        public async Task<T[]> ToArray()
         {
-            return await Execute<T[]?>("toArray");
+            return await Execute<T[]>("toArray");
+        }
+
+        public async Task<List<T>> ToList()
+        {
+            return await Execute<List<T>>("toArray");
         }
 
         protected async Task<TRet> Execute<TRet>(string command, params object?[] parameters)

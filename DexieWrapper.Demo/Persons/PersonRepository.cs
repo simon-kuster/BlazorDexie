@@ -1,35 +1,36 @@
-﻿using DexieWrapper.JsModule;
+﻿using DexieWrapper.Demo.Database;
+using DexieWrapper.JsModule;
 
 namespace DexieWrapper.Demo.Persons
 {
     public class PersonRepository
     {
-        private readonly IJsModule _jsModule;
+        private readonly MyDb _db;
 
         public PersonRepository(IJsModuleFactory jsModuleFactory)
         {
-            _jsModule = jsModuleFactory.CreateModule("personRepository.js"); 
+            _db = new MyDb(jsModuleFactory);
         }
 
         public async Task<List<Person>> GetAll()
         {
-            return await _jsModule.InvokeAsync<List<Person>>("getAll");
+            return await _db.Persons.ToList();
         }
 
         public async Task<Person?> GetById(Guid id)
         {
-            return await _jsModule.InvokeAsync<Person?>("getById", id);
+            return await _db.Persons.Get(id);
         }
 
         public async Task<Person> CreateOrUpdate(Person person)
         {
-            await _jsModule.InvokeVoidAsync("createOrUpdate", person);
+            await _db.Persons.Put(person);
             return await Task.FromResult(person);
         }
 
         public async Task Delete(Person person)
         {
-            await _jsModule.InvokeVoidAsync("remove", person);
+            await _db.Persons.Delete(person.Id);
         }
     }
 }

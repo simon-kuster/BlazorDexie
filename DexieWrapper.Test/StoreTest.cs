@@ -24,8 +24,7 @@ namespace DexieWrapper.Test
         public async Task Get()
         {
             // arrange
-            var moduleFactory = new ModuleWrapperFactory(_nodeJSService, "../../DexieWrapper/wwwroot");
-            var db = new MyDb(moduleFactory);
+            var db = CreateDb();
 
             TestItem initialItem = new TestItem() { Id = Guid.NewGuid(), Name = "AA" };
             await db.TestItems.Put(initialItem);
@@ -42,8 +41,7 @@ namespace DexieWrapper.Test
         public async Task BulkGet()
         {
             // arrange
-            var moduleFactory = new ModuleWrapperFactory(_nodeJSService, "../../DexieWrapper/wwwroot");
-            var db = new MyDb(moduleFactory);
+            var db = CreateDb();
 
             TestItem[] initialItems = new TestItem[4] 
             {
@@ -72,8 +70,7 @@ namespace DexieWrapper.Test
         public async Task Put()
         {
             // arrange
-            var moduleFactory = new ModuleWrapperFactory(_nodeJSService, "../../DexieWrapper/wwwroot");
-            var db = new MyDb(moduleFactory);
+            var db = CreateDb();
 
             // act
             var testItem = new TestItem() { Id = Guid.NewGuid(), Name = "BB" };
@@ -90,8 +87,7 @@ namespace DexieWrapper.Test
         public async Task BulkPut()
         {
             // arrange
-            var moduleFactory = new ModuleWrapperFactory(_nodeJSService, "../../DexieWrapper/wwwroot");
-            var db = new MyDb(moduleFactory);
+            var db = CreateDb();
 
             TestItem[] initialItems = new TestItem[4]
             {
@@ -120,8 +116,7 @@ namespace DexieWrapper.Test
         public async Task Delete()
         {
             // arrange
-            var moduleFactory = new ModuleWrapperFactory(_nodeJSService, "../../DexieWrapper/wwwroot");
-            var db = new MyDb(moduleFactory);
+            var db = CreateDb();
 
             TestItem initialItem = new TestItem() { Id = Guid.NewGuid(), Name = "AA" };
             await db.TestItems.Put(initialItem);
@@ -137,8 +132,7 @@ namespace DexieWrapper.Test
         public async Task BulkDelete()
         {
             // arrange
-            var moduleFactory = new ModuleWrapperFactory(_nodeJSService, "../../DexieWrapper/wwwroot");
-            var db = new MyDb(moduleFactory);
+            var db = CreateDb();
 
             TestItem[] initialItems = new TestItem[4]
             {
@@ -163,51 +157,10 @@ namespace DexieWrapper.Test
         }
 
         [Fact]
-        public async Task ToArray()
-        {
-            // arrange
-            var moduleFactory = new ModuleWrapperFactory(_nodeJSService, "../../DexieWrapper/wwwroot");
-            var db = new MyDb(moduleFactory);
-
-            TestItem[] initialItems = new TestItem[4]
-            {
-                new TestItem() { Id = Guid.NewGuid(), Name = "AA" },
-                new TestItem() { Id = Guid.NewGuid(), Name = "BB" },
-                new TestItem() { Id = Guid.NewGuid(), Name = "CC" },
-                new TestItem() { Id = Guid.NewGuid(), Name = "DD" }
-            };
-
-            await db.TestItems.BulkPut(initialItems);
-
-            // act
-            var testItems = await db.TestItems.ToArray();
-
-            // assert
-            Assert.NotNull(testItems);
-
-            int matches = 0;
-            for (int i = 0; i < testItems!.Length; i++)
-            {
-                Assert.NotNull(testItems[i]);
-
-                for (int j = 0; j < testItems!.Length; j++)
-                {
-                    if (testItems![i]!.Name == initialItems[j].Name)
-                    {
-                        matches += 1;
-                    }
-                }
-            }
-
-            Assert.True(matches == testItems.Length);
-        }
-
-        [Fact]
         public async Task Where()
         {
             // arrange
-            var moduleFactory = new ModuleWrapperFactory(_nodeJSService, "../../DexieWrapper/wwwroot");
-            var db = new MyDb(moduleFactory);
+            var db = CreateDb();
 
             TestItem[] initialItems = new TestItem[4]
             {
@@ -224,6 +177,12 @@ namespace DexieWrapper.Test
 
             // assert
             Assert.Equal(2, testItems?.Length);
+        }
+
+        private MyDb CreateDb()
+        {
+            var moduleFactory = new ModuleWrapperFactory(_nodeJSService, "../../DexieWrapper/wwwroot");
+            return new MyDb(moduleFactory);
         }
     }
 }
