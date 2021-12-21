@@ -71,5 +71,11 @@ namespace DexieWrapper.Database
                 await Delete(key);
             }
         }
+
+        public async Task<T?[]?> ToArray()
+        {
+            Command command = new Command(_storeName, "toArray", new List<object?>());
+            return await _commandExecuterJsInterop.Execute<T?[]?>(_dbDefinition, command);
+        }
     }
 }
