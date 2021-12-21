@@ -55,5 +55,22 @@ namespace DexieWrapper.Test
             Assert.NotNull(checkItem);
             Assert.Equal("BB", checkItem!.Name);
         }
+
+        [Fact]
+        public async Task Delete()
+        {
+            // arrange
+            var moduleFactory = new ModuleWrapperFactory(_nodeJSService, "../../DexieWrapper/wwwroot");
+            var db = new MyDb(moduleFactory);
+
+            TestItem initialItem = new TestItem() { Id = Guid.NewGuid(), Name = "AA" };
+            await db.TestItems.Put(initialItem);
+
+            // act
+            await db.TestItems.Delete(initialItem.Id);
+
+            // assert
+            Assert.True(await db.TestItems.Get(initialItem.Id) == null);
+        }
     }
 }

@@ -34,5 +34,11 @@ namespace DexieWrapper.Database
             Command command = new Command(_storeName, "put", new List<object?> { item, key });
             await _commandExecuterJsInterop.ExecuteNonQuery(_dbDefinition, command);
         }
+
+        public async Task Delete(object primaryKey)
+        {
+            Command command = new Command(_storeName, "delete", new List<object?> { primaryKey });
+            await _commandExecuterJsInterop.ExecuteNonQuery(_dbDefinition, command);
+        }
     }
 }
