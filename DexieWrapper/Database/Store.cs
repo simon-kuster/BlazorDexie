@@ -29,16 +29,47 @@ namespace DexieWrapper.Database
             return await _commandExecuterJsInterop.Execute<T?>(_dbDefinition, command);
         }
 
+        public async Task<T?[]?> BulkGet(object[] primaryKeys)
+        {
+            List<T?> result = new List<T?>();
+
+            foreach (var key in primaryKeys)
+            {
+                result.Add(await Get(key));
+            }
+
+            return result.ToArray();
+        }
+
         public async Task Put(T item, object? key = null)
         {
             Command command = new Command(_storeName, "put", new List<object?> { item, key });
             await _commandExecuterJsInterop.ExecuteNonQuery(_dbDefinition, command);
         }
 
+        public async Task BulkPut(T[] items, object?[]? keys = null)
+        {
+            if (keys == null)
+                keys = new object?[items.Length];
+
+            for (int i = 0; i < items.Length; i++)
+            {
+                await Put(items[i], keys[i]);
+            }
+        }
+
         public async Task Delete(object primaryKey)
         {
             Command command = new Command(_storeName, "delete", new List<object?> { primaryKey });
             await _commandExecuterJsInterop.ExecuteNonQuery(_dbDefinition, command);
+        }
+
+        public async Task BulkDelete(object[] primaryKeys)
+        {
+            foreach (var key in primaryKeys)
+            {
+                await Delete(key);
+            }
         }
     }
 }

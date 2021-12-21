@@ -39,6 +39,36 @@ namespace DexieWrapper.Test
         }
 
         [Fact]
+        public async Task BulkGet()
+        {
+            // arrange
+            var moduleFactory = new ModuleWrapperFactory(_nodeJSService, "../../DexieWrapper/wwwroot");
+            var db = new MyDb(moduleFactory);
+
+            TestItem[] initialItem = new TestItem[4] 
+            {
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA" }, 
+                new TestItem() { Id = Guid.NewGuid(), Name = "BB" }, 
+                new TestItem() { Id = Guid.NewGuid(), Name = "CC" }, 
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD" } 
+            };
+
+            await db.TestItems.BulkPut(initialItem);
+
+            // act
+            var testItems = await db.TestItems.BulkGet(new object[4] { initialItem[0].Id, initialItem[1].Id, initialItem[2].Id, initialItem[3].Id });
+
+            // assert
+            Assert.NotNull(testItems);
+
+            for (int i = 0; i < testItems!.Length; i++)
+            {
+                Assert.NotNull(testItems[i]);
+                Assert.Equal(initialItem[i].Name, testItems![i]!.Name);
+            }
+        }
+
+        [Fact]
         public async Task Put()
         {
             // arrange
@@ -57,6 +87,36 @@ namespace DexieWrapper.Test
         }
 
         [Fact]
+        public async Task BulkPut()
+        {
+            // arrange
+            var moduleFactory = new ModuleWrapperFactory(_nodeJSService, "../../DexieWrapper/wwwroot");
+            var db = new MyDb(moduleFactory);
+
+            TestItem[] initialItem = new TestItem[4]
+            {
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "BB" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "CC" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD" }
+            };
+
+            await db.TestItems.BulkPut(initialItem);
+
+            // act
+            var testItems = await db.TestItems.BulkGet(new object[4] { initialItem[0].Id, initialItem[1].Id, initialItem[2].Id, initialItem[3].Id });
+
+            // assert
+            Assert.NotNull(testItems);
+
+            for (int i = 0; i < testItems!.Length; i++)
+            {
+                Assert.NotNull(testItems[i]);
+                Assert.Equal(initialItem[i].Name, testItems![i]!.Name);
+            }
+        }
+
+        [Fact]
         public async Task Delete()
         {
             // arrange
@@ -71,6 +131,35 @@ namespace DexieWrapper.Test
 
             // assert
             Assert.True(await db.TestItems.Get(initialItem.Id) == null);
+        }
+
+        [Fact]
+        public async Task BulkDelete()
+        {
+            // arrange
+            var moduleFactory = new ModuleWrapperFactory(_nodeJSService, "../../DexieWrapper/wwwroot");
+            var db = new MyDb(moduleFactory);
+
+            TestItem[] initialItems = new TestItem[4]
+            {
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "BB" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "CC" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD" }
+            };
+
+            await db.TestItems.BulkPut(initialItems);
+
+            // act
+            await db.TestItems.BulkDelete(new object[4] { initialItems[0].Id, initialItems[1].Id, initialItems[2].Id, initialItems[3].Id });
+
+            // assert
+            var testItems = await db.TestItems.BulkGet(new object[4] { initialItems[0].Id, initialItems[1].Id, initialItems[2].Id, initialItems[3].Id });
+
+            for (int i = 0; i < testItems!.Length; i++)
+            {
+                Assert.True(testItems[i] == null);
+            }
         }
     }
 }
