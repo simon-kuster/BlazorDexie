@@ -9,7 +9,7 @@ namespace DexieWrapper.Database
         protected CommandExecuterJsInterop _commandExecuterJsInterop = null!;
         protected string _storeName = null!;
 
-        public MainCommand? CurrentCommand { get; set; }
+        public virtual List<Command> CurrentCommands { get; } = new List<Command>();
 
         public Collection()
         {
@@ -29,16 +29,28 @@ namespace DexieWrapper.Database
 
         public async Task<T[]?> ToArray()
         {
-            if (CurrentCommand == null)
-            {
-                CurrentCommand = new MainCommand(_storeName, "toArray", new List<object?>());
-            }
-            else
-            {
-                CurrentCommand.SubCommands.Add(new Command("toArray", new List<object?> { }));
-            }
+            return await Execute<T[]?>(new Command("toArray", new List<object?> { }));
+        }
 
-            return await _commandExecuterJsInterop.Execute<T[]?>(_dbDefinition, CurrentCommand);
+        public void AddCommand(Command command)
+        {
+            CurrentCommands.Add(command);
+        }
+
+        protected async Task<TRet> Execute<TRet>(Command command)
+        {
+            var commands = CurrentCommands.ToList();
+            commands.Add(command);
+
+            return await _commandExecuterJsInterop.Execute<TRet>(_dbDefinition, _storeName, commands);
+        }
+
+        protected async Task ExecuteNonQuery(Command command)
+        {
+            var commands = CurrentCommands.ToList();
+            commands.Add(command);
+
+            await _commandExecuterJsInterop.ExecuteNonQuery(_dbDefinition, _storeName, commands);
         }
     }
 }

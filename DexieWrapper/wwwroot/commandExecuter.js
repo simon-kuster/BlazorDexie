@@ -1,7 +1,7 @@
 import Dexie from './lib/dexie.mjs';
 
-export function execute(dbDefinition, command) {
-    return executeNonQuery(dbDefinition, command).then(result => {
+export function execute(dbDefinition, storeName, commands) {
+    return executeNonQuery(dbDefinition, storeName, commands).then(result => {
         if (!result) {
             return null;
         }
@@ -10,12 +10,12 @@ export function execute(dbDefinition, command) {
     });
 }
 
-export function executeNonQuery(dbDefinition, command) {
+export function executeNonQuery(dbDefinition, storeName, commands) {
     var db = initDb(dbDefinition);
-    var query = db[command.storeName][command.cmd](...command.parameters);
+    var query = db[storeName];
 
-    command.subCommands.forEach(subCommand => {
-        query = query[subCommand.cmd](...subCommand.parameters);
+    commands.forEach(c => {
+        query = query[c.cmd](...c.parameters);
     });
 
     return query;

@@ -13,7 +13,7 @@ namespace DexieWrapper.Database
 
         public Collection<T> IsEqual(object key)
         {
-            _collection.CurrentCommand?.SubCommands.Add(new Command("equals", new List<object?> { key }));
+            _collection.CurrentCommands.Add(new Command("equals", new List<object?> { key }));
             return _collection;
         }
     }
