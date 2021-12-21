@@ -5,13 +5,12 @@ namespace DexieWrapper.Database
 {
     public class Collection<T>
     {
-        protected DbDefinition _dbDefinition = null!;
-        protected CommandExecuterJsInterop _commandExecuterJsInterop = null!;
-        protected string _storeName = null!;
+        protected DbDefinition DbDefinition = null!;
+        protected CommandExecuterJsInterop CommandExecuterJsInterop = null!;
+        protected string StoreName = null!;
+        protected virtual List<Command> CurrentCommands { get; } = new List<Command>();
 
-        public virtual List<Command> CurrentCommands { get; } = new List<Command>();
-
-        public Collection()
+        protected Collection()
         {
         }
 
@@ -22,35 +21,35 @@ namespace DexieWrapper.Database
 
         public void Init(DbDefinition dbDefinition, string storeName, CommandExecuterJsInterop commandExecuterJsInterop)
         {
-            _dbDefinition = dbDefinition;
-            _storeName = storeName;
-            _commandExecuterJsInterop = commandExecuterJsInterop;
+            DbDefinition = dbDefinition;
+            StoreName = storeName;
+            CommandExecuterJsInterop = commandExecuterJsInterop;
+        }
+
+        public void AddCommand(string command, params object?[] parameters)
+        {
+            CurrentCommands.Add(new Command(command, parameters));
         }
 
         public async Task<T[]?> ToArray()
         {
-            return await Execute<T[]?>(new Command("toArray", new List<object?> { }));
+            return await Execute<T[]?>("toArray");
         }
 
-        public void AddCommand(Command command)
-        {
-            CurrentCommands.Add(command);
-        }
-
-        protected async Task<TRet> Execute<TRet>(Command command)
+        protected async Task<TRet> Execute<TRet>(string command, params object?[] parameters)
         {
             var commands = CurrentCommands.ToList();
-            commands.Add(command);
+            commands.Add(new Command(command, parameters));
 
-            return await _commandExecuterJsInterop.Execute<TRet>(_dbDefinition, _storeName, commands);
+            return await CommandExecuterJsInterop.Execute<TRet>(DbDefinition, StoreName, commands);
         }
 
-        protected async Task ExecuteNonQuery(Command command)
+        protected async Task ExecuteNonQuery(string command, params object?[] parameters)
         {
             var commands = CurrentCommands.ToList();
-            commands.Add(command);
+            commands.Add(new Command(command, parameters));
 
-            await _commandExecuterJsInterop.ExecuteNonQuery(_dbDefinition, _storeName, commands);
+            await CommandExecuterJsInterop.ExecuteNonQuery(DbDefinition, StoreName, commands);
         }
     }
 }

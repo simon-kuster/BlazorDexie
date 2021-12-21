@@ -3,9 +3,9 @@
     public class Command
     {
         public string Cmd { get; }
-        public List<object?> Parameters { get; }
+        public object?[] Parameters { get; }
 
-        public Command(string command, List<object?> parameters)
+        public Command(string command, params object?[] parameters)
         {
             Cmd = command;
             Parameters = parameters;

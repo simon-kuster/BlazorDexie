@@ -1,6 +1,4 @@
-﻿using DexieWrapper.JsInterop;
-
-namespace DexieWrapper.Database
+﻿namespace DexieWrapper.Database
 {
     public class WhereClause<T>
     {
@@ -13,7 +11,7 @@ namespace DexieWrapper.Database
 
         public Collection<T> IsEqual(object key)
         {
-            _collection.CurrentCommands.Add(new Command("equals", new List<object?> { key }));
+            _collection.AddCommand("equals",  key);
             return _collection;
         }
     }
