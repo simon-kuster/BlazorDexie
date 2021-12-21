@@ -201,5 +201,29 @@ namespace DexieWrapper.Test
 
             Assert.True(matches == testItems.Length);
         }
+
+        [Fact]
+        public async Task Where()
+        {
+            // arrange
+            var moduleFactory = new ModuleWrapperFactory(_nodeJSService, "../../DexieWrapper/wwwroot");
+            var db = new MyDb(moduleFactory);
+
+            TestItem[] initialItems = new TestItem[4]
+            {
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2010 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2012 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "CC", Year = 2012 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2015 }
+            };
+
+            await db.TestItems.BulkPut(initialItems);
+
+            // act
+            var testItems = await db.TestItems.Where("year").IsEqual(2012).ToArray();
+
+            // assert
+            Assert.Equal(2, testItems?.Length);
+        }
     }
 }

@@ -12,12 +12,12 @@ namespace DexieWrapper.JsInterop
             _jsModule = jsModuleFactory.CreateModule("commandExecuter.js");
         }
 
-        public async Task<T> Execute<T>(DbDefinition databaseDefinition, Command command)
+        public async Task<T> Execute<T>(DbDefinition databaseDefinition, MainCommand command)
         {
             return await _jsModule.InvokeAsync<T>("execute", databaseDefinition, command);
         }
 
-        public async Task ExecuteNonQuery(DbDefinition databaseDefinition, Command command)
+        public async Task ExecuteNonQuery(DbDefinition databaseDefinition, MainCommand command)
         {
             await _jsModule.InvokeVoidAsync("executeNonQuery", databaseDefinition, command);
         }

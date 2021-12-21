@@ -2,15 +2,19 @@
 {
     public class Command
     {
-        public string StoreName { get; }
         public string Cmd { get; }
         public List<object?> Parameters { get; }
+        public List<Command> SubCommands { get; } = new List<Command>();
 
-        public Command(string storeName, string command, List<object?> parameters)
+        public Command(string command, List<object?> parameters)
         {
-            StoreName = storeName;
             Cmd = command;
             Parameters = parameters;
+        }
+
+        public void AddCommand(string command, List<object?> parameters)
+        {
+            SubCommands.Add(new Command(command, parameters));
         }
     }
 }
