@@ -1,11 +1,10 @@
-﻿using DexieWrapper.Definitions;
-using DexieWrapper.JsInterop;
+﻿using DexieWrapper.JsInterop;
 
 namespace DexieWrapper.Database
 {
     public class Collection<T>
     {
-        protected DbDefinition DbDefinition = null!;
+        protected Db Db = null!;
         protected CommandExecuterJsInterop CommandExecuterJsInterop = null!;
         protected string StoreName = null!;
         protected virtual List<Command> CurrentCommands { get; } = new List<Command>();
@@ -14,14 +13,14 @@ namespace DexieWrapper.Database
         {
         }
 
-        public Collection(DbDefinition dbDefinition, string storeName, CommandExecuterJsInterop commandExecuterJsInterop)
+        public Collection(Db db, string storeName, CommandExecuterJsInterop commandExecuterJsInterop)
         {
-            Init(dbDefinition, storeName, commandExecuterJsInterop);
+            Init(db, storeName, commandExecuterJsInterop);
         }
 
-        public void Init(DbDefinition dbDefinition, string storeName, CommandExecuterJsInterop commandExecuterJsInterop)
+        public void Init(Db db, string storeName, CommandExecuterJsInterop commandExecuterJsInterop)
         {
-            DbDefinition = dbDefinition;
+            Db = db;
             StoreName = storeName;
             CommandExecuterJsInterop = commandExecuterJsInterop;
         }
@@ -46,7 +45,14 @@ namespace DexieWrapper.Database
             var commands = CurrentCommands.ToList();
             commands.Add(new Command(command, parameters));
 
-            return await CommandExecuterJsInterop.Execute<TRet>(DbDefinition, StoreName, commands);
+            await Db.Init();
+
+            if (Db.DbJsObjectRef != null)
+            {
+                return await CommandExecuterJsInterop.Execute<TRet>(Db.DbJsObjectRef, StoreName, commands);
+            }
+
+            return await CommandExecuterJsInterop.InitDbAndExecute<TRet>(Db.DbDefinition, StoreName, commands);
         }
 
         protected async Task ExecuteNonQuery(string command, params object?[] parameters)
@@ -54,7 +60,16 @@ namespace DexieWrapper.Database
             var commands = CurrentCommands.ToList();
             commands.Add(new Command(command, parameters));
 
-            await CommandExecuterJsInterop.ExecuteNonQuery(DbDefinition, StoreName, commands);
+            await Db.Init();
+
+            if (Db.DbJsObjectRef != null)
+            {
+                await CommandExecuterJsInterop.ExecuteNonQuery(Db.DbJsObjectRef, StoreName, commands);
+            }
+            else
+            {
+                await CommandExecuterJsInterop.InitDbAndExecuteNonQuery(Db.DbDefinition, StoreName, commands);
+            }
         }
     }
 }

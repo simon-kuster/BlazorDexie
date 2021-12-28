@@ -68,7 +68,7 @@ namespace DexieWrapper.Database
 
         private Collection<T> CreateNewColletion()
         {
-            return new Collection<T>(DbDefinition, StoreName, CommandExecuterJsInterop);
+            return new Collection<T>(Db, StoreName, CommandExecuterJsInterop);
         }
     }
 }
