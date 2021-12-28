@@ -9,7 +9,7 @@ namespace DexieWrapper.JsInterop
 
         public CommandExecuterJsInterop(IJsModuleFactory jsModuleFactory)
         {
-            _jsModule = jsModuleFactory.CreateModule("commandExecuter.js");
+            _jsModule = jsModuleFactory.CreateModule("scripts/commandExecuter.js");
         }
 
         public async Task<T> Execute<T>(DbDefinition databaseDefinition, string storeName, List<Command> commands)

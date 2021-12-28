@@ -181,7 +181,7 @@ namespace DexieWrapper.Test
 
         private MyDb CreateDb()
         {
-            var moduleFactory = new ModuleWrapperFactory(_nodeJSService, "../../DexieWrapper/wwwroot");
+            var moduleFactory = new ModuleWrapperFactory(_nodeJSService, "../../../DexieWrapper/wwwroot");
             return new MyDb(moduleFactory);
         }
     }

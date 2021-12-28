@@ -1,5 +1,3 @@
-import Dexie from './lib/dexie.mjs';
-
 export function execute(dbDefinition, storeName, commands) {
     return executeNonQuery(dbDefinition, storeName, commands).then(result => {
         if (!result) {

@@ -1,12 +1,19 @@
 {
-  "name": "dexiewrapper.test",
-  "version": "1.0.0",
-  "main": "index.js",
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "dependencies": {},
+  "type": "commonjs",
+  "scripts": {
+    "postinstall": "copy-files-from-to"
+  },
+  "copyFiles": [
+    {
+      "from": "node_modules/dexie/dist/modern/dexie.mjs",
+      "to": "wwwroot/scripts/lib/dexie.mjs"
+    }
+  ],
+  "dependencies": {
+    "dexie": "^3.2.0"
+  },
   "devDependencies": {
+    "copy-files-from-to": "3.2.2",
     "fake-indexeddb": "^3.1.7"
   }
 }

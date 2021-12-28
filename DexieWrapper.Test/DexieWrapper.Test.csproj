@@ -8,18 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="package-lock.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="package-lock.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Jering.Javascript.NodeJS" Version="6.2.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
@@ -36,6 +24,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DexieWrapper\DexieWrapper.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\scripts\lib\" />
   </ItemGroup>
 
 </Project>
