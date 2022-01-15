@@ -179,6 +179,22 @@ namespace DexieWrapper.Test
             Assert.Equal(2, testItems?.Length);
         }
 
+        [Fact]
+        public async Task Clear()
+        {
+            // arrange
+            var db = CreateDb();
+
+            TestItem initialItem = new TestItem() { Id = Guid.NewGuid(), Name = "AA" };
+            await db.TestItems.Put(initialItem);
+
+            // act
+            await db.TestItems.Clear();
+
+            // assert
+            Assert.True((await db.TestItems.ToArray()).Length == 0);
+        }    
+
         private MyDb CreateDb()
         {
             var moduleFactory = new ModuleWrapperFactory(_nodeJSService, "../../DexieWrapper/wwwroot");

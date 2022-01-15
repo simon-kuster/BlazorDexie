@@ -41,6 +41,11 @@ namespace DexieWrapper.Database
             return await Execute<List<T>>("toArray");
         }
 
+        public async Task<int> Count()
+        {
+            return await Execute<int>("count");
+        }
+
         protected async Task<TRet> Execute<TRet>(string command, params object?[] parameters)
         {
             var commands = CurrentCommands.ToList();

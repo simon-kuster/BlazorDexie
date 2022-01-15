@@ -14,5 +14,11 @@
             _collection.AddCommand("equals",  key);
             return _collection;
         }
+
+        public Collection<T> AnyOf(params object[] keys)
+        {
+            _collection.AddCommand("anyOf", keys);
+            return _collection;
+        }
     }
 }

@@ -52,6 +52,57 @@ namespace DexieWrapper.Test
             }
         }
 
+        [Fact]
+        public async Task Count()
+        {
+            // arrange
+            var db = CreateDb();
+
+            TestItem[] initialItems = new TestItem[4]
+            {
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "BB" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "CC" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD" }
+            };
+
+            await db.TestItems.BulkPut(initialItems);
+
+            // act
+            int count = await db.TestItems.Count();
+
+            // assert
+            Assert.Equal(initialItems.Length, count);
+        }
+
+        [Fact]
+        public async Task AnyOf()
+        {
+            // arrange
+            var db = CreateDb();
+
+            TestItem[] initialItems = new TestItem[4]
+            {
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2023 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2022 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "CC", Year = 2020 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2011 }
+            };
+
+            TestItem[] expectedItems = new TestItem[] { initialItems[0], initialItems[1], initialItems[2] };
+
+            await db.TestItems.BulkPut(initialItems);
+
+            // act
+            var testItems = await db.TestItems.Where("year").AnyOf(2022, 2020, 2023).ToArray();
+
+            // assert
+            foreach (var item in expectedItems)
+            {
+                Assert.Equal(item.Id, testItems.First(i => i.Year == item.Year).Id);
+            }
+        }
+
         private MyDb CreateDb()
         {
             var moduleFactory = new ModuleWrapperFactory(_nodeJSService, "../../DexieWrapper/wwwroot");

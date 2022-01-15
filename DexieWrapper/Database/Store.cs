@@ -66,6 +66,11 @@ namespace DexieWrapper.Database
             return new WhereClause<T>(collection);
         }
 
+        public async Task Clear()
+        {
+            await ExecuteNonQuery("clear");
+        }
+
         private Collection<T> CreateNewColletion()
         {
             return new Collection<T>(DbDefinition, StoreName, CommandExecuterJsInterop);
