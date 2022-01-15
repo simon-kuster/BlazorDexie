@@ -1,5 +1,4 @@
-﻿using DexieWrapper.Definitions;
-using DexieWrapper.JsInterop;
+﻿using DexieWrapper.JsInterop;
 
 namespace DexieWrapper.Database
 {
@@ -7,6 +6,6 @@ namespace DexieWrapper.Database
     {
         public string[] Indices { get; }
 
-        public void Init(DbDefinition dbDefinition, string storeName, CommandExecuterJsInterop commandExecuterJsInterop);
+        public void Init(Db db, string storeName, CommandExecuterJsInterop commandExecuterJsInterop);
     }
 }

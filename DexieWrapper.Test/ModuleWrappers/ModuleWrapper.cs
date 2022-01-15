@@ -8,7 +8,7 @@ namespace DexieWrapper.Test.ModuleWrappers
     public class ModuleWrapper : IJsModule
     {
         INodeJSService _nodeJSService;
-        private const string ModuleWrapperPath = "../../../ModuleWrappers/es-module-wrapper.js";
+        private const string ModuleWrapperPath = "../../../wwwroot/scripts/es-module-wrapper.js";
         private string _modulePath;
 
         public ModuleWrapper(INodeJSService nodeJSService, string modulePath)

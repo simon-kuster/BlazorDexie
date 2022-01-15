@@ -363,4 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Custom
-*/wwwroot/lib/**
+*/wwwroot/scripts/lib/**
