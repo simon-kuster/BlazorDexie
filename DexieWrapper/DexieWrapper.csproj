@@ -4,6 +4,12 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <PackageId>Nosthy.Blazor.DexieWrapper</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>Nosthy</Authors>
+    <Company>Nosthy</Company>
+    <Product>Nosthy.Blazor.DexieWrapper</Product>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>

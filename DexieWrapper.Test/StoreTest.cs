@@ -156,28 +156,6 @@ namespace DexieWrapper.Test
             }
         }
 
-        [Fact]
-        public async Task Where()
-        {
-            // arrange
-            var db = CreateDb();
-
-            TestItem[] initialItems = new TestItem[4]
-            {
-                new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2010 },
-                new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2012 },
-                new TestItem() { Id = Guid.NewGuid(), Name = "CC", Year = 2012 },
-                new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2015 }
-            };
-
-            await db.TestItems.BulkPut(initialItems);
-
-            // act
-            var testItems = await db.TestItems.Where("year").IsEqual(2012).ToArray();
-
-            // assert
-            Assert.Equal(2, testItems?.Length);
-        }
 
         [Fact]
         public async Task Clear()
