@@ -39,7 +39,7 @@ namespace DexieWrapper.Test
             await db.TestItems.BulkPut(initialItems);
 
             // act
-            var testItems = await db.TestItems.Where("year").IsEqual(2012).ToArray();
+            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).IsEqual(2012).ToArray();
 
             // assert
             Assert.Equal(2, testItems?.Length);
@@ -64,7 +64,7 @@ namespace DexieWrapper.Test
             await db.TestItems.BulkPut(initialItems);
 
             // act
-            var testItems = await db.TestItems.Where("year").AnyOf(2022, 2020, 2023).ToArray();
+            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).AnyOf(2022, 2020, 2023).ToArray();
 
             // assert
             foreach (var item in expectedItems)

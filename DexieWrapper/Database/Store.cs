@@ -1,4 +1,5 @@
 ﻿using DexieWrapper.JsInterop;
+using DexieWrapper.Utils;
 
 namespace DexieWrapper.Database
 {
@@ -10,7 +11,7 @@ namespace DexieWrapper.Database
 
         public Store(params string[] indices)
         {
-            Indices = indices;
+            Indices = indices.Select(Camelizer.ToCamelCase).ToArray();
         }
 
         public async Task<T?> Get(object primaryKey)
@@ -62,7 +63,7 @@ namespace DexieWrapper.Database
         public WhereClause<T> Where(string keyPathArray)
         {
             var collection = CreateNewColletion();
-            collection.AddCommand("where", keyPathArray);
+            collection.AddCommand("where", Camelizer.ToCamelCase(keyPathArray));
             return new WhereClause<T>(collection);
         }
 
