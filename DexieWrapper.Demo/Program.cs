@@ -11,7 +11,7 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-builder.Services.AddScoped<IJsModuleFactory>(sp => new JsObjectReferenceWrapperFactory(sp.GetRequiredService<IJSRuntime>(), "./_content/DexieWrapper"));
+builder.Services.AddScoped<IJsModuleFactory>(sp => new JsObjectReferenceWrapperFactory(sp.GetRequiredService<IJSRuntime>(), "./_content/Nosthy.Blazor.DexieWrapper"));
 builder.Services.AddScoped<MyDb>();
 
 builder.Services.AddScoped<PersonRepository>();
