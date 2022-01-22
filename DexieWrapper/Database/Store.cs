@@ -3,7 +3,7 @@ using DexieWrapper.Utils;
 
 namespace DexieWrapper.Database
 {
-    public class Store<T> : Collection<T>, IStore
+    public class Store<T, TKey> : Collection<T, TKey>, IStore
     {
         public string[] Indices { get; }
 
@@ -14,57 +14,46 @@ namespace DexieWrapper.Database
             Indices = indices.Select(Camelizer.ToCamelCase).ToArray();
         }
 
-        public async Task<T?> Get(object primaryKey)
+        public async Task<T?> Get(TKey primaryKey)
         {
             return await Execute<T?>("get", primaryKey);
         }
 
-        public async Task<T?[]?> BulkGet(object[] primaryKeys)
+        public async Task<T?[]?> BulkGet(IEnumerable<TKey> keys)
         {
-            List<T?> result = new List<T?>();
-
-            foreach (var key in primaryKeys)
-            {
-                result.Add(await Get(key));
-            }
-
-            return result.ToArray();
+            return await Execute<T[]>("bulkGet", keys);
         }
 
-        public async Task Put(T item, object? key = null)
+        public async Task<TKey> Put(T item)
         {
-            await ExecuteNonQuery("put", item, key);
+            return await Execute<TKey>("put", item);
         }
 
-        public async Task BulkPut(T[] items, object?[]? keys = null)
+        public async Task<TKey> Put(T item, TKey? key)
         {
-            if (keys == null)
-                keys = new object?[items.Length];
-
-            for (int i = 0; i < items.Length; i++)
-            {
-                await Put(items[i], keys[i]);
-            }
+            return await Execute<TKey>("put", item, key);
         }
 
-        public async Task Delete(object primaryKey)
+        public async Task BulkPut(T[] items, IEnumerable<TKey>? keys = null)
         {
-            await Execute<T>("delete", primaryKey);
+            await ExecuteNonQuery("bulkPut", items, keys);
         }
 
-        public async Task BulkDelete(object[] primaryKeys)
+        public async Task Delete(TKey primaryKey)
         {
-            foreach (var key in primaryKeys)
-            {
-                await Delete(key);
-            }
+            await ExecuteNonQuery("delete", primaryKey);
         }
 
-        public WhereClause<T> Where(string keyPathArray)
+        public async Task BulkDelete(IEnumerable<TKey> primaryKeys)
+        {
+            await ExecuteNonQuery("bulkDelete", primaryKeys);
+        }
+
+        public WhereClause<T, TKey> Where(string keyPathArray)
         {
             var collection = CreateNewColletion();
             collection.AddCommand("where", Camelizer.ToCamelCase(keyPathArray));
-            return new WhereClause<T>(collection);
+            return new WhereClause<T, TKey>(collection);
         }
 
         public async Task Clear()
@@ -72,9 +61,9 @@ namespace DexieWrapper.Database
             await ExecuteNonQuery("clear");
         }
 
-        protected override Collection<T> CreateNewColletion()
+        protected override Collection<T, TKey> CreateNewColletion()
         {
-            return new Collection<T>(Db, StoreName, CommandExecuterJsInterop);
+            return new Collection<T,TKey>(Db, StoreName, CommandExecuterJsInterop);
         }
     }
 }

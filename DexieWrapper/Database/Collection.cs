@@ -2,7 +2,7 @@
 
 namespace DexieWrapper.Database
 {
-    public class Collection<T>
+    public class Collection<T, TKey>
     {
         protected Db Db = null!;
         protected CommandExecuterJsInterop CommandExecuterJsInterop = null!;
@@ -45,14 +45,19 @@ namespace DexieWrapper.Database
             return await Execute<int>("count");
         }
 
-        public Collection<T> Filter(params string[] filter)
+        public Collection<T, TKey> Filter(params string[] filter)
         {
             var collection = CreateNewColletion();
             collection.AddCommand("filter", filter);
             return collection;
         }
 
-        protected virtual Collection<T> CreateNewColletion()
+        public Collection<T, TKey> And(params string[] filter)
+        {
+            return Filter(filter);
+        }
+
+        protected virtual Collection<T, TKey> CreateNewColletion()
         {
             return this;
         }
@@ -64,12 +69,30 @@ namespace DexieWrapper.Database
 
             await Db.Init();
 
-            if (Db.DbJsObjectRef != null)
+            if (typeof(TRet) == typeof(Guid))
             {
-                return await CommandExecuterJsInterop.Execute<TRet>(Db.DbJsObjectRef, StoreName, commands);
-            }
+                string retString;
 
-            return await CommandExecuterJsInterop.InitDbAndExecute<TRet>(Db.DbDefinition, StoreName, commands);
+                if (Db.DbJsObjectRef != null)
+                {
+                    retString = await CommandExecuterJsInterop.Execute<string>(Db.DbJsObjectRef, StoreName, commands);
+                }
+                else
+                {
+                    retString = await CommandExecuterJsInterop.InitDbAndExecute<string>(Db.DbDefinition, StoreName, commands);
+                }
+
+                return (TRet)(object)Guid.Parse(retString);
+            }
+            else
+            {
+                if (Db.DbJsObjectRef != null)
+                {
+                    return await CommandExecuterJsInterop.Execute<TRet>(Db.DbJsObjectRef, StoreName, commands);
+                }
+
+                return await CommandExecuterJsInterop.InitDbAndExecute<TRet>(Db.DbDefinition, StoreName, commands);
+            }
         }
 
         protected async Task ExecuteNonQuery(string command, params object?[] parameters)

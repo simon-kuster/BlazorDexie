@@ -54,7 +54,7 @@ namespace DexieWrapper.Test
             await db.TestItems.BulkPut(initialItems);
 
             // act
-            var testItems = await db.TestItems.BulkGet(new object[4] { initialItems[0].Id, initialItems[1].Id, initialItems[2].Id, initialItems[3].Id });
+            var testItems = await db.TestItems.BulkGet(new Guid[4] { initialItems[0].Id, initialItems[1].Id, initialItems[2].Id, initialItems[3].Id });
 
             // assert
             Assert.NotNull(testItems);
@@ -74,13 +74,14 @@ namespace DexieWrapper.Test
 
             // act
             var testItem = new TestItem() { Id = Guid.NewGuid(), Name = "BB" };
-            await db.TestItems.Put(testItem);
+            var key = await db.TestItems.Put(testItem);
 
             // assert
             var checkItem = await db.TestItems.Get(testItem.Id);
             
             Assert.NotNull(checkItem);
             Assert.Equal("BB", checkItem!.Name);
+            Assert.Equal(testItem.Id, key);
         }
 
         [Fact]
@@ -97,12 +98,11 @@ namespace DexieWrapper.Test
                 new TestItem() { Id = Guid.NewGuid(), Name = "DD" }
             };
 
+            // act
             await db.TestItems.BulkPut(initialItems);
 
-            // act
-            var testItems = await db.TestItems.BulkGet(new object[4] { initialItems[0].Id, initialItems[1].Id, initialItems[2].Id, initialItems[3].Id });
-
             // assert
+            var testItems = await db.TestItems.BulkGet(new Guid[4] { initialItems[0].Id, initialItems[1].Id, initialItems[2].Id, initialItems[3].Id });
             Assert.NotNull(testItems);
 
             for (int i = 0; i < testItems!.Length; i++)
@@ -145,10 +145,10 @@ namespace DexieWrapper.Test
             await db.TestItems.BulkPut(initialItems);
 
             // act
-            await db.TestItems.BulkDelete(new object[4] { initialItems[0].Id, initialItems[1].Id, initialItems[2].Id, initialItems[3].Id });
+            await db.TestItems.BulkDelete(new Guid[4] { initialItems[0].Id, initialItems[1].Id, initialItems[2].Id, initialItems[3].Id });
 
             // assert
-            var testItems = await db.TestItems.BulkGet(new object[4] { initialItems[0].Id, initialItems[1].Id, initialItems[2].Id, initialItems[3].Id });
+            var testItems = await db.TestItems.BulkGet(new Guid[4] { initialItems[0].Id, initialItems[1].Id, initialItems[2].Id, initialItems[3].Id });
 
             for (int i = 0; i < testItems!.Length; i++)
             {
