@@ -72,7 +72,7 @@ namespace DexieWrapper.Database
             await ExecuteNonQuery("clear");
         }
 
-        private Collection<T> CreateNewColletion()
+        protected override Collection<T> CreateNewColletion()
         {
             return new Collection<T>(Db, StoreName, CommandExecuterJsInterop);
         }

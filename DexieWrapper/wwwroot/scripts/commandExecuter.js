@@ -22,7 +22,12 @@ export function executeNonQuery(db, storeName, commands) {
     var query = db[storeName];
 
     commands.forEach(c => {
-        query = query[c.cmd](...c.parameters);
+        if (c.cmd === 'filter') {
+            var filterFunction = new Function(...c.parameters);
+            query = query[c.cmd](filterFunction);
+        } else {
+            query = query[c.cmd](...c.parameters);
+        }
     });
 
     return query;

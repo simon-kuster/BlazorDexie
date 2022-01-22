@@ -45,6 +45,18 @@ namespace DexieWrapper.Database
             return await Execute<int>("count");
         }
 
+        public Collection<T> Filter(params string[] filter)
+        {
+            var collection = CreateNewColletion();
+            collection.AddCommand("filter", filter);
+            return collection;
+        }
+
+        protected virtual Collection<T> CreateNewColletion()
+        {
+            return this;
+        }
+
         protected async Task<TRet> Execute<TRet>(string command, params object?[] parameters)
         {
             var commands = CurrentCommands.ToList();

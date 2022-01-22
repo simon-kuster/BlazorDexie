@@ -75,6 +75,33 @@ namespace DexieWrapper.Test
             Assert.Equal(initialItems.Length, count);
         }
 
+
+        [Fact]
+        public async Task Filter()
+        {
+            // arrange
+            var db = CreateDb();
+
+            TestItem[] initialItems = new TestItem[4]
+            {
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2023 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2022 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "CC", Year = 2020 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2011 }
+            };
+
+            TestItem[] expectedItems = new TestItem[] { initialItems[2] };
+            await db.TestItems.BulkPut(initialItems);
+
+            // act
+            var testItems = await db.TestItems.Filter("t", "return t.name === 'CC'").ToArray();
+
+            // assert
+            Assert.Single(testItems);
+            Assert.Equal(expectedItems[0].Id, testItems[0].Id);
+        }
+
+
         private MyDb CreateDb()
         {
             var moduleFactory = new ModuleWrapperFactory(_nodeJSService, "../../../DexieWrapper/wwwroot");
