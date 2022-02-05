@@ -25,14 +25,39 @@ namespace DexieWrapper.Database
             return await Execute<TKey>("add", item, key);
         }
 
-        public async Task<T?> Get(TKey primaryKey)
+        public async Task BulkDelete(IEnumerable<TKey> primaryKeys)
         {
-            return await Execute<T?>("get", primaryKey);
+            await ExecuteNonQuery("bulkDelete", primaryKeys);
         }
 
         public async Task<T?[]> BulkGet(IEnumerable<TKey> keys)
         {
             return await Execute<T[]>("bulkGet", keys);
+        }
+
+        public async Task<TKey> BulkPut(T[] items)
+        {
+            return await Execute<TKey>("bulkPut", items);
+        }
+
+        public async Task BulkPut(T[] items, IEnumerable<TKey>? keys)
+        {
+            await ExecuteNonQuery("bulkPut", items, keys);
+        }
+
+        public async Task<List<TKey>> BulkPutReturnAllKeys(T[] items)
+        {
+            return await Execute<List<TKey>>("bulkPut", items, new { allKeys = true });
+        }
+
+        public async Task Delete(TKey primaryKey)
+        {
+            await ExecuteNonQuery("delete", primaryKey);
+        }
+
+        public async Task<T?> Get(TKey primaryKey)
+        {
+            return await Execute<T?>("get", primaryKey);
         }
 
         public async Task<TKey> Put(T item)
@@ -43,31 +68,6 @@ namespace DexieWrapper.Database
         public async Task<TKey> Put(T item, TKey? key)
         {
             return await Execute<TKey>("put", item, key);
-        }
-
-        public async Task<TKey> BulkPut(T[] items)
-        {
-            return await Execute<TKey>("bulkPut", items);
-        }
-
-        public async Task<List<TKey>> BulkPutReturnAllKeys(T[] items)
-        {
-            return await Execute<List<TKey>>("bulkPut", items, new { allKeys = true });
-        }
-
-        public async Task BulkPut(T[] items, IEnumerable<TKey>? keys)
-        {
-            await ExecuteNonQuery("bulkPut", items, keys);
-        }
-
-        public async Task Delete(TKey primaryKey)
-        {
-            await ExecuteNonQuery("delete", primaryKey);
-        }
-
-        public async Task BulkDelete(IEnumerable<TKey> primaryKeys)
-        {
-            await ExecuteNonQuery("bulkDelete", primaryKeys);
         }
 
         public WhereClause<T, TKey> Where(string indexOrPrimaryKey)

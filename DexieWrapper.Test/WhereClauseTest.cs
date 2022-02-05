@@ -21,6 +21,33 @@ namespace DexieWrapper.Test
             _nodeJSService = serviceProvider.GetRequiredService<INodeJSService>();
         }
 
+        [Fact]
+        public async Task AnyOf()
+        {
+            // arrange
+            var db = CreateDb();
+
+            var initialItems = new TestItem[]
+            {
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2023 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2022 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "CC", Year = 2020 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2011 }
+            };
+
+           await db.TestItems.BulkPut(initialItems);
+
+            // act
+            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).AnyOf(2022, 2020, 2023).ToArray();
+
+            // assert
+            TestItem[] expectedItems = new TestItem[] { initialItems[0], initialItems[1], initialItems[2] };
+
+            foreach (var item in expectedItems)
+            {
+                Assert.Equal(item.Id, testItems.First(i => i.Name == item.Name).Id);
+            }
+        }
 
         [Fact]
         public async Task IsEqual()
@@ -42,35 +69,14 @@ namespace DexieWrapper.Test
             var testItems = await db.TestItems.Where(nameof(TestItem.Year)).IsEqual(2012).ToArray();
 
             // assert
-            Assert.Equal(2, testItems?.Length);
-        }
+            TestItem[] expectedItems = new TestItem[] { initialItems[1], initialItems[2] };
 
-        [Fact]
-        public async Task AnyOf()
-        {
-            // arrange
-            var db = CreateDb();
-
-            TestItem[] initialItems = new TestItem[4]
+            Assert.Equal(2, testItems.Length);
+            foreach (var exptectedItem in expectedItems)
             {
-                new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2023 },
-                new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2022 },
-                new TestItem() { Id = Guid.NewGuid(), Name = "CC", Year = 2020 },
-                new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2011 }
-            };
-
-            TestItem[] expectedItems = new TestItem[] { initialItems[0], initialItems[1], initialItems[2] };
-
-            await db.TestItems.BulkPut(initialItems);
-
-            // act
-            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).AnyOf(2022, 2020, 2023).ToArray();
-
-            // assert
-            foreach (var item in expectedItems)
-            {
-                Assert.Equal(item.Id, testItems.First(i => i.Year == item.Year).Id);
+                Assert.Equal(exptectedItem.Id, testItems.First(i => i.Name == exptectedItem.Name).Id);
             }
+
         }
 
         private MyDb CreateDb()

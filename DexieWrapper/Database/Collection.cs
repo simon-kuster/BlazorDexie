@@ -30,14 +30,9 @@ namespace DexieWrapper.Database
             CurrentCommands.Add(new Command(command, parameters));
         }
 
-        public async Task<T[]> ToArray()
+        public Collection<T, TKey> And(params string[] filter)
         {
-            return await Execute<T[]>("toArray");
-        }
-
-        public async Task<List<T>> ToList()
-        {
-            return await Execute<List<T>>("toArray");
+            return Filter(filter);
         }
 
         public async Task<int> Count()
@@ -52,9 +47,14 @@ namespace DexieWrapper.Database
             return collection;
         }
 
-        public Collection<T, TKey> And(params string[] filter)
+        public async Task<T[]> ToArray()
         {
-            return Filter(filter);
+            return await Execute<T[]>("toArray");
+        }
+
+        public async Task<List<T>> ToList()
+        {
+            return await Execute<List<T>>("toArray");
         }
 
         protected virtual Collection<T, TKey> CreateNewColletion()

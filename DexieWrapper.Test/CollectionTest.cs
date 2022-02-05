@@ -22,12 +22,60 @@ namespace DexieWrapper.Test
         }
 
         [Fact]
+        public async Task Count()
+        {
+            // arrange
+            var db = CreateDb();
+
+            var initialItems = new TestItem[]
+            {
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "BB" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "CC" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD" }
+            };
+
+            await db.TestItems.BulkPut(initialItems);
+
+            // act
+            int count = await db.TestItems.Count();
+
+            // assert
+            Assert.Equal(4, count);
+        }
+
+
+        [Fact]
+        public async Task Filter()
+        {
+            // arrange
+            var db = CreateDb();
+
+            var initialItems = new TestItem[]
+            {
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2023 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2022 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "CC", Year = 2020 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2011 }
+            };
+
+            await db.TestItems.BulkPut(initialItems);
+
+            // act
+            var testItems = await db.TestItems.Filter("t", "return t.name === 'CC'").ToArray();
+
+            // assert
+            Assert.Single(testItems);
+            Assert.Equal(initialItems[2].Id, testItems[0].Id);
+        }
+
+        [Fact]
         public async Task ToArrayAndToList()
         {
             // arrange
             var db = CreateDb();
 
-            TestItem[] initialItems = new TestItem[4]
+            var initialItems = new TestItem[]
             {
                 new TestItem() { Id = Guid.NewGuid(), Name = "AA" },
                 new TestItem() { Id = Guid.NewGuid(), Name = "BB" },
@@ -51,56 +99,6 @@ namespace DexieWrapper.Test
                 Assert.Equal(initialItem.Name, testItemList.First(i => i.Id == initialItem.Id).Name);
             }
         }
-
-        [Fact]
-        public async Task Count()
-        {
-            // arrange
-            var db = CreateDb();
-
-            TestItem[] initialItems = new TestItem[4]
-            {
-                new TestItem() { Id = Guid.NewGuid(), Name = "AA" },
-                new TestItem() { Id = Guid.NewGuid(), Name = "BB" },
-                new TestItem() { Id = Guid.NewGuid(), Name = "CC" },
-                new TestItem() { Id = Guid.NewGuid(), Name = "DD" }
-            };
-
-            await db.TestItems.BulkPut(initialItems);
-
-            // act
-            int count = await db.TestItems.Count();
-
-            // assert
-            Assert.Equal(initialItems.Length, count);
-        }
-
-
-        [Fact]
-        public async Task Filter()
-        {
-            // arrange
-            var db = CreateDb();
-
-            TestItem[] initialItems = new TestItem[4]
-            {
-                new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2023 },
-                new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2022 },
-                new TestItem() { Id = Guid.NewGuid(), Name = "CC", Year = 2020 },
-                new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2011 }
-            };
-
-            TestItem[] expectedItems = new TestItem[] { initialItems[2] };
-            await db.TestItems.BulkPut(initialItems);
-
-            // act
-            var testItems = await db.TestItems.Filter("t", "return t.name === 'CC'").ToArray();
-
-            // assert
-            Assert.Single(testItems);
-            Assert.Equal(expectedItems[0].Id, testItems[0].Id);
-        }
-
 
         private MyDb CreateDb()
         {
