@@ -85,6 +85,17 @@ namespace DexieWrapper.Database
             return await Execute<TKey>("put", item, key);
         }
 
+        public async Task<int> Update(TKey key, Dictionary<string, object> changes)
+        {
+            var changesObject = new ExpandoObject();
+            foreach (var change in changes)
+            {
+                changesObject.TryAdd(Camelizer.ToCamelCase(change.Key), change.Value);
+            }
+
+            return await Execute<int>("update", key, changesObject);
+        }
+
         public WhereClause<T, TKey> Where(string indexOrPrimaryKey)
         {
             var collection = CreateNewColletion();
@@ -96,13 +107,13 @@ namespace DexieWrapper.Database
         {
             var collection = CreateNewColletion();
 
-            var obj = new ExpandoObject();
+            var criteriaObject = new ExpandoObject();
             foreach (var criteria in criterias)
             {
-                obj.TryAdd(Camelizer.ToCamelCase(criteria.Key), criteria.Value);
+                criteriaObject.TryAdd(Camelizer.ToCamelCase(criteria.Key), criteria.Value);
             }
 
-            collection.AddCommand("where", obj);
+            collection.AddCommand("where", criteriaObject);
 
             return collection;
         }

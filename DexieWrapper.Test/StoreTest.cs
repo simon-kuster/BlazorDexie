@@ -360,7 +360,7 @@ namespace DexieWrapper.Test
             // assert
             var checkItem = await db.TestItems.Get(testItem.Id);
 
-            Assert.Equal(testItem.Id, key);
+            Assert.Equal(key, testItem.Id);
             Assert.NotNull(checkItem);
             Assert.Equal("BB", checkItem!.Name);
         }
@@ -381,6 +381,26 @@ namespace DexieWrapper.Test
 
             Assert.NotNull(checkItem);
             Assert.Equal("BB", checkItem!.Name);
+        }
+
+        [Fact]
+        public async Task Update()
+        {
+            // arrange
+            var db = CreateDb();
+
+            var initialItem = new TestItem() { Id = Guid.NewGuid(), Name = "BB" };
+            await db.TestItems.Put(initialItem);
+
+            // act
+            var updatedRecord = await db.TestItems.Update(initialItem.Id, new Dictionary<string, object> { { nameof(TestItem.Name), "CC" } });
+
+            // assert
+            var checkItem = await db.TestItems.Get(initialItem.Id);
+
+            Assert.Equal(1, updatedRecord);
+            Assert.NotNull(checkItem);
+            Assert.Equal("CC", checkItem!.Name);
         }
 
         [Fact]
