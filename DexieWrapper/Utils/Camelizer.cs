@@ -1,4 +1,4 @@
-﻿namespace DexieWrapper.Utils
+﻿namespace Nosthy.Blazor.DexieWrapper.Utils
 {
     public static class Camelizer
     {

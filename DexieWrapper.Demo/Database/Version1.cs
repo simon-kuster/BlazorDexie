@@ -1,6 +1,6 @@
-﻿using DexieWrapper.Database;
+﻿using Nosthy.Blazor.DexieWrapper.Database;
 
-namespace DexieWrapper.Demo.Database
+namespace Nosthy.Blazor.DexieWrapper.Demo.Database
 {
     public class Version1 : DbVersion
     {

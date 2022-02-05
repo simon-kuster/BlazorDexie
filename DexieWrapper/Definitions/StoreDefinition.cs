@@ -1,4 +1,4 @@
-﻿namespace DexieWrapper.Definitions
+﻿namespace Nosthy.Blazor.DexieWrapper.Definitions
 {
     public class StoreDefinition
     {

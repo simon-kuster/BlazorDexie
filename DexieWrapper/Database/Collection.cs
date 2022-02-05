@@ -1,6 +1,6 @@
-﻿using DexieWrapper.JsInterop;
+﻿using Nosthy.Blazor.DexieWrapper.JsInterop;
 
-namespace DexieWrapper.Database
+namespace Nosthy.Blazor.DexieWrapper.Database
 {
     public class Collection<T, TKey>
     {

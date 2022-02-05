@@ -10,6 +10,8 @@
     <Company>Nosthy</Company>
     <Product>Nosthy.Blazor.DexieWrapper</Product>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RootNamespace>Nosthy.Blazor.DexieWrapper</RootNamespace>
+    <Copyright>Copyright 2022(c) Simon Kuster. All rights reserved.</Copyright>
   </PropertyGroup>
 
   <ItemGroup>

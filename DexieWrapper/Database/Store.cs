@@ -1,8 +1,8 @@
-﻿using DexieWrapper.JsInterop;
-using DexieWrapper.Utils;
+﻿using Nosthy.Blazor.DexieWrapper.JsInterop;
+using Nosthy.Blazor.DexieWrapper.Utils;
 using System.Dynamic;
 
-namespace DexieWrapper.Database
+namespace Nosthy.Blazor.DexieWrapper.Database
 {
     public class Store<T, TKey> : Collection<T, TKey>, IStore
     {
@@ -125,7 +125,7 @@ namespace DexieWrapper.Database
 
         protected override Collection<T, TKey> CreateNewColletion()
         {
-            return new Collection<T,TKey>(Db, StoreName, CommandExecuterJsInterop);
+            return new Collection<T, TKey>(Db, StoreName, CommandExecuterJsInterop);
         }
     }
 }

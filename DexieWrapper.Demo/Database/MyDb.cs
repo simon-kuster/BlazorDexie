@@ -1,14 +1,14 @@
-﻿using DexieWrapper.Database;
-using DexieWrapper.Demo.Persons;
-using DexieWrapper.JsModule;
+﻿using Nosthy.Blazor.DexieWrapper.Database;
+using Nosthy.Blazor.DexieWrapper.Demo.Persons;
+using Nosthy.Blazor.DexieWrapper.JsModule;
 
-namespace DexieWrapper.Demo.Database
+namespace Nosthy.Blazor.DexieWrapper.Demo.Database
 {
     public class MyDb : Db
     {
         public Store<Person, Guid> Persons { get; set; } = new(nameof(Person.Id));
 
-        public MyDb(IJsModuleFactory jsModuleFactory) 
+        public MyDb(IJsModuleFactory jsModuleFactory)
             : base("MyDatabase", 2, new DbVersion[] { new Version1() }, jsModuleFactory)
         {
         }

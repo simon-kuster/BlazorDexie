@@ -1,4 +1,4 @@
-﻿namespace DexieWrapper.JsModule
+﻿namespace Nosthy.Blazor.DexieWrapper.JsModule
 {
     public interface IJsModule
     {

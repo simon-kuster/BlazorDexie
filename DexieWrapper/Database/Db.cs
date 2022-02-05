@@ -1,17 +1,17 @@
-﻿using DexieWrapper.Definitions;
-using DexieWrapper.JsInterop;
-using DexieWrapper.JsModule;
-using Microsoft.JSInterop;
+﻿using Microsoft.JSInterop;
+using Nosthy.Blazor.DexieWrapper.Definitions;
+using Nosthy.Blazor.DexieWrapper.JsInterop;
+using Nosthy.Blazor.DexieWrapper.JsModule;
 using System.Text.Json.Serialization;
 
-namespace DexieWrapper.Database
+namespace Nosthy.Blazor.DexieWrapper.Database
 {
     public abstract class Db
     {
         private readonly CommandExecuterJsInterop _commandExecuterJsInterop;
 
         public string DatabaseName { get; }
-        public int VersionNumber { get; } 
+        public int VersionNumber { get; }
         public DbDefinition DbDefinition { get; }
         public IJSObjectReference? DbJsObjectRef { get; private set; }
 

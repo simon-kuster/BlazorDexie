@@ -1,10 +1,10 @@
-using DexieWrapper.Demo;
-using DexieWrapper.Demo.Database;
-using DexieWrapper.Demo.Persons;
-using DexieWrapper.JsModule;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.JSInterop;
+using Nosthy.Blazor.DexieWrapper.Demo;
+using Nosthy.Blazor.DexieWrapper.Demo.Database;
+using Nosthy.Blazor.DexieWrapper.Demo.Persons;
+using Nosthy.Blazor.DexieWrapper.JsModule;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");

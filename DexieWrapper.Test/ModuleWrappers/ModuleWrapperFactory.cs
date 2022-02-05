@@ -1,8 +1,8 @@
-﻿using DexieWrapper.JsModule;
-using Jering.Javascript.NodeJS;
+﻿using Jering.Javascript.NodeJS;
+using Nosthy.Blazor.DexieWrapper.JsModule;
 using System.IO;
 
-namespace DexieWrapper.Test.ModuleWrappers
+namespace Nosthy.Blazor.DexieWrapper.Test.ModuleWrappers
 {
     public class ModuleWrapperFactory : IJsModuleFactory
     {

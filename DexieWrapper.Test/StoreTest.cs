@@ -1,14 +1,14 @@
-﻿using DexieWrapper.Test.Databases;
-using DexieWrapper.Test.ModuleWrappers;
-using Jering.Javascript.NodeJS;
+﻿using Jering.Javascript.NodeJS;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
+using Nosthy.Blazor.DexieWrapper.Test.Database;
+using Nosthy.Blazor.DexieWrapper.Test.ModuleWrappers;
 
-namespace DexieWrapper.Test
+namespace Nosthy.Blazor.DexieWrapper.Test
 {
     public class StoreTest
     {
@@ -22,7 +22,7 @@ namespace DexieWrapper.Test
             _nodeJSService = serviceProvider.GetRequiredService<INodeJSService>();
         }
 
-        [Fact]  
+        [Fact]
         public async Task Add()
         {
             // arrange

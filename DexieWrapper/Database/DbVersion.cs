@@ -1,8 +1,8 @@
-﻿using DexieWrapper.Definitions;
+﻿using Nosthy.Blazor.DexieWrapper.Definitions;
 
-namespace DexieWrapper.Database
+namespace Nosthy.Blazor.DexieWrapper.Database
 {
-    public class DbVersion 
+    public class DbVersion
     {
         public int VersionNumber { get; }
 

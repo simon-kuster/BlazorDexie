@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
 
     <IsPackable>false</IsPackable>
+
+    <RootNamespace>Nosthy.Blazor.DexieWrapper.Test</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

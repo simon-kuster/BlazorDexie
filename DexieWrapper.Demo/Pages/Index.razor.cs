@@ -1,7 +1,7 @@
-﻿using DexieWrapper.Demo.Persons;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
+using Nosthy.Blazor.DexieWrapper.Demo.Persons;
 
-namespace DexieWrapper.Demo.Pages
+namespace Nosthy.Blazor.DexieWrapper.Demo.Pages
 {
     public partial class Index
     {

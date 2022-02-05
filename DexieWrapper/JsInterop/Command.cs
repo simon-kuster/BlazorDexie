@@ -1,4 +1,4 @@
-﻿namespace DexieWrapper.JsInterop
+﻿namespace Nosthy.Blazor.DexieWrapper.JsInterop
 {
     public class Command
     {

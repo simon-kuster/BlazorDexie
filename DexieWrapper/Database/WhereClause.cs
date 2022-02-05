@@ -1,4 +1,4 @@
-﻿namespace DexieWrapper.Database
+﻿namespace Nosthy.Blazor.DexieWrapper.Database
 {
     public class WhereClause<T, TKey>
     {
@@ -17,7 +17,7 @@
 
         public Collection<T, TKey> IsEqual(object key)
         {
-            _collection.AddCommand("equals",  key);
+            _collection.AddCommand("equals", key);
             return _collection;
         }
     }

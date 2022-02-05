@@ -1,8 +1,8 @@
-﻿using DexieWrapper.Definitions;
-using DexieWrapper.JsModule;
-using Microsoft.JSInterop;
+﻿using Microsoft.JSInterop;
+using Nosthy.Blazor.DexieWrapper.Definitions;
+using Nosthy.Blazor.DexieWrapper.JsModule;
 
-namespace DexieWrapper.JsInterop
+namespace Nosthy.Blazor.DexieWrapper.JsInterop
 {
     public class CommandExecuterJsInterop
     {

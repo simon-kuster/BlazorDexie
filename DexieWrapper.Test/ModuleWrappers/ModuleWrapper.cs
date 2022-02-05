@@ -1,9 +1,9 @@
-﻿using DexieWrapper.JsModule;
-using Jering.Javascript.NodeJS;
+﻿using Jering.Javascript.NodeJS;
+using Nosthy.Blazor.DexieWrapper.JsModule;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DexieWrapper.Test.ModuleWrappers
+namespace Nosthy.Blazor.DexieWrapper.Test.ModuleWrappers
 {
     public class ModuleWrapper : IJsModule
     {
@@ -13,7 +13,7 @@ namespace DexieWrapper.Test.ModuleWrappers
 
         public ModuleWrapper(INodeJSService nodeJSService, string modulePath)
         {
-            _nodeJSService= nodeJSService;
+            _nodeJSService = nodeJSService;
             _modulePath = modulePath;
         }
 

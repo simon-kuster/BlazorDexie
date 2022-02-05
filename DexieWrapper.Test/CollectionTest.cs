@@ -1,13 +1,13 @@
-﻿using DexieWrapper.Test.Databases;
-using DexieWrapper.Test.ModuleWrappers;
-using Jering.Javascript.NodeJS;
+﻿using Jering.Javascript.NodeJS;
 using Microsoft.Extensions.DependencyInjection;
+using Nosthy.Blazor.DexieWrapper.Test.Database;
+using Nosthy.Blazor.DexieWrapper.Test.ModuleWrappers;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace DexieWrapper.Test
+namespace Nosthy.Blazor.DexieWrapper.Test
 {
     public class CollectionTest
     {

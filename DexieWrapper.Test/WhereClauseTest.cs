@@ -1,13 +1,13 @@
-﻿using DexieWrapper.Test.Databases;
-using DexieWrapper.Test.ModuleWrappers;
-using Jering.Javascript.NodeJS;
+﻿using Jering.Javascript.NodeJS;
 using Microsoft.Extensions.DependencyInjection;
+using Nosthy.Blazor.DexieWrapper.Test.Database;
+using Nosthy.Blazor.DexieWrapper.Test.ModuleWrappers;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace DexieWrapper.Test
+namespace Nosthy.Blazor.DexieWrapper.Test
 {
     public class WhereClauseTest
     {
@@ -35,7 +35,7 @@ namespace DexieWrapper.Test
                 new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2011 }
             };
 
-           await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems);
 
             // act
             var testItems = await db.TestItems.Where(nameof(TestItem.Year)).AnyOf(2022, 2020, 2023).ToArray();
