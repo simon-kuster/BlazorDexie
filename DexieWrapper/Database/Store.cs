@@ -25,6 +25,21 @@ namespace DexieWrapper.Database
             return await Execute<TKey>("add", item, key);
         }
 
+        public async Task<TKey> BulkAdd(T[] items)
+        {
+            return await Execute<TKey>("bulkAdd", items);
+        }
+
+        public async Task BulkAdd(T[] items, IEnumerable<TKey>? keys)
+        {
+            await ExecuteNonQuery("bulkAdd", items, keys);
+        }
+
+        public async Task<List<TKey>> BulkAddReturnAllKeys(T[] items)
+        {
+            return await Execute<List<TKey>>("bulkAdd", items, new { allKeys = true });
+        }
+
         public async Task BulkDelete(IEnumerable<TKey> primaryKeys)
         {
             await ExecuteNonQuery("bulkDelete", primaryKeys);
