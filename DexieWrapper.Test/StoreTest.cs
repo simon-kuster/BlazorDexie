@@ -4,7 +4,6 @@ using Jering.Javascript.NodeJS;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -21,6 +20,42 @@ namespace DexieWrapper.Test
             services.AddNodeJS();
             ServiceProvider serviceProvider = services.BuildServiceProvider();
             _nodeJSService = serviceProvider.GetRequiredService<INodeJSService>();
+        }
+
+        [Fact]
+        public async Task Add()
+        {
+            // arrange
+            var db = CreateDb();
+
+            // act
+            var testItem = new TestItem() { Id = Guid.NewGuid(), Name = "BB" };
+            var key = await db.TestItems.Add(testItem);
+
+            // assert
+            var checkItem = await db.TestItems.Get(testItem.Id);
+
+            Assert.NotNull(checkItem);
+            Assert.Equal("BB", checkItem!.Name);
+            Assert.Equal(testItem.Id, key);
+        }
+
+        [Fact]
+        public async Task AddHiddenKey()
+        {
+            // arrange
+            var db = CreateDb();
+
+            // act
+            var testItem = new TestItemHiddenKey() { Name = "BB" };
+            var key = Guid.NewGuid();
+            await db.TestItemsHiddenKey.Add(testItem, key);
+
+            // assert
+            var checkItem = await db.TestItemsHiddenKey.Get(key);
+
+            Assert.NotNull(checkItem);
+            Assert.Equal("BB", checkItem!.Name);
         }
 
         [Fact]
@@ -85,6 +120,24 @@ namespace DexieWrapper.Test
             Assert.NotNull(checkItem);
             Assert.Equal("BB", checkItem!.Name);
             Assert.Equal(testItem.Id, key);
+        }
+
+        [Fact]
+        public async Task PutHiddenKey()
+        {
+            // arrange
+            var db = CreateDb();
+
+            // act
+            var testItem = new TestItemHiddenKey() { Name = "BB" };
+            var key = Guid.NewGuid();
+            await db.TestItemsHiddenKey.Put(testItem, key);
+
+            // assert
+            var checkItem = await db.TestItemsHiddenKey.Get(key);
+
+            Assert.NotNull(checkItem);
+            Assert.Equal("BB", checkItem!.Name);
         }
 
         [Fact]

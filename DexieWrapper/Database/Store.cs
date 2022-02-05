@@ -15,6 +15,16 @@ namespace DexieWrapper.Database
             Indices = indices.Select(Camelizer.ToCamelCase).ToArray();
         }
 
+        public async Task<TKey> Add(T item)
+        {
+            return await Execute<TKey>("add", item);
+        }
+
+        public async Task<TKey> Add(T item, TKey? key)
+        {
+            return await Execute<TKey>("add", item, key);
+        }
+
         public async Task<T?> Get(TKey primaryKey)
         {
             return await Execute<T?>("get", primaryKey);
