@@ -3,6 +3,9 @@ using DexieWrapper.Test.ModuleWrappers;
 using Jering.Javascript.NodeJS;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
+using System.Dynamic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -43,12 +46,12 @@ namespace DexieWrapper.Test
             // arrange
             var db = CreateDb();
 
-            TestItem[] initialItems = new TestItem[4] 
+            TestItem[] initialItems = new TestItem[4]
             {
-                new TestItem() { Id = Guid.NewGuid(), Name = "AA" }, 
-                new TestItem() { Id = Guid.NewGuid(), Name = "BB" }, 
-                new TestItem() { Id = Guid.NewGuid(), Name = "CC" }, 
-                new TestItem() { Id = Guid.NewGuid(), Name = "DD" } 
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "BB" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "CC" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD" }
             };
 
             await db.TestItems.BulkPut(initialItems);
@@ -78,7 +81,7 @@ namespace DexieWrapper.Test
 
             // assert
             var checkItem = await db.TestItems.Get(testItem.Id);
-            
+
             Assert.NotNull(checkItem);
             Assert.Equal("BB", checkItem!.Name);
             Assert.Equal(testItem.Id, key);
@@ -171,12 +174,39 @@ namespace DexieWrapper.Test
 
             // assert
             Assert.True((await db.TestItems.ToArray()).Length == 0);
-        }    
+        }
 
         private MyDb CreateDb()
         {
             var moduleFactory = new ModuleWrapperFactory(_nodeJSService, "../../../DexieWrapper/wwwroot");
             return new MyDb(moduleFactory);
+        }
+
+        [Fact]
+        public async Task Where()
+        {
+            // arrange
+            var db = CreateDb();
+
+            TestItem[] initialItems = new TestItem[4]
+            {
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2010 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2012 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "CC", Year = 2012 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2015 }
+            };
+
+            await db.TestItems.BulkPut(initialItems);
+
+            // act
+            var testItems = await db.TestItems.Where(new Dictionary<string, object>
+            {
+                { nameof(TestItem.Year), 2015 }
+            }).ToArray();
+
+            // assert
+            Assert.Equal(1, testItems?.Length);
+            Assert.Equal(initialItems[3].Id, testItems?.First()?.Id);
         }
     }
 }

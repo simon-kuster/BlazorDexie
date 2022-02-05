@@ -1,5 +1,6 @@
 ﻿using DexieWrapper.JsInterop;
 using DexieWrapper.Utils;
+using System.Dynamic;
 
 namespace DexieWrapper.Database
 {
@@ -19,7 +20,7 @@ namespace DexieWrapper.Database
             return await Execute<T?>("get", primaryKey);
         }
 
-        public async Task<T?[]?> BulkGet(IEnumerable<TKey> keys)
+        public async Task<T?[]> BulkGet(IEnumerable<TKey> keys)
         {
             return await Execute<T[]>("bulkGet", keys);
         }
@@ -49,11 +50,26 @@ namespace DexieWrapper.Database
             await ExecuteNonQuery("bulkDelete", primaryKeys);
         }
 
-        public WhereClause<T, TKey> Where(string keyPathArray)
+        public WhereClause<T, TKey> Where(string indexOrPrimaryKey)
         {
             var collection = CreateNewColletion();
-            collection.AddCommand("where", Camelizer.ToCamelCase(keyPathArray));
+            collection.AddCommand("where", Camelizer.ToCamelCase(indexOrPrimaryKey));
             return new WhereClause<T, TKey>(collection);
+        }
+
+        public Collection<T, TKey> Where(Dictionary<string, object> criterias)
+        {
+            var collection = CreateNewColletion();
+
+            var obj = new ExpandoObject();
+            foreach (var criteria in criterias)
+            {
+                obj.TryAdd(Camelizer.ToCamelCase(criteria.Key), criteria.Value);
+            }
+
+            collection.AddCommand("where", obj);
+
+            return collection;
         }
 
         public async Task Clear()
