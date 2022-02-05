@@ -45,7 +45,17 @@ namespace DexieWrapper.Database
             return await Execute<TKey>("put", item, key);
         }
 
-        public async Task BulkPut(T[] items, IEnumerable<TKey>? keys = null)
+        public async Task<TKey> BulkPut(T[] items)
+        {
+            return await Execute<TKey>("bulkPut", items);
+        }
+
+        public async Task<List<TKey>> BulkPutReturnAllKeys(T[] items)
+        {
+            return await Execute<List<TKey>>("bulkPut", items, new { allKeys = true });
+        }
+
+        public async Task BulkPut(T[] items, IEnumerable<TKey>? keys)
         {
             await ExecuteNonQuery("bulkPut", items, keys);
         }

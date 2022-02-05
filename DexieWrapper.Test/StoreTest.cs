@@ -155,10 +155,76 @@ namespace DexieWrapper.Test
             };
 
             // act
-            await db.TestItems.BulkPut(initialItems);
+            var lastkey = await db.TestItems.BulkPut(initialItems);
 
             // assert
             var testItems = await db.TestItems.BulkGet(new Guid[4] { initialItems[0].Id, initialItems[1].Id, initialItems[2].Id, initialItems[3].Id });
+
+            Assert.Equal(initialItems[3].Id, lastkey);
+            Assert.NotNull(testItems);
+
+            for (int i = 0; i < testItems!.Length; i++)
+            {
+                Assert.NotNull(testItems[i]);
+                Assert.Equal(initialItems[i].Name, testItems![i]!.Name);
+            }
+        }
+
+        [Fact]
+        public async Task BulkPutReturnAllkeys()
+        {
+            // arrange
+            var db = CreateDb();
+
+            TestItem[] initialItems = new TestItem[4]
+            {
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "BB" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "CC" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD" }
+            };
+
+            // act
+            var keys = await db.TestItems.BulkPutReturnAllKeys(initialItems);
+
+            // assert
+            var testItems = await db.TestItems.BulkGet(new Guid[4] { initialItems[0].Id, initialItems[1].Id, initialItems[2].Id, initialItems[3].Id });
+
+            Assert.Equal(initialItems[0].Id, keys[0]);
+            Assert.Equal(initialItems[1].Id, keys[1]);
+            Assert.Equal(initialItems[2].Id, keys[2]);
+            Assert.Equal(initialItems[3].Id, keys[3]);
+            Assert.NotNull(testItems);
+
+            for (int i = 0; i < testItems!.Length; i++)
+            {
+                Assert.NotNull(testItems[i]);
+                Assert.Equal(initialItems[i].Name, testItems![i]!.Name);
+            }
+        }
+
+        [Fact]
+        public async Task BulkPutHiddenKey()
+        {
+            // arrange
+            var db = CreateDb();
+
+            var initialItems = new TestItemHiddenKey[]
+            {
+                new TestItemHiddenKey() { Name = "AA" },
+                new TestItemHiddenKey() { Name = "BB" },
+                new TestItemHiddenKey() { Name = "CC" },
+                new TestItemHiddenKey() { Name = "DD" }
+            };
+
+            var keys = new Guid[] { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() };
+
+            // act
+            await db.TestItemsHiddenKey.BulkPut(initialItems, keys);
+
+            // assert
+            var testItems = await db.TestItemsHiddenKey.BulkGet(keys);
+
             Assert.NotNull(testItems);
 
             for (int i = 0; i < testItems!.Length; i++)
