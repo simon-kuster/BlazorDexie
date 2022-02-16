@@ -22,6 +22,64 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         }
 
         [Fact]
+        public async Task Above()
+        {
+            // arrange
+            var db = CreateDb();
+
+            var initialItems = new TestItem[]
+            {
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2023 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2022 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "CC", Year = 2020 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2011 }
+            };
+
+            await db.TestItems.BulkPut(initialItems);
+
+            // act
+            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).Above(2020).ToArray();
+
+            // assert
+            TestItem[] expectedItems = new TestItem[] { initialItems[0], initialItems[1] };
+
+            Assert.Equal(2, testItems.Length);
+            foreach (var item in expectedItems)
+            {
+                Assert.Equal(item.Id, testItems.First(i => i.Year == item.Year).Id);
+            }
+        }
+
+        [Fact]
+        public async Task AboveOrEqual()
+        {
+            // arrange
+            var db = CreateDb();
+
+            var initialItems = new TestItem[]
+            {
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2023 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2022 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "CC", Year = 2020 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2011 }
+            };
+
+            await db.TestItems.BulkPut(initialItems);
+
+            // act
+            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).AboveOrEqual(2020).ToArray();
+
+            // assert
+            TestItem[] expectedItems = new TestItem[] { initialItems[0], initialItems[1], initialItems[2] };
+
+            Assert.Equal(3, testItems.Length);
+            foreach (var item in expectedItems)
+            {
+                Assert.Equal(item.Id, testItems.First(i => i.Year == item.Year).Id);
+            }
+        }
+
+        [Fact]
         public async Task AnyOf()
         {
             // arrange
@@ -46,6 +104,121 @@ namespace Nosthy.Blazor.DexieWrapper.Test
             foreach (var item in expectedItems)
             {
                 Assert.Equal(item.Id, testItems.First(i => i.Name == item.Name).Id);
+            }
+        }
+
+        [Fact]
+        public async Task AnyOfIngoreCase()
+        {
+            // arrange
+            var db = CreateDb();
+
+            var initialItems = new TestItem[]
+            {
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2023 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2022 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "CC", Year = 2020 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2011 }
+            };
+
+            await db.TestItems.BulkPut(initialItems);
+
+            // act
+            var testItems = await db.TestItems.Where(nameof(TestItem.Name)).AnyOfIgnoreCase("bB", "aA", "cC").ToArray();
+
+            // assert
+            TestItem[] expectedItems = new TestItem[] { initialItems[0], initialItems[1], initialItems[2] };
+
+            foreach (var item in expectedItems)
+            {
+                Assert.Equal(item.Id, testItems.First(i => i.Name == item.Name).Id);
+            }
+        }
+
+        [Fact]
+        public async Task Below()
+        {
+            // arrange
+            var db = CreateDb();
+
+            var initialItems = new TestItem[]
+            {
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2023 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2022 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "CC", Year = 2020 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2011 }
+            };
+
+            await db.TestItems.BulkPut(initialItems);
+
+            // act
+            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).Below(2022).ToArray();
+
+            // assert
+            TestItem[] expectedItems = new TestItem[] { initialItems[2], initialItems[3] };
+
+            Assert.Equal(2, testItems.Length);
+            foreach (var item in expectedItems)
+            {
+                Assert.Equal(item.Id, testItems.First(i => i.Year == item.Year).Id);
+            }
+        }
+
+        [Fact]
+        public async Task BelowOrEqual()
+        {
+            // arrange
+            var db = CreateDb();
+
+            var initialItems = new TestItem[]
+            {
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2023 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2022 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "CC", Year = 2020 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2011 }
+            };
+
+            await db.TestItems.BulkPut(initialItems);
+
+            // act
+            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).BelowOrEqual(2022).ToArray();
+
+            // assert
+            TestItem[] expectedItems = new TestItem[] { initialItems[1], initialItems[2], initialItems[3] };
+
+            Assert.Equal(3, testItems.Length);
+            foreach (var item in expectedItems)
+            {
+                Assert.Equal(item.Id, testItems.First(i => i.Year == item.Year).Id);
+            }
+        }
+
+        [Fact]
+        public async Task Between()
+        {
+            // arrange
+            var db = CreateDb();
+
+            var initialItems = new TestItem[]
+            {
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2023 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2022 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "CC", Year = 2020 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2011 }
+            };
+
+            await db.TestItems.BulkPut(initialItems);
+
+            // act
+            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).Betweent(2020, 2023).ToArray();
+
+            // assert
+            TestItem[] expectedItems = new TestItem[] { initialItems[1], initialItems[2] };
+
+            Assert.Equal(2, testItems.Length);
+            foreach (var item in expectedItems)
+            {
+                Assert.Equal(item.Id, testItems.First(i => i.Year == item.Year).Id);
             }
         }
 
@@ -77,6 +250,242 @@ namespace Nosthy.Blazor.DexieWrapper.Test
                 Assert.Equal(exptectedItem.Id, testItems.First(i => i.Name == exptectedItem.Name).Id);
             }
 
+        }
+
+        [Fact]
+        public async Task IsEqualIgnoreCase()
+        {
+            // arrange
+            var db = CreateDb();
+
+            TestItem[] initialItems = new TestItem[4]
+            {
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2010 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2012 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2013 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2015 }
+            };
+
+            await db.TestItems.BulkPut(initialItems);
+
+            // act
+            var testItems = await db.TestItems.Where(nameof(TestItem.Name)).IsEqualIgnoreCase("BB").ToArray();
+
+            // assert
+            TestItem[] expectedItems = new TestItem[] { initialItems[1], initialItems[2] };
+
+            Assert.Equal(2, testItems.Length);
+            foreach (var exptectedItem in expectedItems)
+            {
+                Assert.Equal(exptectedItem.Id, testItems.First(i => i.Year == exptectedItem.Year).Id);
+            }
+
+        }
+
+        //[Fact]
+        //public async Task InAnyRange()
+        //{
+        //    // arrange
+        //    var db = CreateDb();
+
+        //    TestItem[] initialItems = new TestItem[4]
+        //    {
+        //        new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2010 },
+        //        new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2012 },
+        //        new TestItem() { Id = Guid.NewGuid(), Name = "CC", Year = 2012 },
+        //        new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2015 }
+        //    };
+
+        //    await db.TestItems.BulkPut(initialItems);
+
+        //    // act
+        //    var testItems = await db.TestItems.Where(nameof(TestItem.Year)).InAnyRange(new object[][] { new object[] { 2010, 2012 }, new object[] { 2012, 2015 } })(2012).ToArray();
+
+        //    // assert
+        //    TestItem[] expectedItems = new TestItem[] { initialItems[1], initialItems[2] };
+
+        //    Assert.Equal(2, testItems.Length);
+        //    foreach (var exptectedItem in expectedItems)
+        //    {
+        //        Assert.Equal(exptectedItem.Id, testItems.First(i => i.Name == exptectedItem.Name).Id);
+        //    }
+
+        //}
+
+        [Fact]
+        public async Task NoneOf()
+        {
+            // arrange
+            var db = CreateDb();
+
+            TestItem[] initialItems = new TestItem[4]
+            {
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2010 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2012 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "CC", Year = 2013 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2015 }
+            };
+
+            await db.TestItems.BulkPut(initialItems);
+
+            // act
+            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).NoneOf(2010, 2012).ToArray();
+
+            // assert
+            TestItem[] expectedItems = new TestItem[] { initialItems[2], initialItems[3] };
+
+            Assert.Equal(2, testItems.Length);
+            foreach (var exptectedItem in expectedItems)
+            {
+                Assert.Equal(exptectedItem.Id, testItems.First(i => i.Name == exptectedItem.Name).Id);
+            }
+
+        }
+
+        [Fact]
+        public async Task IsNotEqual()
+        {
+            // arrange
+            var db = CreateDb();
+
+            TestItem[] initialItems = new TestItem[4]
+            {
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2010 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2012 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "CC", Year = 2013 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2015 }
+            };
+
+            await db.TestItems.BulkPut(initialItems);
+
+            // act
+            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).IsNotEqual(2012).ToArray();
+
+            // assert
+            TestItem[] expectedItems = new TestItem[] { initialItems[0], initialItems[2], initialItems[3] };
+
+            Assert.Equal(3, testItems.Length);
+            foreach (var exptectedItem in expectedItems)
+            {
+                Assert.Equal(exptectedItem.Id, testItems.First(i => i.Name == exptectedItem.Name).Id);
+            }
+
+        }
+
+        [Fact]
+        public async Task StartsWith()
+        {
+            // arrange
+            var db = CreateDb();
+
+            TestItem[] initialItems = new TestItem[4]
+            {
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2010 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "AB", Year = 2012 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "AC", Year = 2013 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2015 }
+            };
+
+            await db.TestItems.BulkPut(initialItems);
+
+            // act
+            var testItems = await db.TestItems.Where(nameof(TestItem.Name)).StartsWith("A").ToArray();
+
+            // assert
+            TestItem[] expectedItems = new TestItem[] { initialItems[0], initialItems[1], initialItems[2] };
+
+            Assert.Equal(3, testItems.Length);
+            foreach (var exptectedItem in expectedItems)
+            {
+                Assert.Equal(exptectedItem.Id, testItems.First(i => i.Year == exptectedItem.Year).Id);
+            }
+        }
+
+        [Fact]
+        public async Task StartsWithAnyOf()
+        {
+            // arrange
+            var db = CreateDb();
+
+            TestItem[] initialItems = new TestItem[4]
+            {
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2010 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2012 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "CC", Year = 2013 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2015 }
+            };
+
+            await db.TestItems.BulkPut(initialItems);
+
+            // act
+            var testItems = await db.TestItems.Where(nameof(TestItem.Name)).StartsWithAnyOf("A", "B").ToArray();
+
+            // assert
+            TestItem[] expectedItems = new TestItem[] { initialItems[0], initialItems[1] };
+
+            Assert.Equal(2, testItems.Length);
+            foreach (var exptectedItem in expectedItems)
+            {
+                Assert.Equal(exptectedItem.Id, testItems.First(i => i.Year == exptectedItem.Year).Id);
+            }
+        }
+
+        [Fact]
+        public async Task StartsWithIgnoreCase()
+        {
+            // arrange
+            var db = CreateDb();
+
+            TestItem[] initialItems = new TestItem[4]
+            {
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2010 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "AB", Year = 2012 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "AC", Year = 2013 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2015 }
+            };
+
+            await db.TestItems.BulkPut(initialItems);
+
+            // act
+            var testItems = await db.TestItems.Where(nameof(TestItem.Name)).StartsWithIgnoreCase("a").ToArray();
+
+            // assert
+            TestItem[] expectedItems = new TestItem[] { initialItems[0], initialItems[1], initialItems[2] };
+
+            Assert.Equal(3, testItems.Length);
+            foreach (var exptectedItem in expectedItems)
+            {
+                Assert.Equal(exptectedItem.Id, testItems.First(i => i.Year == exptectedItem.Year).Id);
+            }
+        }
+
+        [Fact]
+        public async Task StartsWithAnyOfIgnoreCase()
+        {
+            // arrange
+            var db = CreateDb();
+
+            TestItem[] initialItems = new TestItem[4]
+            {
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2010 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2012 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "CC", Year = 2013 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2015 }
+            };
+
+            await db.TestItems.BulkPut(initialItems);
+
+            // act
+            var testItems = await db.TestItems.Where(nameof(TestItem.Name)).StartsWithAnyOfIgnoreCase("a", "b").ToArray();
+
+            // assert
+            TestItem[] expectedItems = new TestItem[] { initialItems[0], initialItems[1] };
+
+            Assert.Equal(2, testItems.Length);
+            foreach (var exptectedItem in expectedItems)
+            {
+                Assert.Equal(exptectedItem.Id, testItems.First(i => i.Year == exptectedItem.Year).Id);
+            }
         }
 
         private MyDb CreateDb()
