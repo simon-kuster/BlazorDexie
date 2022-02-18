@@ -69,7 +69,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
             var testItems = await db.TestItems.Where(nameof(TestItem.Year)).IsEqual(2012).ToArray();
 
             // assert
-            TestItem[] expectedItems = new TestItem[] { initialItems[1], initialItems[2] };
+            var expectedItems = new TestItem[] { initialItems[1], initialItems[2] };
 
             Assert.Equal(2, testItems.Length);
             foreach (var exptectedItem in expectedItems)
