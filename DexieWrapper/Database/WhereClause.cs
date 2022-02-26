@@ -57,7 +57,7 @@
             return _collection;
         }
 
-        public Collection<T, TKey> IsEqualIgnoreCase(object value)
+        public Collection<T, TKey> EqualIgnoreCase(object value)
         {
             _collection.AddCommand("equalsIgnoreCase", value);
             return _collection;
@@ -77,7 +77,7 @@
             return _collection;
         }
 
-        public Collection<T, TKey> IsNotEqual(object value)
+        public Collection<T, TKey> NotEqual(object value)
         {
             _collection.AddCommand("notEqual", value);
             return _collection;

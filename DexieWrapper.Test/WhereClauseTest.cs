@@ -253,7 +253,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         }
 
         [Fact]
-        public async Task IsEqualIgnoreCase()
+        public async Task EqualIgnoreCase()
         {
             // arrange
             var db = CreateDb();
@@ -269,7 +269,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
             await db.TestItems.BulkPut(initialItems);
 
             // act
-            var testItems = await db.TestItems.Where(nameof(TestItem.Name)).IsEqualIgnoreCase("BB").ToArray();
+            var testItems = await db.TestItems.Where(nameof(TestItem.Name)).EqualIgnoreCase("BB").ToArray();
 
             // assert
             TestItem[] expectedItems = new TestItem[] { initialItems[1], initialItems[2] };
@@ -343,7 +343,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         }
 
         [Fact]
-        public async Task IsNotEqual()
+        public async Task NotEqual()
         {
             // arrange
             var db = CreateDb();
@@ -359,7 +359,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
             await db.TestItems.BulkPut(initialItems);
 
             // act
-            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).IsNotEqual(2012).ToArray();
+            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).NotEqual(2012).ToArray();
 
             // assert
             TestItem[] expectedItems = new TestItem[] { initialItems[0], initialItems[2], initialItems[3] };
