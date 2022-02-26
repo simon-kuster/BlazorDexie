@@ -75,6 +75,13 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             return await Execute<T?>("get", primaryKey);
         }
 
+        public Collection<T, TKey> OrderBy(string index)
+        {
+            var collection = CreateNewColletion();
+            collection.AddCommand("orderBy", Camelizer.ToCamelCase(index));
+            return collection;
+        }
+
         public async Task<TKey> Put(T item)
         {
             return await Execute<TKey>("put", item);
@@ -83,6 +90,13 @@ namespace Nosthy.Blazor.DexieWrapper.Database
         public async Task<TKey> Put(T item, TKey? key)
         {
             return await Execute<TKey>("put", item, key);
+        }
+
+        public Collection<T, TKey> Reverse()
+        {
+            var collection = CreateNewColletion();
+            collection.AddCommand("reverse");
+            return collection;
         }
 
         public async Task<int> Update(TKey key, Dictionary<string, object> changes)

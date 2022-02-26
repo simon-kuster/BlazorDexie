@@ -348,6 +348,28 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         }
 
         [Fact]
+        public async Task OrderBy()
+        {
+            // arrange
+            var db = CreateDb();
+
+            var initialItems = new TestItem[]{
+                new TestItem() { Id = Guid.NewGuid(), Name = "C" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "A" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "B" }
+            };
+
+            await db.TestItems.BulkPut(initialItems);
+
+            // act
+            var testItems = await db.TestItems.OrderBy(nameof(TestItem.Name)).ToArray();
+
+            // assert
+            Assert.Equal(3, testItems.Length);
+            Assert.Equal(new string[] {"A", "B", "C" }, testItems.Select(t => t.Name).ToArray());
+        }
+
+        [Fact]
         public async Task Put()
         {
             // arrange
@@ -381,6 +403,30 @@ namespace Nosthy.Blazor.DexieWrapper.Test
 
             Assert.NotNull(checkItem);
             Assert.Equal("BB", checkItem!.Name);
+        }
+
+        [Fact]
+        public async Task Reverse()
+        {
+            // arrange
+            var db = CreateDb();
+
+            var initialItems = new TestItem[]{
+                new TestItem() { Id = Guid.NewGuid(), Name = "C" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "A" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "B" }
+            };
+
+            var exceptedNames = initialItems.OrderByDescending(i => i.Id).Select(i => i.Name).ToArray();
+
+            await db.TestItems.BulkPut(initialItems);
+
+            // act
+            var testItems = await db.TestItems.Reverse().ToArray();
+
+            // assert
+            Assert.Equal(3, testItems.Length);
+            Assert.Equal(exceptedNames, testItems.Select(t => t.Name).ToArray());
         }
 
         [Fact]
