@@ -210,7 +210,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
             await db.TestItems.BulkPut(initialItems);
 
             // act
-            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).Betweent(2020, 2023).ToArray();
+            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).Between(2020, 2023).ToArray();
 
             // assert
             TestItem[] expectedItems = new TestItem[] { initialItems[1], initialItems[2] };

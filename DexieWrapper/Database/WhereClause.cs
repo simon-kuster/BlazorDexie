@@ -45,7 +45,7 @@
             return _collection;
         }
 
-        public Collection<T, TKey> Betweent(object minValue, object maxValue, bool includeMin = true, bool includeMax = false)
+        public Collection<T, TKey> Between(object minValue, object maxValue, bool includeMin = true, bool includeMax = false)
         {
             _collection.AddCommand("between", minValue, maxValue, includeMin, includeMax);
             return _collection;
