@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <PackageId>Nosthy.Blazor.DexieWrapper</PackageId>
-    <Version>0.1.0</Version>
+    <Version>0.2.0</Version>
     <Authors>Nosthy</Authors>
     <Company>Nosthy</Company>
     <Product>Nosthy.Blazor.DexieWrapper</Product>
