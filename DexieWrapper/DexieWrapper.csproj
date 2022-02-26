@@ -11,7 +11,8 @@
     <Product>Nosthy.Blazor.DexieWrapper</Product>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RootNamespace>Nosthy.Blazor.DexieWrapper</RootNamespace>
-    <Copyright>Copyright 2022(c) Simon Kuster. All rights reserved.</Copyright>
+    <Copyright>Copyright 2022(c) Nosthy. All rights reserved.</Copyright>
+    <Description>Nosthy.Blazor.DexieWrapper provides an easy way to access the browers IndexedDb for Blazor applications. It is a wrapper around the well-known javascript library Dexie.js.</Description>
   </PropertyGroup>
 
   <ItemGroup>
