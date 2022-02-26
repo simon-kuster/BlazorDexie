@@ -228,7 +228,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
             // arrange
             var db = CreateDb();
 
-            TestItem[] initialItems = new TestItem[4]
+            var initialItems = new TestItem[]
             {
                 new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2010 },
                 new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2012 },
@@ -258,7 +258,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
             // arrange
             var db = CreateDb();
 
-            TestItem[] initialItems = new TestItem[4]
+            var initialItems = new TestItem[]
             {
                 new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2010 },
                 new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2012 },
@@ -282,35 +282,38 @@ namespace Nosthy.Blazor.DexieWrapper.Test
 
         }
 
-        //[Fact]
-        //public async Task InAnyRange()
-        //{
-        //    // arrange
-        //    var db = CreateDb();
+        [Fact]
+        public async Task InAnyRange()
+        {
+            // arrange
+            var db = CreateDb();
 
-        //    TestItem[] initialItems = new TestItem[4]
-        //    {
-        //        new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2010 },
-        //        new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2012 },
-        //        new TestItem() { Id = Guid.NewGuid(), Name = "CC", Year = 2012 },
-        //        new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2015 }
-        //    };
+            var initialItems = new TestItem[]
+            {
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2010 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2011 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "CC", Year = 2012 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2013 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2014 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2015 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2016 }
+            };
 
-        //    await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems);
 
-        //    // act
-        //    var testItems = await db.TestItems.Where(nameof(TestItem.Year)).InAnyRange(new object[][] { new object[] { 2010, 2012 }, new object[] { 2012, 2015 } })(2012).ToArray();
+            // act
+            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).InAnyRange(new object[][] { new object[] { 2010, 2011 }, new object[] { 2014, 2016 } }).ToArray();
 
-        //    // assert
-        //    TestItem[] expectedItems = new TestItem[] { initialItems[1], initialItems[2] };
+            // assert
+            TestItem[] expectedItems = new TestItem[] { initialItems[0], initialItems[4], initialItems[5] };
 
-        //    Assert.Equal(2, testItems.Length);
-        //    foreach (var exptectedItem in expectedItems)
-        //    {
-        //        Assert.Equal(exptectedItem.Id, testItems.First(i => i.Name == exptectedItem.Name).Id);
-        //    }
+            Assert.Equal(3, testItems.Length);
+            foreach (var exptectedItem in expectedItems)
+            {
+                Assert.Equal(exptectedItem.Id, testItems.First(i => i.Year == exptectedItem.Year).Id);
+            }
 
-        //}
+        }
 
         [Fact]
         public async Task NoneOf()
@@ -318,7 +321,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
             // arrange
             var db = CreateDb();
 
-            TestItem[] initialItems = new TestItem[4]
+            var initialItems = new TestItem[]
             {
                 new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2010 },
                 new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2012 },
@@ -348,7 +351,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
             // arrange
             var db = CreateDb();
 
-            TestItem[] initialItems = new TestItem[4]
+            var initialItems = new TestItem[]
             {
                 new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2010 },
                 new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2012 },
@@ -378,7 +381,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
             // arrange
             var db = CreateDb();
 
-            TestItem[] initialItems = new TestItem[4]
+            var initialItems = new TestItem[]
             {
                 new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2010 },
                 new TestItem() { Id = Guid.NewGuid(), Name = "AB", Year = 2012 },
@@ -407,7 +410,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
             // arrange
             var db = CreateDb();
 
-            TestItem[] initialItems = new TestItem[4]
+            var initialItems = new TestItem[]
             {
                 new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2010 },
                 new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2012 },
@@ -436,7 +439,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
             // arrange
             var db = CreateDb();
 
-            TestItem[] initialItems = new TestItem[4]
+            var initialItems = new TestItem[]
             {
                 new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2010 },
                 new TestItem() { Id = Guid.NewGuid(), Name = "AB", Year = 2012 },
@@ -465,7 +468,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
             // arrange
             var db = CreateDb();
 
-            TestItem[] initialItems = new TestItem[4]
+            var initialItems = new TestItem[]
             {
                 new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2010 },
                 new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2012 },

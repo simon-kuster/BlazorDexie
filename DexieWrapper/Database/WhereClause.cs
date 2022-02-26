@@ -67,7 +67,7 @@
         {
             object options = new { includeLowers = includeMin, includeUppers = includeMax };
 
-            _collection.AddCommand("equals", ranges, options);
+            _collection.AddCommand("inAnyRange", ranges, options);
             return _collection;
         }
 
