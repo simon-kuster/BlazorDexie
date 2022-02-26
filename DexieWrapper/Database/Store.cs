@@ -92,13 +92,6 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             return await Execute<TKey>("put", item, key);
         }
 
-        public Collection<T, TKey> Reverse()
-        {
-            var collection = CreateNewColletion();
-            collection.AddCommand("reverse");
-            return collection;
-        }
-
         public async Task<int> Update(TKey key, Dictionary<string, object> changes)
         {
             var changesObject = new ExpandoObject();

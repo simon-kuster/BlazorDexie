@@ -47,6 +47,13 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             return collection;
         }
 
+        public Collection<T, TKey> Reverse()
+        {
+            var collection = CreateNewColletion();
+            collection.AddCommand("reverse");
+            return collection;
+        }
+
         public async Task<T[]> ToArray()
         {
             return await Execute<T[]>("toArray");
