@@ -26,3 +26,8 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
+    - name: Pack
+      run: dotnet pack --configuration Release
+      working-directory: DexieWrapper
+    - name: Push
+      run: dotnet nuget push "DexieWrapper/bin/Release/Nosthy.Blazor.DexieWrapper.0.1.0.nupkg" --api-key oy2cr7n4uahdzhr6f7eqwennhhc4i5dupeqnlsegesebc4 --source "github"
