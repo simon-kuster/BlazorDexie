@@ -36,4 +36,4 @@ jobs:
       run: dotnet pack --configuration Release
       working-directory: DexieWrapper
     - name: Push
-      run: dotnet nuget push "DexieWrapper/bin/Release/Nosthy.Blazor.DexieWrapper.0.2.0.nupkg" --api-key oy2cr7n4uahdzhr6f7eqwennhhc4i5dupeqnlsegesebc4 --source "https://api.nuget.org/v3/index.json"
+      run: dotnet nuget push "DexieWrapper/bin/Release/Nosthy.Blazor.DexieWrapper.*.nupkg" --api-key oy2cr7n4uahdzhr6f7eqwennhhc4i5dupeqnlsegesebc4 --source "https://api.nuget.org/v3/index.json"
