@@ -13,6 +13,7 @@
     <RootNamespace>Nosthy.Blazor.DexieWrapper</RootNamespace>
     <Copyright>Copyright 2022(c) Nosthy. All rights reserved.</Copyright>
     <Description>Nosthy.Blazor.DexieWrapper provides an easy way to access the browers IndexedDb for Blazor applications. It is a wrapper around the well-known javascript library Dexie.js.</Description>
+    <PackageProjectUrl>https://github.com/Simon-Kuster/Nosthy.Blazor.DexieWrapper</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
