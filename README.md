@@ -35,8 +35,8 @@ Usage in Blazor
 
         protected override async Task OnInitializedAsync()
         {
-            var jsModuleFactory = new JsObjectReferenceWrapperFactory(JSRuntime, "./_content/Nosthy.Blazor.DexieWrapper");
-            var db = new MyDb(jsModuleFactory);
+            var moduleFactory = new EsModuleFactory(JSRuntime);
+            var db = new MyDb(moduleFactory);
 
             await db.Friends.BulkPut(new Friend[]
             {
