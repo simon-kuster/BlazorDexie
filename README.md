@@ -22,7 +22,7 @@ public class MyDb : Db
     public Store<Friend, int> Friends { get; set; } = new(nameof(Friend.Id), nameof(Friend.Name), nameof(Friend.Age));
 
     public MyDb(IModuleFactory moduleFactory)
-        : base("FriendDatabase", 1, new DbVersion[] { }, jsModuleFactory)
+        : base("FriendDatabase", 1, new DbVersion[] { }, moduleFactory)
     {
     }
 }
