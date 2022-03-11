@@ -454,7 +454,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
 
         private MyDb CreateDb()
         {
-            var moduleFactory = new ModuleWrapperFactory(_nodeJSService, "../../../DexieWrapper/wwwroot");
+            var moduleFactory = new CommonJsModuleFactory(_nodeJSService, "../../../DexieWrapper/wwwroot");
             return new MyDb(moduleFactory);
         }
     }

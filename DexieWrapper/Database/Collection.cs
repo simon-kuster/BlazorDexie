@@ -80,9 +80,9 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             {
                 string retString;
 
-                if (Db.DbJsObjectRef != null)
+                if (Db.DbRef != null)
                 {
-                    retString = await CommandExecuterJsInterop.Execute<string>(Db.DbJsObjectRef, StoreName, commands);
+                    retString = await CommandExecuterJsInterop.Execute<string>(Db.DbRef, StoreName, commands);
                 }
                 else
                 {
@@ -93,9 +93,9 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             }
             else
             {
-                if (Db.DbJsObjectRef != null)
+                if (Db.DbRef != null)
                 {
-                    return await CommandExecuterJsInterop.Execute<TRet>(Db.DbJsObjectRef, StoreName, commands);
+                    return await CommandExecuterJsInterop.Execute<TRet>(Db.DbRef, StoreName, commands);
                 }
 
                 return await CommandExecuterJsInterop.InitDbAndExecute<TRet>(Db.DbDefinition, StoreName, commands);
@@ -109,9 +109,9 @@ namespace Nosthy.Blazor.DexieWrapper.Database
 
             await Db.Init();
 
-            if (Db.DbJsObjectRef != null)
+            if (Db.DbRef != null)
             {
-                await CommandExecuterJsInterop.ExecuteNonQuery(Db.DbJsObjectRef, StoreName, commands);
+                await CommandExecuterJsInterop.ExecuteNonQuery(Db.DbRef, StoreName, commands);
             }
             else
             {

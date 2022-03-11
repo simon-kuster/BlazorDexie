@@ -4,20 +4,20 @@ using System.IO;
 
 namespace Nosthy.Blazor.DexieWrapper.Test.ModuleWrappers
 {
-    public class ModuleWrapperFactory : IJsModuleFactory
+    public class CommonJsModuleFactory : IModuleFactory
     {
         private readonly INodeJSService _nodeJSService;
         private readonly string _basePath;
 
-        public ModuleWrapperFactory(INodeJSService nodeJSService, string basePath)
+        public CommonJsModuleFactory(INodeJSService nodeJSService, string basePath)
         {
             _nodeJSService = nodeJSService;
             _basePath = basePath;
         }
 
-        public IJsModule CreateModule(string modulePath)
+        public IModule CreateModule(string modulePath)
         {
-            return new ModuleWrapper(_nodeJSService, Path.Combine(_basePath, modulePath));
+            return new CommonJsModule(_nodeJSService, Path.Combine(_basePath, modulePath));
         }
     }
 }

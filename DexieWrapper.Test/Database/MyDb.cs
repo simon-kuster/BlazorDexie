@@ -10,7 +10,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test.Database
         public Store<TestItem, Guid> TestItems { get; set; } = new(nameof(TestItem.Id), nameof(TestItem.Year), nameof(TestItem.Name));
         public Store<TestItemHiddenKey, Guid> TestItemsHiddenKey { get; set; } = new(string.Empty, nameof(TestItem.Id), nameof(TestItem.Year));
 
-        public MyDb(IJsModuleFactory jsModuleFactory)
+        public MyDb(IModuleFactory jsModuleFactory)
             : base("MyDatabase", 2, new DbVersion[] { new Version1() }, jsModuleFactory)
         {
         }

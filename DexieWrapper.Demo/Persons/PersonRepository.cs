@@ -7,7 +7,7 @@ namespace Nosthy.Blazor.DexieWrapper.Demo.Persons
     {
         private readonly MyDb _db;
 
-        public PersonRepository(IJsModuleFactory jsModuleFactory)
+        public PersonRepository(IModuleFactory jsModuleFactory)
         {
             _db = new MyDb(jsModuleFactory);
         }

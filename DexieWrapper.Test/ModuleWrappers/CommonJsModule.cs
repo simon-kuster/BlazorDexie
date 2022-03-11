@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 
 namespace Nosthy.Blazor.DexieWrapper.Test.ModuleWrappers
 {
-    public class ModuleWrapper : IJsModule
+    public class CommonJsModule : IModule
     {
         INodeJSService _nodeJSService;
         private const string ModuleWrapperPath = "../../../wwwroot/scripts/es-module-wrapper.js";
         private string _modulePath;
 
-        public ModuleWrapper(INodeJSService nodeJSService, string modulePath)
+        public CommonJsModule(INodeJSService nodeJSService, string modulePath)
         {
             _nodeJSService = nodeJSService;
             _modulePath = modulePath;

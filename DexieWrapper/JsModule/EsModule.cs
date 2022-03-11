@@ -2,11 +2,11 @@
 
 namespace Nosthy.Blazor.DexieWrapper.JsModule
 {
-    public class JsObjectReferenceWrapper : IJsModule
+    public class EsModule : IModule
     {
         private readonly Lazy<Task<IJSObjectReference>> _moduleTask;
 
-        public JsObjectReferenceWrapper(IJSRuntime jsRuntime, string modulePath)
+        public EsModule(IJSRuntime jsRuntime, string modulePath)
         {
             _moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>("import", modulePath).AsTask());
         }

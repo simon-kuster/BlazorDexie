@@ -13,12 +13,12 @@ namespace Nosthy.Blazor.DexieWrapper.Database
         public string DatabaseName { get; }
         public int VersionNumber { get; }
         public DbDefinition DbDefinition { get; }
-        public IJSObjectReference? DbJsObjectRef { get; private set; }
+        public IJSObjectReference? DbRef { get; private set; }
 
         [JsonIgnore]
         public IEnumerable<DbVersion> PreviousVersions { get; }
 
-        public Db(string databaseName, int currentVersionNumber, IEnumerable<DbVersion> previousVersions, IJsModuleFactory jsModuleFactory)
+        public Db(string databaseName, int currentVersionNumber, IEnumerable<DbVersion> previousVersions, IModuleFactory jsModuleFactory)
         {
             DatabaseName = databaseName;
             VersionNumber = currentVersionNumber;
@@ -54,11 +54,11 @@ namespace Nosthy.Blazor.DexieWrapper.Database
 
         public async Task Init()
         {
-            if (DbJsObjectRef == null && _commandExecuterJsInterop.CanUseObjectReference)
+            if (DbRef == null && _commandExecuterJsInterop.CanUseObjectReference)
             {
                 // Optimized code for Blazor
                 // Create Dexie object only once
-                DbJsObjectRef = await _commandExecuterJsInterop.InitDb(DbDefinition);
+                DbRef = await _commandExecuterJsInterop.InitDb(DbDefinition);
             }
         }
     }
