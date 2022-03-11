@@ -25,17 +25,17 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             return await Execute<TKey>("add", item, key);
         }
 
-        public async Task<TKey> BulkAdd(T[] items)
+        public async Task<TKey> BulkAdd(IEnumerable<T> items)
         {
             return await Execute<TKey>("bulkAdd", items);
         }
 
-        public async Task BulkAdd(T[] items, IEnumerable<TKey>? keys)
+        public async Task BulkAdd(IEnumerable<T> items, IEnumerable<TKey>? keys)
         {
             await ExecuteNonQuery("bulkAdd", items, keys);
         }
 
-        public async Task<List<TKey>> BulkAddReturnAllKeys(T[] items)
+        public async Task<List<TKey>> BulkAddReturnAllKeys(IEnumerable<T> items)
         {
             return await Execute<List<TKey>>("bulkAdd", items, new { allKeys = true });
         }
@@ -50,17 +50,17 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             return await Execute<T[]>("bulkGet", keys);
         }
 
-        public async Task<TKey> BulkPut(T[] items)
+        public async Task<TKey> BulkPut(IEnumerable<T> items)
         {
             return await Execute<TKey>("bulkPut", items);
         }
 
-        public async Task BulkPut(T[] items, IEnumerable<TKey>? keys)
+        public async Task BulkPut(IEnumerable<T> items, IEnumerable<TKey>? keys)
         {
             await ExecuteNonQuery("bulkPut", items, keys);
         }
 
-        public async Task<List<TKey>> BulkPutReturnAllKeys(T[] items)
+        public async Task<List<TKey>> BulkPutReturnAllKeys(IEnumerable<T> items)
         {
             return await Execute<List<TKey>>("bulkPut", items, new { allKeys = true });
         }
