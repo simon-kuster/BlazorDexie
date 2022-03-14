@@ -25,7 +25,7 @@ namespace Nosthy.Blazor.DexieWrapper.Database
                     if (store != null)
                     {
                         var storeName = property.Name;
-                        currentVersion.Stores.Add(new StoreDefinition(storeName, store.Indices));
+                        currentVersion.Stores.Add(new StoreDefinition(storeName, store.SchemaDefinitions));
                     }
                 }
             }

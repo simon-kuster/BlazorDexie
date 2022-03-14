@@ -452,6 +452,28 @@ namespace Nosthy.Blazor.DexieWrapper.Test
             Assert.Equal(initialItems[3].Id, testItems?.First().Id);
         }
 
+        [Fact]
+        public void IndicesAndPrimaryKey()
+        {
+            // arrange
+            var db = CreateDb();
+
+            // assert
+            Assert.Equal("Id", db.TestItems.PrimaryKey);
+            Assert.Equal(new []{ "Id", "Year", "Name" }, db.TestItems.Indices);
+        }
+
+        [Fact]
+        public void HasIndex()
+        {
+            // arrange
+            var db = CreateDb();
+
+            // assert
+            Assert.True(db.TestItems.HasIndex("Year"));
+            Assert.False(db.TestItems.HasIndex("Month"));
+        }
+
         private MyDb CreateDb()
         {
             var moduleFactory = new CommonJsModuleFactory(_nodeJSService, "../../../DexieWrapper/wwwroot");

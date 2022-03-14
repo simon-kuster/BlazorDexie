@@ -6,14 +6,32 @@ namespace Nosthy.Blazor.DexieWrapper.Database
 {
     public class Store<T, TKey> : Collection<T, TKey>, IStore
     {
+        public string[] SchemaDefinitions { get; }
+        public string PrimaryKey { get; }
         public string[] Indices { get; }
 
         protected override List<Command> CurrentCommands { get => new List<Command>(); }
 
-        public Store(params string[] indices)
+        public Store(params string[] schemaDefinitions)
         {
-            Indices = indices.Select(Camelizer.ToCamelCase).ToArray();
+            if (schemaDefinitions.Length == 0)
+            {
+                throw new ArgumentException("Must contain at least one element", nameof(schemaDefinitions));
+            }
+
+            SchemaDefinitions = schemaDefinitions.Select(Camelizer.ToCamelCase).ToArray();
+            
+            Indices = schemaDefinitions.Select(d => d
+            .TrimStart('+')
+            .TrimStart('&')
+            .TrimStart('*')
+            .TrimStart('[')
+            .TrimEnd(']'))
+                .ToArray();
+
+            PrimaryKey = Indices.First();   
         }
+
 
         public async Task<TKey> Add(T item)
         {
@@ -128,6 +146,11 @@ namespace Nosthy.Blazor.DexieWrapper.Database
         public async Task Clear()
         {
             await ExecuteNonQuery("clear");
+        }
+
+        public bool HasIndex(string index)
+        {
+            return Indices.Contains(index); 
         }
 
         protected override Collection<T, TKey> CreateNewColletion()
