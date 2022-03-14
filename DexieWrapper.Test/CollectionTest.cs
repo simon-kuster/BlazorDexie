@@ -70,6 +70,30 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         }
 
         [Fact]
+        public async Task OffsetLimit()
+        {
+            // arrange
+            var db = CreateDb();
+
+            var initialItems = new TestItem[]
+            {
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA", Year = 2023 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "BB", Year = 2022 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "CC", Year = 2020 },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2011 }
+            };
+
+            await db.TestItems.BulkPut(initialItems);
+
+            // act
+            var testItems = await db.TestItems.OrderBy(nameof(TestItem.Name)).Offset(1).Limit(2).ToArray();    
+
+            // assert
+
+            Assert.Equal(new[] { "BB", "CC" }, testItems.Select(t => t.Name).ToList());
+        }
+
+        [Fact]
         public async Task Reverse()
         {
             // arrange

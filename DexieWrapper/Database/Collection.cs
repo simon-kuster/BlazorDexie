@@ -47,6 +47,20 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             return collection;
         }
 
+        public Collection<T, TKey> Limit(int count)
+        {
+            var collection = CreateNewColletion();
+            collection.AddCommand("limit", count);
+            return collection;
+        }
+
+        public Collection<T, TKey> Offset(int count)
+        {
+            var collection = CreateNewColletion();
+            collection.AddCommand("offset", count);
+            return collection;
+        }
+
         public Collection<T, TKey> Reverse()
         {
             var collection = CreateNewColletion();
