@@ -62,7 +62,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
             await db.TestItems.BulkPut(initialItems);
 
             // act
-            var testItems = await db.TestItems.Filter("t", "return t.name === 'CC'").ToArray();
+            var testItems = await db.TestItems.Filter("return i.name === p[0]", new[] { "CC" }).ToArray();
 
             // assert
             Assert.Single(testItems);

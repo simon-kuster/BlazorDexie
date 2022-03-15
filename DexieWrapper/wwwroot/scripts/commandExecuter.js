@@ -23,8 +23,8 @@ export function executeNonQuery(db, storeName, commands) {
 
     commands.forEach(c => {
         if (c.cmd === 'filter') {
-            var filterFunction = new Function(...c.parameters);
-            query = query[c.cmd](filterFunction);
+            var filterFunction = new Function('i', 'p', c.parameters[0]);
+            query = query[c.cmd]((i) => filterFunction(i, c.parameters[1]));
         } else {
             query = query[c.cmd](...c.parameters);
         }

@@ -30,9 +30,9 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             CurrentCommands.Add(new Command(command, parameters));
         }
 
-        public Collection<T, TKey> And(params string[] filter)
+        public Collection<T, TKey> And(string filterFunction, IEnumerable<object>? parameters = null)
         {
-            return Filter(filter);
+            return Filter(filterFunction, parameters);
         }
 
         public async Task<int> Count()
@@ -40,10 +40,10 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             return await Execute<int>("count");
         }
 
-        public Collection<T, TKey> Filter(params string[] filter)
+        public Collection<T, TKey> Filter(string filterFunction, IEnumerable<object>? parameters = null)
         {
             var collection = CreateNewColletion();
-            collection.AddCommand("filter", filter);
+            collection.AddCommand("filter", filterFunction, parameters);
             return collection;
         }
 
