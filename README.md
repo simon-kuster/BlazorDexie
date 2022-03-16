@@ -21,8 +21,8 @@ public class MyDb : Db
 {
     public Store<Friend, int> Friends { get; set; } = new(nameof(Friend.Id), nameof(Friend.Name), nameof(Friend.Age));
 
-    public MyDb(IJsModuleFactory jsModuleFactory)
-        : base("FriendDatabase", 1, new DbVersion[] { }, jsModuleFactory)
+    public MyDb(IModuleFactory moduleFactory)
+        : base("FriendDatabase", 1, new DbVersion[] { }, moduleFactory)
     {
     }
 }
@@ -35,8 +35,8 @@ Usage in Blazor
 
         protected override async Task OnInitializedAsync()
         {
-            var jsModuleFactory = new JsObjectReferenceWrapperFactory(JSRuntime, "./_content/Nosthy.Blazor.DexieWrapper");
-            var db = new MyDb(jsModuleFactory);
+            var moduleFactory = new EsModuleFactory(JSRuntime);
+            var db = new MyDb(moduleFactory);
 
             await db.Friends.BulkPut(new Friend[]
             {
