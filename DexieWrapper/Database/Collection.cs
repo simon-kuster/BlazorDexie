@@ -47,6 +47,13 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             return collection;
         }
 
+        public Collection<T, TKey> FilterModule(string modulePath, IEnumerable<object>? parameters = null)
+        {
+            var collection = CreateNewColletion();
+            collection.AddCommand("filterModule", modulePath, parameters);
+            return collection;
+        }
+
         public Collection<T, TKey> Limit(int count)
         {
             var collection = CreateNewColletion();
