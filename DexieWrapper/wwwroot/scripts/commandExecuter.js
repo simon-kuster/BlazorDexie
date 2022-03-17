@@ -30,7 +30,6 @@ export async function executeNonQuery(db, storeName, commands) {
             case "filterModule":
                 var cust = await import(c.parameters[0]);
                 query = query.filter((i) => cust.default(i, c.parameters[1]));
-                
                 break;
 
             default:

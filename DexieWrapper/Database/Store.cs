@@ -20,13 +20,11 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             }
 
             SchemaDefinitions = schemaDefinitions.Select(Camelizer.ToCamelCase).ToArray();
-            
+
             Indices = schemaDefinitions.Select(d => d
             .TrimStart('+')
             .TrimStart('&')
-            .TrimStart('*')
-            .TrimStart('[')
-            .TrimEnd(']'))
+            .TrimStart('*'))
                 .ToArray();
 
             PrimaryKey = Indices.First();   

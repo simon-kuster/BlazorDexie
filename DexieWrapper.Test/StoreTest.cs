@@ -369,6 +369,30 @@ namespace Nosthy.Blazor.DexieWrapper.Test
             Assert.Equal(new string[] {"A", "B", "C" }, testItems.Select(t => t.Name).ToArray());
         }
 
+
+        [Fact]
+        public async Task OrderByCompoundIndex()
+        {
+            // arrange
+            var db = CreateDb();
+
+            var initialItems = new TestItemWithCompoundIndex[]{
+                new TestItemWithCompoundIndex() { Firstname = "B", Secondname = "A" },
+                new TestItemWithCompoundIndex() { Firstname = "A", Secondname = "A" },
+                new TestItemWithCompoundIndex() { Firstname = "A", Secondname = "B" }
+            };
+
+            await db.TestItemsWithCompoundIndex.BulkPut(initialItems);
+
+
+            // act
+            var testItems = await db.TestItemsWithCompoundIndex.OrderBy(db.TestItemsWithCompoundIndex.Indices[1]).ToArray();
+
+            // assert
+            Assert.Equal(3, testItems.Length);
+            Assert.Equal(new int?[] { 2, 3, 1 }, testItems.Select(t => t.Id).ToArray());
+        }
+
         [Fact]
         public async Task Put()
         {
