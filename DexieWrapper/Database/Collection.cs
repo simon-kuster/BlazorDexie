@@ -37,7 +37,7 @@ namespace Nosthy.Blazor.DexieWrapper.Database
 
         public async Task<int> Count()
         {
-            return await Execute<int>("count");
+            return await Execute<int?>("count") ?? 0;
         }
 
         public Collection<T, TKey> Filter(string filterFunction, IEnumerable<object>? parameters = null)
