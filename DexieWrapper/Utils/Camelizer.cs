@@ -18,6 +18,13 @@
                 return "[" + string.Join("+", camelizedSubStrings) + "]";
             }
 
+            if (str.Contains("."))
+            {
+                var subStrings = str.Split('.');
+                var camelizedSubStrings = subStrings.Select(s => ToCamelCase(s.Trim())).ToArray();
+                return string.Join(".", camelizedSubStrings);
+            }
+
             if (firstChar == '&' || firstChar == '*')
             {
                 return firstChar + ToCamelCase(str.Substring(1));
