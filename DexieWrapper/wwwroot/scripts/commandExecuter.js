@@ -5,7 +5,7 @@ export function initDbAndExecute(dbDefinition, storeName, commands) {
 
 export async function execute(db, storeName, commands) {
     var result = await executeNonQuery(db, storeName, commands);
-    if (!result) {
+    if (result === undefined) {
         return null;
     }
 
