@@ -31,64 +31,64 @@ namespace Nosthy.Blazor.DexieWrapper.Database
         }
 
 
-        public async Task<TKey> Add(T item)
+        public async Task<TKey> Add(T item, CancellationToken cancellationToken = default)
         {
-            return await Execute<TKey>("add", item);
+            return await Execute<TKey>("add", cancellationToken, item);
         }
 
-        public async Task<TKey> Add(T item, TKey? key)
+        public async Task<TKey> Add(T item, TKey? key, CancellationToken cancellationToken = default)
         {
-            return await Execute<TKey>("add", item, key);
+            return await Execute<TKey>("add", cancellationToken, item, key);
         }
 
-        public async Task<TKey> BulkAdd(IEnumerable<T> items)
+        public async Task<TKey> BulkAdd(IEnumerable<T> items, CancellationToken cancellationToken = default)
         {
-            return await Execute<TKey>("bulkAdd", items);
+            return await Execute<TKey>("bulkAdd", cancellationToken, items);
         }
 
-        public async Task BulkAdd(IEnumerable<T> items, IEnumerable<TKey>? keys)
+        public async Task BulkAdd(IEnumerable<T> items, IEnumerable<TKey>? keys, CancellationToken cancellationToken = default)
         {
-            await ExecuteNonQuery("bulkAdd", items, keys);
+            await ExecuteNonQuery("bulkAdd", cancellationToken, items, keys);
         }
 
-        public async Task<List<TKey>> BulkAddReturnAllKeys(IEnumerable<T> items)
+        public async Task<List<TKey>> BulkAddReturnAllKeys(IEnumerable<T> items, CancellationToken cancellationToken = default)
         {
-            return await Execute<List<TKey>>("bulkAdd", items, new { allKeys = true });
+            return await Execute<List<TKey>>("bulkAdd", cancellationToken, items, new { allKeys = true });
         }
 
-        public async Task BulkDelete(IEnumerable<TKey> primaryKeys)
+        public async Task BulkDelete(IEnumerable<TKey> primaryKeys, CancellationToken cancellationToken = default)
         {
-            await ExecuteNonQuery("bulkDelete", primaryKeys);
+            await ExecuteNonQuery("bulkDelete", cancellationToken, primaryKeys);
         }
 
-        public async Task<T?[]> BulkGet(IEnumerable<TKey> keys)
+        public async Task<T?[]> BulkGet(IEnumerable<TKey> keys, CancellationToken cancellationToken = default)
         {
-            return await Execute<T[]>("bulkGet", keys);
+            return await Execute<T[]>("bulkGet", cancellationToken, keys);
         }
 
-        public async Task<TKey> BulkPut(IEnumerable<T> items)
+        public async Task<TKey> BulkPut(IEnumerable<T> items, CancellationToken cancellationToken = default)
         {
-            return await Execute<TKey>("bulkPut", items);
+            return await Execute<TKey>("bulkPut", cancellationToken, items);
         }
 
-        public async Task BulkPut(IEnumerable<T> items, IEnumerable<TKey>? keys)
+        public async Task BulkPut(IEnumerable<T> items, IEnumerable<TKey>? keys, CancellationToken cancellationToken = default)
         {
-            await ExecuteNonQuery("bulkPut", items, keys);
+            await ExecuteNonQuery("bulkPut", cancellationToken, items, keys);
         }
 
-        public async Task<List<TKey>> BulkPutReturnAllKeys(IEnumerable<T> items)
+        public async Task<List<TKey>> BulkPutReturnAllKeys(IEnumerable<T> items, CancellationToken cancellationToken = default)
         {
-            return await Execute<List<TKey>>("bulkPut", items, new { allKeys = true });
+            return await Execute<List<TKey>>("bulkPut", cancellationToken, items, new { allKeys = true });
         }
 
-        public async Task Delete(TKey primaryKey)
+        public async Task Delete(TKey primaryKey, CancellationToken cancellationToken = default)
         {
-            await ExecuteNonQuery("delete", primaryKey);
+            await ExecuteNonQuery("delete", cancellationToken, primaryKey);
         }
 
-        public async Task<T?> Get(TKey primaryKey)
+        public async Task<T?> Get(TKey primaryKey, CancellationToken cancellationToken = default)
         {
-            return await Execute<T?>("get", primaryKey);
+            return await Execute<T?>("get", cancellationToken, primaryKey);
         }
 
         public Collection<T, TKey> OrderBy(string index)
@@ -98,17 +98,17 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             return collection;
         }
 
-        public async Task<TKey> Put(T item)
+        public async Task<TKey> Put(T item, CancellationToken cancellationToken = default)
         {
-            return await Execute<TKey>("put", item);
+            return await Execute<TKey>("put", cancellationToken, item);
         }
 
-        public async Task<TKey> Put(T item, TKey? key)
+        public async Task<TKey> Put(T item, TKey? key, CancellationToken cancellationToken = default)
         {
-            return await Execute<TKey>("put", item, key);
+            return await Execute<TKey>("put", cancellationToken, item, key);
         }
 
-        public async Task<int> Update(TKey key, Dictionary<string, object> changes)
+        public async Task<int> Update(TKey key, Dictionary<string, object> changes, CancellationToken cancellationToken = default)
         {
             var changesObject = new ExpandoObject();
             foreach (var change in changes)
@@ -116,7 +116,7 @@ namespace Nosthy.Blazor.DexieWrapper.Database
                 changesObject.TryAdd(Camelizer.ToCamelCase(change.Key), change.Value);
             }
 
-            return await Execute<int>("update", key, changesObject);
+            return await Execute<int>("update", cancellationToken, key, changesObject);
         }
 
         public WhereClause<T, TKey> Where(string indexOrPrimaryKey)
@@ -141,9 +141,9 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             return collection;
         }
 
-        public async Task Clear()
+        public async Task Clear(CancellationToken cancellationToken = default)
         {
-            await ExecuteNonQuery("clear");
+            await ExecuteNonQuery("clear", cancellationToken);
         }
 
         public bool HasIndex(string index)

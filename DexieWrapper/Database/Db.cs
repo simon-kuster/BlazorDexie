@@ -52,13 +52,13 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             }
         }
 
-        public async Task Init()
+        public async Task Init(CancellationToken cancellationToken)
         {
             if (DbRef == null && _commandExecuterJsInterop.CanUseObjectReference)
             {
                 // Optimized code for Blazor
                 // Create Dexie object only once
-                DbRef = await _commandExecuterJsInterop.InitDb(DbDefinition);
+                DbRef = await _commandExecuterJsInterop.InitDb(DbDefinition, cancellationToken);
             }
         }
     }
