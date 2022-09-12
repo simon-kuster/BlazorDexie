@@ -35,9 +35,9 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             return Filter(filterFunction, parameters);
         }
 
-        public async Task<int> Count(CancellationToken cancellationToken = default)
+        public async Task<int> Count(string? databaseName = null, CancellationToken cancellationToken = default)
         {
-            return await Execute<int>("count", cancellationToken);
+            return await Execute<int>("count", databaseName ?? Db.DefaultDatabaseName, cancellationToken);
         }
 
         public Collection<T, TKey> Filter(string filterFunction, IEnumerable<object>? parameters = null)
@@ -75,14 +75,14 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             return collection;
         }
 
-        public async Task<T[]> ToArray(CancellationToken cancellationToken = default)
+        public async Task<T[]> ToArray(string? databaseName = null, CancellationToken cancellationToken = default)
         {
-            return await Execute<T[]>("toArray", cancellationToken);
+            return await Execute<T[]>("toArray", databaseName ?? Db.DefaultDatabaseName, cancellationToken);
         }
 
-        public async Task<List<T>> ToList(CancellationToken cancellationToken = default)
+        public async Task<List<T>> ToList(string? databaseName = null, CancellationToken cancellationToken = default)
         {
-            return await Execute<List<T>>("toArray", cancellationToken);
+            return await Execute<List<T>>("toArray", databaseName ?? Db.DefaultDatabaseName, cancellationToken);
         }
 
         protected virtual Collection<T, TKey> CreateNewColletion()
@@ -90,53 +90,53 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             return this;
         }
 
-        protected async Task<TRet> Execute<TRet>(string command, CancellationToken cancellationToken, params object?[] parameters)
+        protected async Task<TRet> Execute<TRet>(string command, string databaseName, CancellationToken cancellationToken, params object?[] parameters)
         {
             var commands = CurrentCommands.ToList();
             commands.Add(new Command(command, parameters));
 
-            await Db.Init(cancellationToken);
+            await Db.Init(databaseName, cancellationToken);
 
             if (typeof(TRet) == typeof(Guid))
             {
                 string retString;
 
-                if (Db.DbRef != null)
+                if (Db.DbJsReference != null)
                 {
-                    retString = await CommandExecuterJsInterop.Execute<string>(Db.DbRef, StoreName, commands, cancellationToken);
+                    retString = await CommandExecuterJsInterop.Execute<string>(Db.DbJsReference, StoreName, commands, cancellationToken);
                 }
                 else
                 {
-                    retString = await CommandExecuterJsInterop.InitDbAndExecute<string>(Db.DbDefinition, StoreName, commands, cancellationToken);
+                    retString = await CommandExecuterJsInterop.InitDbAndExecute<string>(databaseName, Db.Versions, StoreName, commands, cancellationToken);
                 }
 
                 return (TRet)(object)Guid.Parse(retString);
             }
             else
             {
-                if (Db.DbRef != null)
+                if (Db.DbJsReference != null)
                 {
-                    return await CommandExecuterJsInterop.Execute<TRet>(Db.DbRef, StoreName, commands, cancellationToken);
+                    return await CommandExecuterJsInterop.Execute<TRet>(Db.DbJsReference, StoreName, commands, cancellationToken);
                 }
 
-                return await CommandExecuterJsInterop.InitDbAndExecute<TRet>(Db.DbDefinition, StoreName, commands, cancellationToken);
+                return await CommandExecuterJsInterop.InitDbAndExecute<TRet>(databaseName, Db.Versions, StoreName, commands, cancellationToken);
             }
         }
 
-        protected async Task ExecuteNonQuery(string command, CancellationToken cancellationToken, params object?[] parameters)
+        protected async Task ExecuteNonQuery(string command, string databaseName, CancellationToken cancellationToken, params object?[] parameters)
         {
             var commands = CurrentCommands.ToList();
             commands.Add(new Command(command, parameters));
 
-            await Db.Init(cancellationToken);
+            await Db.Init(databaseName, cancellationToken);
 
-            if (Db.DbRef != null)
+            if (Db.DbJsReference != null)
             {
-                await CommandExecuterJsInterop.ExecuteNonQuery(Db.DbRef, StoreName, commands, cancellationToken);
+                await CommandExecuterJsInterop.ExecuteNonQuery(Db.DbJsReference, StoreName, commands, cancellationToken);
             }
             else
             {
-                await CommandExecuterJsInterop.InitDbAndExecuteNonQuery(Db.DbDefinition, StoreName, commands, cancellationToken);
+                await CommandExecuterJsInterop.InitDbAndExecuteNonQuery(databaseName, Db.Versions, StoreName, commands, cancellationToken);
             }
         }
     }

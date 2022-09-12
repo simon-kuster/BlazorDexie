@@ -16,9 +16,10 @@ namespace Nosthy.Blazor.DexieWrapper.JsInterop
             CanUseObjectReference = _module is EsModule;
         }
 
-        public async Task<T> InitDbAndExecute<T>(DbDefinition dbDefinition, string storeName, List<Command> commands, CancellationToken cancellationToken)
+        public async Task<T> InitDbAndExecute<T>(string databaseName, List<DbVersionDefinition> versions, string storeName, List<Command> commands, 
+            CancellationToken cancellationToken)
         {
-            return await _module.InvokeAsync<T>("initDbAndExecute", cancellationToken, dbDefinition, storeName, commands);
+            return await _module.InvokeAsync<T>("initDbAndExecute", cancellationToken, databaseName, versions, storeName, commands);
         }
 
         public async Task<T> Execute<T>(IJSObjectReference dbJsObjectRef, string storeName, List<Command> commands, CancellationToken cancellationToken)
@@ -26,9 +27,10 @@ namespace Nosthy.Blazor.DexieWrapper.JsInterop
             return await _module.InvokeAsync<T>("execute", cancellationToken, dbJsObjectRef, storeName, commands);
         }
 
-        public async Task InitDbAndExecuteNonQuery(DbDefinition dbDefinition, string storeName, List<Command> commands, CancellationToken cancellationToken)
+        public async Task InitDbAndExecuteNonQuery(string databaseName, List<DbVersionDefinition> versions, string storeName, List<Command> commands, 
+            CancellationToken cancellationToken)
         {
-            await _module.InvokeVoidAsync("initDbAndExecuteNonQuery", cancellationToken, dbDefinition, storeName, commands);
+            await _module.InvokeVoidAsync("initDbAndExecuteNonQuery", cancellationToken, databaseName, versions, storeName, commands);
         }
 
         public async Task ExecuteNonQuery(IJSObjectReference dbJsObjectRef, string storeName, List<Command> commands, CancellationToken cancellationToken)
@@ -36,9 +38,9 @@ namespace Nosthy.Blazor.DexieWrapper.JsInterop
             await _module.InvokeVoidAsync("executeNonQuery", cancellationToken, dbJsObjectRef, storeName, commands);
         }
 
-        public async Task<IJSObjectReference> InitDb(DbDefinition dbDefinition, CancellationToken cancellationToken)
+        public async Task<IJSObjectReference> InitDb(string databaseName, List<DbVersionDefinition> versions, CancellationToken cancellationToken)
         {
-            return await _module.InvokeAsync<IJSObjectReference>("initDb", cancellationToken, dbDefinition);
+            return await _module.InvokeAsync<IJSObjectReference>("initDb", cancellationToken, databaseName, versions);
         }
     }
 }

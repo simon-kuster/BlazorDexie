@@ -348,6 +348,24 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         }
 
         [Fact]
+        public async Task DifferentDatabaseName()
+        {
+            // arrange
+            var db = CreateDb();
+            var databaseName = "database2";
+
+            var initialItem = new TestItem() { Id = Guid.NewGuid(), Name = "AA" };
+            await db.TestItems.Put(initialItem, databaseName);
+
+            // act
+            var testItem = await db.TestItems.Get(initialItem.Id, databaseName);
+
+            // assert
+            Assert.NotNull(testItem);
+            Assert.Equal("AA", testItem!.Name);
+        }
+
+        [Fact]
         public async Task OrderBy()
         {
             // arrange

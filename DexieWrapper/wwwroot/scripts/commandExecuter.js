@@ -1,5 +1,5 @@
-export function initDbAndExecute(dbDefinition, storeName, commands) {
-    var db = initDb(dbDefinition);
+export function initDbAndExecute(databaseName, versions, storeName, commands) {
+    var db = initDb(databaseName, versions);
     return execute(db, storeName, commands);
 }
 
@@ -12,8 +12,8 @@ export async function execute(db, storeName, commands) {
     return result;
 }
 
-export function initDbAndExecuteNonQuery(dbDefinition, storeName, commands) {
-    var db = initDb(dbDefinition);
+export function initDbAndExecuteNonQuery(databaseName, versions, storeName, commands) {
+    var db = initDb(databaseName, versions);
     return executeNonQuery(db, storeName, commands);
 }
 
@@ -41,10 +41,10 @@ export async function executeNonQuery(db, storeName, commands) {
     return query;
 }
 
-export function initDb(dbDefinition) {
-    const db = new Dexie(dbDefinition.databaseName);
+export function initDb(databaseName, versions) {
+    const db = new Dexie(databaseName);
 
-    dbDefinition.versions.forEach(version => {
+    versions.forEach(version => {
         var storeDefinitions = {};
 
         version.stores.forEach(store => {

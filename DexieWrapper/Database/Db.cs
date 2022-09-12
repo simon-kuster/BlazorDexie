@@ -9,24 +9,24 @@ namespace Nosthy.Blazor.DexieWrapper.Database
     public abstract class Db
     {
         private readonly CommandExecuterJsInterop _commandExecuterJsInterop;
+        private string? _dbJsReferenceDatabaseName;
 
-        public string DatabaseName { get; }
+        public string DefaultDatabaseName { get; }
         public int VersionNumber { get; }
-        public DbDefinition DbDefinition { get; }
-        public IJSObjectReference? DbRef { get; private set; }
+        public List<DbVersionDefinition> Versions { get; } = new List<DbVersionDefinition>();
+        public IJSObjectReference? DbJsReference { get; private set; }
 
         [JsonIgnore]
         public IEnumerable<DbVersion> PreviousVersions { get; }
 
-        public Db(string databaseName, int currentVersionNumber, IEnumerable<DbVersion> previousVersions, IModuleFactory jsModuleFactory)
+        public Db(string defaultDatabaseName, int currentVersionNumber, IEnumerable<DbVersion> previousVersions, IModuleFactory jsModuleFactory)
         {
-            DatabaseName = databaseName;
+            DefaultDatabaseName = defaultDatabaseName;
             VersionNumber = currentVersionNumber;
             PreviousVersions = previousVersions;
             _commandExecuterJsInterop = new CommandExecuterJsInterop(jsModuleFactory);
 
             var latestVersion = new DbVersionDefinition(VersionNumber);
-            DbDefinition = new DbDefinition(DatabaseName);
 
             var properties = GetType().GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
             foreach (var property in properties)
@@ -44,21 +44,27 @@ namespace Nosthy.Blazor.DexieWrapper.Database
                 }
             }
 
-            DbDefinition.Versions.Add(latestVersion);
+            Versions.Add(latestVersion);
 
             foreach (var version in PreviousVersions)
             {
-                DbDefinition.Versions.Add(version.GetDefinition());
+                Versions.Add(version.GetDefinition());
             }
         }
 
-        public async Task Init(CancellationToken cancellationToken)
+        public async Task Init(string databaseName, CancellationToken cancellationToken)
         {
-            if (DbRef == null && _commandExecuterJsInterop.CanUseObjectReference)
+            if ((DbJsReference == null || _dbJsReferenceDatabaseName != databaseName) && _commandExecuterJsInterop.CanUseObjectReference)
             {
+                if (DbJsReference != null)
+                {
+                    await DbJsReference.DisposeAsync();
+                }
+
                 // Optimized code for Blazor
                 // Create Dexie object only once
-                DbRef = await _commandExecuterJsInterop.InitDb(DbDefinition, cancellationToken);
+                DbJsReference = await _commandExecuterJsInterop.InitDb(databaseName, Versions, cancellationToken);
+                _dbJsReferenceDatabaseName = databaseName;
             }
         }
     }
