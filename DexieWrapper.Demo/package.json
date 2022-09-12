@@ -10,7 +10,7 @@
     }
   ],
   "dependencies": {
-    "dexie": "^3.2.0"
+    "dexie": "^3.2.2"
   },
   "devDependencies": {
     "copy-files-from-to": "3.2.2"
