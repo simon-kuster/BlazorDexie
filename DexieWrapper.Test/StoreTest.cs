@@ -26,7 +26,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task Add()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             // act
             var testItem = new TestItem() { Id = Guid.NewGuid(), Name = "BB" };
@@ -44,7 +44,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task AddHiddenKey()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             // act
             var testItem = new TestItemHiddenKey() { Name = "BB" };
@@ -62,7 +62,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task BulkAdd()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItem[]
             {
@@ -91,7 +91,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task BulkAddReturnAllkeys()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItem[]
             {
@@ -124,7 +124,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task BulkAddHiddenKey()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItemHiddenKey[]
             {
@@ -153,7 +153,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task BulkDelete()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItem[]
             {
@@ -185,7 +185,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task BulkGet()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItem[]
             {
@@ -211,7 +211,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task BulkPut()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItem[]
             {
@@ -240,7 +240,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task BulkPutReturnAllkeys()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItem[]
             {
@@ -273,7 +273,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task BulkPutHiddenKey()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItemHiddenKey[]
             {
@@ -302,7 +302,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task Clear()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             TestItem initialItem = new TestItem() { Id = Guid.NewGuid(), Name = "AA" };
             await db.TestItems.Put(initialItem);
@@ -318,7 +318,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task Delete()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItem = new TestItem() { Id = Guid.NewGuid(), Name = "AA" };
             await db.TestItems.Put(initialItem);
@@ -334,7 +334,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task Get()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItem = new TestItem() { Id = Guid.NewGuid(), Name = "AA" };
             await db.TestItems.Put(initialItem);
@@ -351,7 +351,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task DifferentDatabaseName()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
             var databaseName = "database2";
 
             var initialItem = new TestItem() { Id = Guid.NewGuid(), Name = "AA" };
@@ -369,7 +369,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task OrderBy()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItem[]{
                 new TestItem() { Id = Guid.NewGuid(), Name = "C" },
@@ -392,7 +392,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task OrderByCompoundIndex()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItemWithCompoundIndex[]{
                 new TestItemWithCompoundIndex() { Firstname = "B", Secondname = "A" },
@@ -415,7 +415,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task Put()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             // act
             var testItem = new TestItem() { Id = Guid.NewGuid(), Name = "BB" };
@@ -433,7 +433,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task PutHiddenKey()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             // act
             var testItem = new TestItemHiddenKey() { Name = "BB" };
@@ -451,7 +451,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task Update()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItem = new TestItem() { Id = Guid.NewGuid(), Name = "BB" };
             await db.TestItems.Put(initialItem);
@@ -471,7 +471,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task Where()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItem[]
             {
@@ -495,10 +495,10 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         }
 
         [Fact]
-        public void IndicesAndPrimaryKey()
+        public async Task IndicesAndPrimaryKey()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             // assert
             Assert.Equal("Id", db.TestItems.PrimaryKey);
@@ -506,10 +506,10 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         }
 
         [Fact]
-        public void HasIndex()
+        public async Task HasIndex()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             // assert
             Assert.True(db.TestItems.HasIndex("Year"));

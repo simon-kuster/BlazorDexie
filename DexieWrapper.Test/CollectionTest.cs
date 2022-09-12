@@ -25,7 +25,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task Count()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItem[]
             {
@@ -48,7 +48,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task Filter()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItem[]
             {
@@ -72,7 +72,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task FilterModule()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItem[]
             {
@@ -96,7 +96,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task OffsetLimit()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItem[]
             {
@@ -120,7 +120,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task Reverse()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItem[]{
                 new TestItem() { Id = Guid.NewGuid(), Name = "C" },
@@ -144,7 +144,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task ToArrayAndToList()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItem[]
             {

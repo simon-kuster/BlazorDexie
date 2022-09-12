@@ -1,5 +1,6 @@
 ﻿using Jering.Javascript.NodeJS;
 using Nosthy.Blazor.DexieWrapper.JsModule;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test.ModuleWrappers
         INodeJSService _nodeJSService;
         private const string ModuleWrapperPath = "../../../wwwroot/scripts/es-module-wrapper.js";
         private string _modulePath;
+        private bool disposed = false;
 
         public CommonJsModule(INodeJSService nodeJSService, string modulePath)
         {
@@ -34,6 +36,23 @@ namespace Nosthy.Blazor.DexieWrapper.Test.ModuleWrappers
             argList.AddRange(args);
 
             await _nodeJSService.InvokeFromFileAsync(ModuleWrapperPath, args: argList.ToArray(), cancellationToken: cancellationToken);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    _nodeJSService.Dispose();
+                }
+            }
         }
     }
 }

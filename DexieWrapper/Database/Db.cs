@@ -6,10 +6,11 @@ using System.Text.Json.Serialization;
 
 namespace Nosthy.Blazor.DexieWrapper.Database
 {
-    public abstract class Db
+    public abstract class Db : IDisposable, IAsyncDisposable
     {
         private readonly CommandExecuterJsInterop _commandExecuterJsInterop;
         private string? _dbJsReferenceDatabaseName;
+        private bool disposed = false;
 
         public string DefaultDatabaseName { get; }
         public int VersionNumber { get; }
@@ -65,6 +66,39 @@ namespace Nosthy.Blazor.DexieWrapper.Database
                 // Create Dexie object only once
                 DbJsReference = await _commandExecuterJsInterop.InitDb(databaseName, Versions, cancellationToken);
                 _dbJsReferenceDatabaseName = databaseName;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        public async ValueTask DisposeAsync()
+        {
+            await DisposeAsyncCore().ConfigureAwait(false);
+
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    _commandExecuterJsInterop.Dispose();
+                }
+            }
+        }
+
+        protected virtual async ValueTask DisposeAsyncCore()
+        {
+            if (DbJsReference != null)
+            {
+                await DbJsReference.DisposeAsync().ConfigureAwait(false);
             }
         }
     }

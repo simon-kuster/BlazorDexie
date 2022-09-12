@@ -4,9 +4,10 @@ using Nosthy.Blazor.DexieWrapper.JsModule;
 
 namespace Nosthy.Blazor.DexieWrapper.JsInterop
 {
-    public class CommandExecuterJsInterop
+    public class CommandExecuterJsInterop : IDisposable
     {
         private readonly IModule _module;
+        private bool disposed = false;
 
         public bool CanUseObjectReference { get; set; }
 
@@ -41,6 +42,23 @@ namespace Nosthy.Blazor.DexieWrapper.JsInterop
         public async Task<IJSObjectReference> InitDb(string databaseName, List<DbVersionDefinition> versions, CancellationToken cancellationToken)
         {
             return await _module.InvokeAsync<IJSObjectReference>("initDb", cancellationToken, databaseName, versions);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    _module.Dispose();
+                }
+            }
         }
     }
 }

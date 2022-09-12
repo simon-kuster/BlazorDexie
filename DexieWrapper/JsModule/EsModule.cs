@@ -2,9 +2,10 @@
 
 namespace Nosthy.Blazor.DexieWrapper.JsModule
 {
-    public class EsModule : IModule
+    public class EsModule : IModule, IDisposable
     {
         private readonly Lazy<Task<IJSObjectReference>> _moduleTask;
+        private bool disposed = false;
 
         public EsModule(IJSRuntime jsRuntime, string modulePath)
         {
@@ -21,6 +22,26 @@ namespace Nosthy.Blazor.DexieWrapper.JsModule
         {
             var module = await _moduleTask.Value;
             await module.InvokeVoidAsync(identifier, cancellationToken, args);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    if (_moduleTask.IsValueCreated)
+                    {
+                        _moduleTask.Value.Dispose();
+                    }
+                }
+            }
         }
     }
 }
