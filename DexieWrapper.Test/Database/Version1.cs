@@ -1,4 +1,5 @@
 ﻿using Nosthy.Blazor.DexieWrapper.Database;
+using Nosthy.Blazor.DexieWrapper.Test.TestsItems;
 using System;
 
 namespace Nosthy.Blazor.DexieWrapper.Test.Database

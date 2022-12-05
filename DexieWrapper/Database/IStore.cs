@@ -1,4 +1,4 @@
-﻿using Nosthy.Blazor.DexieWrapper.JsInterop;
+﻿using Nosthy.Blazor.DexieWrapper.DexieJsInterop;
 
 namespace Nosthy.Blazor.DexieWrapper.Database
 {

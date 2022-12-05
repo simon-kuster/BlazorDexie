@@ -34,3 +34,10 @@
         </tbody>
     </table>
 }
+
+<br /><br /><br />
+<InputFile OnChange="@CreateBild" accept="image/x-png,image/jpeg" />
+
+<button @onclick="LoadBild">Load Bild</button>
+
+<img src="@_imgSrc" />

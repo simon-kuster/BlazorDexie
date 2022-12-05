@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Nosthy.Blazor.DexieWrapper.Test
+namespace Nosthy.Blazor.DexieWrapper.Test.TestsItems
 {
     public class TestItem
     {
