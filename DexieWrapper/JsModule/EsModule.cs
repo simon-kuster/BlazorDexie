@@ -2,46 +2,46 @@
 
 namespace Nosthy.Blazor.DexieWrapper.JsModule
 {
-    public class EsModule : IModule, IDisposable
+    public sealed class EsModule : IModule
     {
-        private readonly Lazy<Task<IJSObjectReference>> _moduleTask;
-        private bool disposed = false;
+        private Lazy<Task<IJSObjectReference>>? _jsObjectReferenceTask;
 
         public EsModule(IJSRuntime jsRuntime, string modulePath)
         {
-            _moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>("import", modulePath).AsTask());
+            _jsObjectReferenceTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>("import", modulePath).AsTask());
         }
 
         public async Task<T> InvokeAsync<T>(string identifier, CancellationToken cancellationToken, params object[] args)
         {
-            var module = await _moduleTask.Value;
-            return await module.InvokeAsync<T>(identifier, cancellationToken, args);
+            var jsObjectReference = await GetJsObjectReference();
+            return await jsObjectReference.InvokeAsync<T>(identifier, cancellationToken, args);
         }
 
         public async Task InvokeVoidAsync(string identifier, CancellationToken cancellationToken, params object[] args)
         {
-            var module = await _moduleTask.Value;
-            await module.InvokeVoidAsync(identifier, cancellationToken, args);
+            var jsObjectReference = await GetJsObjectReference();
+            await jsObjectReference.InvokeVoidAsync(identifier, cancellationToken, args);
         }
 
-        public void Dispose()
+        public async ValueTask DisposeAsync()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposed)
+            if(_jsObjectReferenceTask?.IsValueCreated == true)
             {
-                if (disposing)
-                {
-                    if (_moduleTask.IsValueCreated)
-                    {
-                        _moduleTask.Value.Dispose();
-                    }
-                }
+                var jsObjectReference = await GetJsObjectReference();
+
+                await jsObjectReference.DisposeAsync().ConfigureAwait(false); 
+                _jsObjectReferenceTask = null;
             }
+        }
+
+        private async Task<IJSObjectReference> GetJsObjectReference()
+        {
+            if (_jsObjectReferenceTask == null)
+            {
+                throw new ObjectDisposedException("JsObjectReference is disposed");
+            }
+
+            return await _jsObjectReferenceTask.Value;
         }
     }
 }

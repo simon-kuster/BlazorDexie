@@ -2,7 +2,7 @@
 
 namespace Nosthy.Blazor.DexieWrapper.ObjUrl
 {
-    public class ObjectUrlJsInterop : IDisposable
+    public sealed class ObjectUrlJsInterop : IAsyncDisposable
     {
         private readonly IModule _module;
         private bool disposed = false;
@@ -32,24 +32,16 @@ namespace Nosthy.Blazor.DexieWrapper.ObjUrl
                 return await _module.InvokeAsync<byte[]>("fetchObjectUrlAsUint8Array", cancellationToken, objectUrl);
             }
 
-            var data =  await _module.InvokeAsync<string>("fetchObjectUrlAsUint8Array", cancellationToken, objectUrl);
+            var data = await _module.InvokeAsync<string>("fetchObjectUrlAsUint8Array", cancellationToken, objectUrl);
             return Convert.FromBase64String(data);
         }
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
+        public async ValueTask DisposeAsync()
         {
             if (!disposed)
             {
-                if (disposing)
-                {
-                    _module.Dispose();
-                }
+                await _module.DisposeAsync();
+                disposed = true;
             }
         }
     }

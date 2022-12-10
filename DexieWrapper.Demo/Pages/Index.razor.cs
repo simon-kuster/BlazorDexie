@@ -63,7 +63,7 @@ namespace Nosthy.Blazor.DexieWrapper.Demo.Pages
             using var memoryStream = new MemoryStream();
             await stream.CopyToAsync(memoryStream);
 
-            using var objectUrlService = new ObjectUrlService(ModuleFactory);
+            await using var objectUrlService = new ObjectUrlService(ModuleFactory);
             var blobData = await CreateBlobData(memoryStream.ToArray(), objectUrlService);
 
             var image = new ImageDataItem

@@ -4,10 +4,9 @@ using Nosthy.Blazor.DexieWrapper.JsModule;
 
 namespace Nosthy.Blazor.DexieWrapper.DexieJsInterop
 {
-    public class CommandExecuterJsInterop : IDisposable
+    public sealed class CommandExecuterJsInterop : IAsyncDisposable
     {
-        private readonly IModule _module;
-        private bool disposed = false;
+        private readonly IModule? _module;
 
         public bool RunInBrowser { get; set; }
 
@@ -20,45 +19,46 @@ namespace Nosthy.Blazor.DexieWrapper.DexieJsInterop
         public async Task<T> InitDbAndExecute<T>(string databaseName, List<DbVersionDefinition> versions, string storeName, List<Command> commands, 
             CancellationToken cancellationToken)
         {
-            return await _module.InvokeAsync<T>("initDbAndExecute", cancellationToken, databaseName, versions, storeName, commands);
+            return await GetModule().InvokeAsync<T>("initDbAndExecute", cancellationToken, databaseName, versions, storeName, commands);
         }
 
         public async Task<T> Execute<T>(IJSObjectReference dbJsObjectRef, string storeName, List<Command> commands, CancellationToken cancellationToken)
         {
-            return await _module.InvokeAsync<T>("execute", cancellationToken, dbJsObjectRef, storeName, commands);
+            return await GetModule().InvokeAsync<T>("execute", cancellationToken, dbJsObjectRef, storeName, commands);
         }
 
         public async Task InitDbAndExecuteNonQuery(string databaseName, List<DbVersionDefinition> versions, string storeName, List<Command> commands, 
             CancellationToken cancellationToken)
         {
-            await _module.InvokeVoidAsync("initDbAndExecuteNonQuery", cancellationToken, databaseName, versions, storeName, commands);
+            await GetModule().InvokeVoidAsync("initDbAndExecuteNonQuery", cancellationToken, databaseName, versions, storeName, commands);
         }
 
         public async Task ExecuteNonQuery(IJSObjectReference dbJsObjectRef, string storeName, List<Command> commands, CancellationToken cancellationToken)
         {
-            await _module.InvokeVoidAsync("executeNonQuery", cancellationToken, dbJsObjectRef, storeName, commands);
+            await GetModule().InvokeVoidAsync("executeNonQuery", cancellationToken, dbJsObjectRef, storeName, commands);
         }
 
         public async Task<IJSObjectReference> InitDb(string databaseName, List<DbVersionDefinition> versions, CancellationToken cancellationToken)
         {
-            return await _module.InvokeAsync<IJSObjectReference>("initDb", cancellationToken, databaseName, versions);
+            return await GetModule().InvokeAsync<IJSObjectReference>("initDb", cancellationToken, databaseName, versions);
         }
 
-        public void Dispose()
+        public async ValueTask DisposeAsync()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposed)
+            if (_module != null)
             {
-                if (disposing)
-                {
-                    _module.Dispose();
-                }
+                await _module.DisposeAsync().ConfigureAwait(false); 
             }
+        }
+
+        private IModule GetModule()
+        {
+            if (_module == null)
+            {
+                throw new ObjectDisposedException("_module is disposed");
+            }
+
+            return _module;
         }
     }
 }

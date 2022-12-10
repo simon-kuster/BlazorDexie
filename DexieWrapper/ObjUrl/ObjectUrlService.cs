@@ -1,8 +1,9 @@
 ﻿using Nosthy.Blazor.DexieWrapper.JsModule;
+using System.Reflection;
 
 namespace Nosthy.Blazor.DexieWrapper.ObjUrl
 {
-    public class ObjectUrlService : IDisposable
+    public sealed class ObjectUrlService : IAsyncDisposable
     {
         private readonly ObjectUrlJsInterop _objecUrlJsInterop;
         private bool disposed = false;
@@ -27,20 +28,12 @@ namespace Nosthy.Blazor.DexieWrapper.ObjUrl
            return await _objecUrlJsInterop.FetchDataNode(objectUrl, cancellationToken);
         }
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
+        public async ValueTask DisposeAsync()
         {
             if (!disposed)
             {
-                if (disposing)
-                {
-                    _objecUrlJsInterop.Dispose();
-                }
+                await _objecUrlJsInterop.DisposeAsync();
+                disposed = true;
             }
         }
     }

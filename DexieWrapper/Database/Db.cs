@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace Nosthy.Blazor.DexieWrapper.Database
 {
-    public abstract class Db : IDisposable, IAsyncDisposable
+    public abstract class Db : IAsyncDisposable
     {
         private readonly CommandExecuterJsInterop _commandExecuterJsInterop;
         private string? _dbJsReferenceDatabaseName;
@@ -69,29 +69,11 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             }
         }
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
         public async ValueTask DisposeAsync()
         {
             await DisposeAsyncCore().ConfigureAwait(false);
 
-            Dispose(true);
             GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposed)
-            {
-                if (disposing)
-                {
-                    _commandExecuterJsInterop.Dispose();
-                }
-            }
         }
 
         protected virtual async ValueTask DisposeAsyncCore()
