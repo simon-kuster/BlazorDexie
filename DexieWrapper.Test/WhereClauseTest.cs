@@ -1,5 +1,4 @@
 ﻿using Jering.Javascript.NodeJS;
-using Microsoft.Extensions.DependencyInjection;
 using Nosthy.Blazor.DexieWrapper.Test.Database;
 using Nosthy.Blazor.DexieWrapper.Test.ModuleWrappers;
 using Nosthy.Blazor.DexieWrapper.Test.TestsItems;
@@ -14,19 +13,16 @@ namespace Nosthy.Blazor.DexieWrapper.Test
     {
         private INodeJSService _nodeJSService;
 
-        public WhereClauseTest()
+        public WhereClauseTest(INodeJSService nodeJSService)
         {
-            var services = new ServiceCollection();
-            services.AddNodeJS();
-            ServiceProvider serviceProvider = services.BuildServiceProvider();
-            _nodeJSService = serviceProvider.GetRequiredService<INodeJSService>();
+            _nodeJSService = nodeJSService;
         }
 
         [Fact]
         public async Task Above()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItem[]
             {
@@ -55,7 +51,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task AboveOrEqual()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItem[]
             {
@@ -84,7 +80,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task AnyOf()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItem[]
             {
@@ -112,7 +108,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task AnyOfIngoreCase()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItem[]
             {
@@ -140,7 +136,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task Below()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItem[]
             {
@@ -169,7 +165,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task BelowOrEqual()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItem[]
             {
@@ -198,7 +194,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task Between()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItem[]
             {
@@ -227,7 +223,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task IsEqual()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItem[]
             {
@@ -257,7 +253,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task EqualIgnoreCase()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItem[]
             {
@@ -287,7 +283,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task InAnyRange()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItem[]
             {
@@ -320,7 +316,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task NoneOf()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItem[]
             {
@@ -350,7 +346,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task NotEqual()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItem[]
             {
@@ -380,7 +376,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task StartsWith()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItem[]
             {
@@ -409,7 +405,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task StartsWithAnyOf()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItem[]
             {
@@ -438,7 +434,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task StartsWithIgnoreCase()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItem[]
             {
@@ -467,7 +463,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         public async Task StartsWithAnyOfIgnoreCase()
         {
             // arrange
-            var db = CreateDb();
+            await using var db = CreateDb();
 
             var initialItems = new TestItem[]
             {
@@ -494,8 +490,9 @@ namespace Nosthy.Blazor.DexieWrapper.Test
 
         private MyDb CreateDb()
         {
+            var databaseId = Guid.NewGuid().ToString();
             var moduleFactory = new CommonJsModuleFactory(_nodeJSService, "../../../DexieWrapper/wwwroot");
-            return new MyDb(moduleFactory);
+            return new MyDb(moduleFactory, databaseId);
         }
     }
 }

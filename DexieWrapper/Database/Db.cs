@@ -10,7 +10,6 @@ namespace Nosthy.Blazor.DexieWrapper.Database
     {
         private readonly CommandExecuterJsInterop _commandExecuterJsInterop;
         private string? _dbJsReferenceDatabaseName;
-        private bool disposed = false;
 
         public string DefaultDatabaseName { get; }
         public int VersionNumber { get; }

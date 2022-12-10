@@ -1,5 +1,4 @@
 ﻿using Jering.Javascript.NodeJS;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -15,12 +14,9 @@ namespace Nosthy.Blazor.DexieWrapper.Test
     {
         private INodeJSService _nodeJSService;
 
-        public StoreTest()
+        public StoreTest(INodeJSService nodeJSService)
         {
-            var services = new ServiceCollection();
-            services.AddNodeJS();
-            var serviceProvider = services.BuildServiceProvider();
-            _nodeJSService = serviceProvider.GetRequiredService<INodeJSService>();
+            _nodeJSService = nodeJSService;
         }
 
         [Fact]
@@ -519,8 +515,9 @@ namespace Nosthy.Blazor.DexieWrapper.Test
 
         private MyDb CreateDb()
         {
+            var databaseId = Guid.NewGuid().ToString();
             var moduleFactory = new CommonJsModuleFactory(_nodeJSService, "../../../DexieWrapper/wwwroot");
-            return new MyDb(moduleFactory);
+            return new MyDb(moduleFactory, databaseId);
         }
     }
 }

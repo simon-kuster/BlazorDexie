@@ -1,5 +1,4 @@
 ﻿using Jering.Javascript.NodeJS;
-using Microsoft.Extensions.DependencyInjection;
 using Nosthy.Blazor.DexieWrapper.Test.Database;
 using Nosthy.Blazor.DexieWrapper.Test.ModuleWrappers;
 using Nosthy.Blazor.DexieWrapper.Test.TestsItems;
@@ -14,12 +13,9 @@ namespace Nosthy.Blazor.DexieWrapper.Test
     {
         private INodeJSService _nodeJSService;
 
-        public CollectionTest()
+        public CollectionTest(INodeJSService nodeJSService)
         {
-            var services = new ServiceCollection();
-            services.AddNodeJS();
-            ServiceProvider serviceProvider = services.BuildServiceProvider();
-            _nodeJSService = serviceProvider.GetRequiredService<INodeJSService>();
+            _nodeJSService = nodeJSService;
         }
 
         [Fact]
@@ -174,8 +170,9 @@ namespace Nosthy.Blazor.DexieWrapper.Test
 
         private MyDb CreateDb()
         {
+            var databaseId = Guid.NewGuid().ToString();
             var moduleFactory = new CommonJsModuleFactory(_nodeJSService, "../../../DexieWrapper/wwwroot");
-            return new MyDb(moduleFactory);
+            return new MyDb(moduleFactory, databaseId);
         }
     }
 }

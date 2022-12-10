@@ -1,5 +1,4 @@
 ﻿using Jering.Javascript.NodeJS;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -13,17 +12,13 @@ using Nosthy.Blazor.DexieWrapper.ObjUrl;
 
 namespace Nosthy.Blazor.DexieWrapper.Test
 {
-    public class StoreDataTest
+    public class StoreDataTest : IAsyncLifetime
     {
         private CommonJsModuleFactory _moduleFactory;
         private ObjectUrlService _objectUrlService;
 
-        public StoreDataTest()
+        public StoreDataTest(INodeJSService nodeJSService)
         {
-            var services = new ServiceCollection();
-            services.AddNodeJS();
-            var serviceProvider = services.BuildServiceProvider();
-            var nodeJSService = serviceProvider.GetRequiredService<INodeJSService>();
             _moduleFactory = new CommonJsModuleFactory(nodeJSService, "../../../DexieWrapper/wwwroot");
             _objectUrlService = new ObjectUrlService(_moduleFactory);
         }
@@ -204,7 +199,8 @@ namespace Nosthy.Blazor.DexieWrapper.Test
 
         private MyDb CreateDb()
         {
-            return new MyDb(_moduleFactory);
+            var databaseId = Guid.NewGuid().ToString();
+            return new MyDb(_moduleFactory, databaseId);
         }
 
         private async Task<BlobData> CreateBlobData(byte[] data, BlobDataFormat blobDataFormat)
@@ -244,6 +240,16 @@ namespace Nosthy.Blazor.DexieWrapper.Test
             }
 
             return new byte[0];
+        }
+
+        public Task InitializeAsync()
+        {
+            return Task.CompletedTask;
+        }
+
+        public async Task DisposeAsync()
+        {
+            await _objectUrlService.DisposeAsync().ConfigureAwait(false);
         }
     }
 }

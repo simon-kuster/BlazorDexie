@@ -17,8 +17,8 @@ namespace Nosthy.Blazor.DexieWrapper.Test.Database
 
         public Store<TestDataItem, Guid> TestDataItems { get; set; } = new(nameof(TestDataItem.Id));
 
-        public MyDb(IModuleFactory jsModuleFactory)
-            : base("MyDatabase", 2, new DbVersion[] { new Version1() }, jsModuleFactory)
+        public MyDb(IModuleFactory jsModuleFactory, string databaseId)
+            : base($"MyDatabase_{databaseId}", 2, new DbVersion[] { new Version1() }, jsModuleFactory)
         {
         }
     }
