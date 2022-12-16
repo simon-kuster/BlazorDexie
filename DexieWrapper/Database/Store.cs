@@ -40,6 +40,16 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             return await Execute<TKey>("add", databaseName ?? Db.DefaultDatabaseName, cancellationToken, item, key);
         }
 
+        public async Task<TKey> AddBlob(byte[] data, TKey? key, string? databaseName = null, CancellationToken cancellationToken = default)
+        {
+            return await Execute<TKey>("addBlob", databaseName ?? Db.DefaultDatabaseName, cancellationToken, data, key);
+        }
+
+        public async Task<TKey> AddObjectUrl(string objectUrl, TKey? key, string? databaseName = null, CancellationToken cancellationToken = default)
+        {
+            return await Execute<TKey>("addObjectUrl", databaseName ?? Db.DefaultDatabaseName, cancellationToken, objectUrl, key);
+        }
+
         public async Task<TKey> BulkAdd(IEnumerable<T> items, string? databaseName = null, CancellationToken cancellationToken = default)
         {
             return await Execute<TKey>("bulkAdd", databaseName ?? Db.DefaultDatabaseName, cancellationToken, items);
@@ -90,6 +100,16 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             return await Execute<T?>("get", databaseName ?? Db.DefaultDatabaseName, cancellationToken, primaryKey);
         }
 
+        public async Task<byte[]> GetBlob(TKey primaryKey, string? databaseName = null, CancellationToken cancellationToken = default)
+        {
+            return await Execute<byte[]>("getBlob", databaseName ?? Db.DefaultDatabaseName, cancellationToken, primaryKey);
+        }
+
+        public async Task<string> GetObjectUrl(TKey primaryKey, string? databaseName = null, CancellationToken cancellationToken = default)
+        {
+            return await Execute<string>("getObjectUrl", databaseName ?? Db.DefaultDatabaseName, cancellationToken, primaryKey);
+        }
+
         public Collection<T, TKey> OrderBy(string index)
         {
             var collection = CreateNewColletion();
@@ -105,6 +125,16 @@ namespace Nosthy.Blazor.DexieWrapper.Database
         public async Task<TKey> Put(T item, TKey? key, string? databaseName = null, CancellationToken cancellationToken = default)
         {
             return await Execute<TKey>("put", databaseName ?? Db.DefaultDatabaseName, cancellationToken, item, key);
+        }
+
+        public async Task<TKey> PutBlob(byte[] data, TKey? key, string? databaseName = null, CancellationToken cancellationToken = default)
+        {
+            return await Execute<TKey>("putBlob", databaseName ?? Db.DefaultDatabaseName, cancellationToken, data, key);
+        }
+
+        public async Task<TKey> PutObjectUrl(string objectUrl, TKey? key, string? databaseName = null, CancellationToken cancellationToken = default)
+        {
+            return await Execute<TKey>("putObjectUrl", databaseName ?? Db.DefaultDatabaseName, cancellationToken, objectUrl, key);
         }
 
         public async Task<int> Update(TKey key, Dictionary<string, object> changes, string? databaseName = null, CancellationToken cancellationToken = default)

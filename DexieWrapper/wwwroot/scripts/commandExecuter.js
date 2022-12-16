@@ -1,3 +1,5 @@
+import { createObjectUrl, fetchObjectUrl, revokeObjectUrl } from './objectUrl.js';
+
 export function initDbAndExecute(databaseName, versions, storeName, commands) {
     var db = initDb(databaseName, versions);
     return execute(db, storeName, commands);
@@ -32,6 +34,33 @@ export async function executeNonQuery(db, storeName, commands) {
                 query = query.filter((i) => cust.default(i, c.parameters[1]));
                 break;
 
+            case "addBlob":
+                query = query.add(new Blob([c.parameters[0]]), c.parameters[1]);
+                break;
+
+            case "putBlob":
+                query = query.put(new Blob([c.parameters[0]]), c.parameters[1]);
+                break;
+
+            case "getBlob":
+                const blob = await query.get(c.parameters[0]);
+                query = new Uint8Array(await new Response(blob).arrayBuffer());
+                break;
+
+            case "addObjectUrl":
+                query = query.add(await ObjectUrlToBlob(c.parameters[0]), c.parameters[1]);
+                break;
+
+            case "putObjectUrl":
+                query = query.put(await ObjectUrlToBlob(c.parameters[0]), c.parameters[1]);
+                break;
+
+            case "getObjectUrl":
+                const blob2 = await query.get(c.parameters[0])
+                query = createObjectUrl(blob2);
+                break;
+
+
             default:
                 query = query[c.cmd](...c.parameters);
                 break;
@@ -39,6 +68,12 @@ export async function executeNonQuery(db, storeName, commands) {
     }
 
     return query;
+}
+
+async function ObjectUrlToBlob(objectUrl) {
+    const blob = await fetchObjectUrl(objectUrl);
+    revokeObjectUrl(objectUrl);
+    return blob;
 }
 
 export function initDb(databaseName, versions) {

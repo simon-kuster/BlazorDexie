@@ -15,6 +15,8 @@ namespace Nosthy.Blazor.DexieWrapper.Test.Database
              "++" + nameof(TestItemWithCompoundIndex.Id),
             new CompoundIndex(nameof(TestItemWithCompoundIndex.Firstname), nameof(TestItemWithCompoundIndex.Secondname)).ToString());
 
+        public Store<byte[], Guid> BlobData { get; set; } = new(string.Empty);
+
         public MyDb(IModuleFactory jsModuleFactory, string databaseId)
             : base($"MyDatabase_{databaseId}", 2, new DbVersion[] { new Version1() }, jsModuleFactory)
         {

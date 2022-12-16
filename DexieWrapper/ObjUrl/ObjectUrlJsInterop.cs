@@ -25,7 +25,7 @@ namespace Nosthy.Blazor.DexieWrapper.ObjUrl
             await _module.InvokeAsync<string>("revokeObjectUrl", cancellationToken, objectUrl);
         }
 
-        public async Task<byte[]> FetchDataNode(string objectUrl, CancellationToken cancellationToken = default)
+        public async Task<byte[]> FetchData(string objectUrl, CancellationToken cancellationToken = default)
         {
             if (_runInBrowser)
             {

@@ -22,9 +22,9 @@ namespace Nosthy.Blazor.DexieWrapper.ObjUrl
             await _objecUrlJsInterop.Revoke(objectUrl, cancellationToken);
         }
 
-        public async Task<byte[]> FetchDataNode(string objectUrl, CancellationToken cancellationToken = default)
+        public async Task<byte[]> FetchData(string objectUrl, CancellationToken cancellationToken = default)
         {
-           return await _objecUrlJsInterop.FetchDataNode(objectUrl, cancellationToken);
+           return await _objecUrlJsInterop.FetchData(objectUrl, cancellationToken);
         }
 
         public async ValueTask DisposeAsync()

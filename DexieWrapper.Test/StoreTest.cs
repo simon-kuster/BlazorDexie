@@ -465,6 +465,27 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         }
 
         [Fact]
+        public async Task UpdateHiddenKey()
+        {
+            // arrange
+            await using var db = CreateDb();
+
+            var key = Guid.NewGuid();
+            var initialItem = new TestItemHiddenKey() { Name = "BB" };
+            await db.TestItemsHiddenKey.Put(initialItem, key);
+
+            // act
+            var updatedRecord = await db.TestItemsHiddenKey.Update(key, new Dictionary<string, object> { { nameof(TestItem.Name), "CC" } });
+
+            // assert
+            var checkItem = await db.TestItemsHiddenKey.Get(key);
+
+            Assert.Equal(1, updatedRecord);
+            Assert.NotNull(checkItem);
+            Assert.Equal("CC", checkItem!.Name);
+        }
+
+        [Fact]
         public async Task Where()
         {
             // arrange

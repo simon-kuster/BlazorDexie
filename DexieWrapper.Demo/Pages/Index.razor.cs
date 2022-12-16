@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Nosthy.Blazor.DexieWrapper.Demo.Database;
 using Nosthy.Blazor.DexieWrapper.Demo.Persons;
+using Nosthy.Blazor.DexieWrapper.JsModule;
+using Nosthy.Blazor.DexieWrapper.ObjUrl;
 
 namespace Nosthy.Blazor.DexieWrapper.Demo.Pages
 {
@@ -8,6 +11,8 @@ namespace Nosthy.Blazor.DexieWrapper.Demo.Pages
         private Person? _person;
 
         [Inject] public PersonRepository PersonRepository { get; set; } = null!;
+        [Inject] public IModuleFactory ModuleFactory { get; set; } = null!;
+        [Inject] public ObjectUrlService ObjectUrlService { get; set; } = null!;
 
         private async Task CreatePersonClicked()
         {
@@ -47,6 +52,63 @@ namespace Nosthy.Blazor.DexieWrapper.Demo.Pages
 
             await PersonRepository.Delete(_person);
             _person = null;
+        }
+
+        private async Task AddBlob()
+        {
+            var db = new MyDb(ModuleFactory);
+
+            // act
+            var initalData = new byte[] { 213, 23, 55, 234, 11 };
+            var key = Guid.NewGuid();
+            await db.BlobData.AddBlob(initalData, key);
+
+            // assert
+            var data = await db.BlobData.GetBlob(key);
+        }
+
+        private async Task PutBlob()
+        {
+            var db = new MyDb(ModuleFactory);
+
+            // act
+            var initalData = new byte[] { 213, 23, 55, 234, 22 };
+            var key = Guid.NewGuid();
+            await db.BlobData.PutBlob(initalData, key);
+
+            // assert
+            var data = await db.BlobData.GetBlob(key);
+        }
+
+        private async Task AddObjectUrl()
+        {
+            var db = new MyDb(ModuleFactory);
+
+            // act
+            var initalData = new byte[] { 213, 23, 55, 234, 33 };
+            var initalObjectUrl = await ObjectUrlService.Create(initalData);
+
+            var key = Guid.NewGuid();
+            await db.BlobData.AddObjectUrl(initalObjectUrl, key);
+
+            // assert
+            var objectUrl = await db.BlobData.GetObjectUrl(key);
+            var data = await ObjectUrlService.FetchData(objectUrl);
+            await ObjectUrlService.Revoke(objectUrl);
+        }
+
+        private async Task PutObjectUrl()
+        {
+            var db = new MyDb(ModuleFactory);
+
+            // act
+            var initalData = new byte[] { 213, 23, 55, 234, 44 };
+            var initalObjectUrl = await ObjectUrlService.Create(initalData);
+            var key = Guid.NewGuid();
+            await db.BlobData.PutObjectUrl(initalObjectUrl, key);
+
+            // assert
+            var data = await db.BlobData.GetBlob(key);
         }
     }
 }
