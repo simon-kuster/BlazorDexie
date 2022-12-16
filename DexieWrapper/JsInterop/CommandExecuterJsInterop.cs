@@ -2,18 +2,18 @@
 using Nosthy.Blazor.DexieWrapper.Definitions;
 using Nosthy.Blazor.DexieWrapper.JsModule;
 
-namespace Nosthy.Blazor.DexieWrapper.DexieJsInterop
+namespace Nosthy.Blazor.DexieWrapper.JsInterop
 {
     public sealed class CommandExecuterJsInterop : IAsyncDisposable
     {
         private readonly IModule? _module;
 
-        public bool RunInBrowser { get; set; }
+        public bool CanUseObjectReference { get; set; }
 
         public CommandExecuterJsInterop(IModuleFactory jsModuleFactory)
         {
             _module = jsModuleFactory.CreateModule("scripts/commandExecuter.js");
-            RunInBrowser = _module is EsModule;
+            CanUseObjectReference = _module is EsModule;
         }
 
         public async Task<T> InitDbAndExecute<T>(string databaseName, List<DbVersionDefinition> versions, string storeName, List<Command> commands, 

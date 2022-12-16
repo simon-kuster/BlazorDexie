@@ -1,11 +1,9 @@
-﻿using Nosthy.Blazor.DexieWrapper.Blob;
-using Nosthy.Blazor.DexieWrapper.DexieJsInterop;
+﻿using Nosthy.Blazor.DexieWrapper.JsInterop;
 
 namespace Nosthy.Blazor.DexieWrapper.Database
 {
     public class Collection<T, TKey>
     {
-        protected BlobDataConvertFactory<T> BlobDataConvertFactory = new();
         protected Db Db = null!;
         protected CommandExecuterJsInterop CommandExecuterJsInterop = null!;
         protected string StoreName = null!;
@@ -27,14 +25,14 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             CommandExecuterJsInterop = commandExecuterJsInterop;
         }
 
-        public void AddCommand(string command, params object?[] dexieParameters)
+        public void AddCommand(string command, params object?[] parameters)
         {
-            CurrentCommands.Add(new Command(command, dexieParameters, new CommandParameters()));
+            CurrentCommands.Add(new Command(command, parameters));
         }
 
-        public Collection<T, TKey> And(string filterFunction, IEnumerable<object>? dexieParameters = null)
+        public Collection<T, TKey> And(string filterFunction, IEnumerable<object>? parameters = null)
         {
-            return Filter(filterFunction, dexieParameters);
+            return Filter(filterFunction, parameters);
         }
 
         public async Task<int> Count(CancellationToken cancellationToken = default)
@@ -44,20 +42,20 @@ namespace Nosthy.Blazor.DexieWrapper.Database
 
         public async Task<int> Count(string databaseName, CancellationToken cancellationToken = default)
         {
-            return await Execute<int>("count", new object?[] { }, databaseName, new CommandParameters(), cancellationToken);
+            return await Execute<int>("count", databaseName, cancellationToken);
         }
 
-        public Collection<T, TKey> Filter(string filterFunction, IEnumerable<object>? dexieParameters = null)
+        public Collection<T, TKey> Filter(string filterFunction, IEnumerable<object>? parameters = null)
         {
             var collection = CreateNewColletion();
-            collection.AddCommand("filter", filterFunction, dexieParameters);
+            collection.AddCommand("filter", filterFunction, parameters);
             return collection;
         }
 
-        public Collection<T, TKey> FilterModule(string modulePath, IEnumerable<object>? dexieParameters = null)
+        public Collection<T, TKey> FilterModule(string modulePath, IEnumerable<object>? parameters = null)
         {
             var collection = CreateNewColletion();
-            collection.AddCommand("filterModule", modulePath, dexieParameters);
+            collection.AddCommand("filterModule", modulePath, parameters);
             return collection;
         }
 
@@ -82,18 +80,14 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             return collection;
         }
 
-        public async Task<T[]> ToArray(BlobDataFormat blobDataFormat = BlobDataFormat.ByteArray, CancellationToken cancellationToken = default)
+        public async Task<T[]> ToArray(CancellationToken cancellationToken = default)
         {
-            return await ToArray(Db.DefaultDatabaseName, blobDataFormat, cancellationToken);  
+            return await ToArray(Db.DefaultDatabaseName, cancellationToken);  
         }
 
-        public async Task<T[]> ToArray(string databaseName, BlobDataFormat blobDataFormat = BlobDataFormat.ByteArray, CancellationToken cancellationToken = default)
+        public async Task<T[]> ToArray(string databaseName, CancellationToken cancellationToken = default)
         {
-            return await Execute<T[]>("toArray",
-                new object?[] { },
-                databaseName,
-                new CommandParameters { BlobDataConvert = BlobDataConvertFactory.CreateForRead(true, blobDataFormat) },
-                cancellationToken);
+            return await Execute<T[]>("toArray", databaseName ?? Db.DefaultDatabaseName, cancellationToken);
         }
 
         public async Task<List<T>> ToList(CancellationToken cancellationToken = default)
@@ -103,10 +97,7 @@ namespace Nosthy.Blazor.DexieWrapper.Database
 
         public async Task<List<T>> ToList(string databaseName, CancellationToken cancellationToken = default)
         {
-            return await Execute<List<T>>(
-                "toArray", new object?[] { }, 
-                databaseName, new CommandParameters(), 
-                cancellationToken);
+            return await Execute<List<T>>("toArray", databaseName ?? Db.DefaultDatabaseName, cancellationToken);
         }
 
         protected virtual Collection<T, TKey> CreateNewColletion()
@@ -114,10 +105,10 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             return this;
         }
 
-        protected async Task<TRet> Execute<TRet>(string command, object?[] dexieParameters, string databaseName, CommandParameters commandParameters, CancellationToken cancellationToken)
+        protected async Task<TRet> Execute<TRet>(string command, string databaseName, CancellationToken cancellationToken, params object?[] parameters)
         {
             var commands = CurrentCommands.ToList();
-            commands.Add(new Command(command, dexieParameters, commandParameters));
+            commands.Add(new Command(command, parameters));
 
             await Db.Init(databaseName, cancellationToken);
 
@@ -147,10 +138,10 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             }
         }
 
-        protected async Task ExecuteNonQuery(string command, object?[] dexieParameters, string databaseName, CommandParameters commandParameters, CancellationToken cancellationToken)
+        protected async Task ExecuteNonQuery(string command, string databaseName, CancellationToken cancellationToken, params object?[] parameters)
         {
             var commands = CurrentCommands.ToList();
-            commands.Add(new Command(command, dexieParameters, new CommandParameters()));
+            commands.Add(new Command(command, parameters));
 
             await Db.Init(databaseName, cancellationToken);
 

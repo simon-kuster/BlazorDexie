@@ -1,7 +1,6 @@
 ﻿using Jering.Javascript.NodeJS;
 using Nosthy.Blazor.DexieWrapper.Test.Database;
 using Nosthy.Blazor.DexieWrapper.Test.ModuleWrappers;
-using Nosthy.Blazor.DexieWrapper.Test.TestsItems;
 using System;
 using System.Linq;
 using System.Threading.Tasks;

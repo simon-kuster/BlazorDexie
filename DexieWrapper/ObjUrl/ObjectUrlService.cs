@@ -1,5 +1,4 @@
 ﻿using Nosthy.Blazor.DexieWrapper.JsModule;
-using System.Reflection;
 
 namespace Nosthy.Blazor.DexieWrapper.ObjUrl
 {

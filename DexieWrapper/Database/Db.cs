@@ -1,6 +1,6 @@
 ﻿using Microsoft.JSInterop;
 using Nosthy.Blazor.DexieWrapper.Definitions;
-using Nosthy.Blazor.DexieWrapper.DexieJsInterop;
+using Nosthy.Blazor.DexieWrapper.JsInterop;
 using Nosthy.Blazor.DexieWrapper.JsModule;
 using System.Text.Json.Serialization;
 
@@ -54,7 +54,7 @@ namespace Nosthy.Blazor.DexieWrapper.Database
 
         public async Task Init(string databaseName, CancellationToken cancellationToken)
         {
-            if ((DbJsReference == null || _dbJsReferenceDatabaseName != databaseName) && _commandExecuterJsInterop.RunInBrowser)
+            if ((DbJsReference == null || _dbJsReferenceDatabaseName != databaseName) && _commandExecuterJsInterop.CanUseObjectReference)
             {
                 if (DbJsReference != null)
                 {

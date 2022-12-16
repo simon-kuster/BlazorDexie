@@ -364,3 +364,4 @@ FodyWeavers.xsd
 
 # Custom
 */wwwroot/scripts/lib/**
+/DexieWrapper/wwwroot/scripts/objectUrl.js
