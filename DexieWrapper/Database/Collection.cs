@@ -35,14 +35,9 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             return Filter(filterFunction, parameters);
         }
 
-        public async Task<int> Count(CancellationToken cancellationToken = default)
+        public async Task<int> Count(string? databaseName = null, CancellationToken cancellationToken = default)
         {
-            return await Count(Db.DefaultDatabaseName, cancellationToken);
-        }
-
-        public async Task<int> Count(string databaseName, CancellationToken cancellationToken = default)
-        {
-            return await Execute<int>("count", databaseName, cancellationToken);
+            return await Execute<int>("count", databaseName ?? Db.DefaultDatabaseName, cancellationToken);
         }
 
         public Collection<T, TKey> Filter(string filterFunction, IEnumerable<object>? parameters = null)
@@ -80,22 +75,12 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             return collection;
         }
 
-        public async Task<T[]> ToArray(CancellationToken cancellationToken = default)
-        {
-            return await ToArray(Db.DefaultDatabaseName, cancellationToken);  
-        }
-
-        public async Task<T[]> ToArray(string databaseName, CancellationToken cancellationToken = default)
+        public async Task<T[]> ToArray(string? databaseName = null, CancellationToken cancellationToken = default)
         {
             return await Execute<T[]>("toArray", databaseName ?? Db.DefaultDatabaseName, cancellationToken);
         }
 
-        public async Task<List<T>> ToList(CancellationToken cancellationToken = default)
-        {
-            return await ToList(Db.DefaultDatabaseName, cancellationToken);
-        }
-
-        public async Task<List<T>> ToList(string databaseName, CancellationToken cancellationToken = default)
+        public async Task<List<T>> ToList(string? databaseName = null, CancellationToken cancellationToken = default)
         {
             return await Execute<List<T>>("toArray", databaseName ?? Db.DefaultDatabaseName, cancellationToken);
         }

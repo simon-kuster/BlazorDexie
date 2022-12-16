@@ -30,124 +30,64 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             PrimaryKey = Indices.First();   
         }
 
-        public async Task<TKey> Add(T item, CancellationToken cancellationToken = default)
+        public async Task<TKey> Add(T item, string? databaseName = null, CancellationToken cancellationToken = default)
         {
-            return await Add(item, Db.DefaultDatabaseName, cancellationToken);
+            return await Execute<TKey>("add", databaseName ?? Db.DefaultDatabaseName, cancellationToken, item);
         }
 
-        public async Task<TKey> Add(T item, string databaseName, CancellationToken cancellationToken = default)
-        {
-            return await Execute<TKey>("add", databaseName, cancellationToken, item);
-        }
-
-        public async Task<TKey> Add(T item, TKey? key, CancellationToken cancellationToken = default)
-        {
-            return await Add(item, key, Db.DefaultDatabaseName, cancellationToken);
-        }
-
-        public async Task<TKey> Add(T item, TKey? key, string databaseName, CancellationToken cancellationToken = default)
+        public async Task<TKey> Add(T item, TKey? key, string? databaseName = null, CancellationToken cancellationToken = default)
         {
             return await Execute<TKey>("add", databaseName ?? Db.DefaultDatabaseName, cancellationToken, item, key);
         }
 
-        public async Task<TKey> BulkAdd(IEnumerable<T> items, CancellationToken cancellationToken = default)
+        public async Task<TKey> BulkAdd(IEnumerable<T> items, string? databaseName = null, CancellationToken cancellationToken = default)
         {
-            return await BulkAdd(items, Db.DefaultDatabaseName, cancellationToken);
+            return await Execute<TKey>("bulkAdd", databaseName ?? Db.DefaultDatabaseName, cancellationToken, items);
         }
 
-        public async Task<TKey> BulkAdd(IEnumerable<T> items, string databaseName, CancellationToken cancellationToken = default)
-        {
-            return await Execute<TKey>("bulkAdd", databaseName, cancellationToken, items);
-        }
-
-        public async Task BulkAdd(IEnumerable<T> items, IEnumerable<TKey>? keys, CancellationToken cancellationToken = default)
-        {
-            await BulkAdd(items, keys, Db.DefaultDatabaseName, cancellationToken);  
-        }
-
-        public async Task BulkAdd(IEnumerable<T> items, IEnumerable<TKey>? keys, string databaseName, CancellationToken cancellationToken = default)
+        public async Task BulkAdd(IEnumerable<T> items, IEnumerable<TKey>? keys, string? databaseName = null, CancellationToken cancellationToken = default)
         {
             await ExecuteNonQuery("bulkAdd", databaseName ?? Db.DefaultDatabaseName, cancellationToken, items, keys);
         }
 
-        public async Task<List<TKey>> BulkAddReturnAllKeys(IEnumerable<T> items, CancellationToken cancellationToken = default)
+        public async Task<List<TKey>> BulkAddReturnAllKeys(IEnumerable<T> items, string? databaseName = null, CancellationToken cancellationToken = default)
         {
-            return await BulkAddReturnAllKeys(items, Db.DefaultDatabaseName, cancellationToken);
+            return await Execute<List<TKey>>("bulkAdd", databaseName ?? Db.DefaultDatabaseName, cancellationToken, items, new { allKeys = true });
         }
 
-        public async Task<List<TKey>> BulkAddReturnAllKeys(IEnumerable<T> items, string databaseName, CancellationToken cancellationToken = default)
+        public async Task BulkDelete(IEnumerable<TKey> primaryKeys, string? databaseName = null, CancellationToken cancellationToken = default)
         {
-            return await Execute<List<TKey>>("bulkAdd", databaseName, cancellationToken, items, new { allKeys = true });
+            await ExecuteNonQuery("bulkDelete", databaseName ?? Db.DefaultDatabaseName, cancellationToken, primaryKeys);
         }
 
-        public async Task BulkDelete(IEnumerable<TKey> primaryKeys, CancellationToken cancellationToken = default)
-        {
-            await BulkDelete(primaryKeys, Db.DefaultDatabaseName, cancellationToken);
-        }
-
-        public async Task BulkDelete(IEnumerable<TKey> primaryKeys, string databaseName, CancellationToken cancellationToken = default)
-        {
-            await ExecuteNonQuery("bulkDelete", databaseName, cancellationToken, primaryKeys);
-        }
-
-        public async Task<T?[]> BulkGet(IEnumerable<TKey> keys, CancellationToken cancellationToken = default)
-        {
-            return await BulkGet(keys, Db.DefaultDatabaseName, cancellationToken);
-        }
-
-        public async Task<T?[]> BulkGet(IEnumerable<TKey> keys, string databaseName, CancellationToken cancellationToken = default)
+        public async Task<T?[]> BulkGet(IEnumerable<TKey> keys, string? databaseName = null, CancellationToken cancellationToken = default)
         {
             return await Execute<T[]>("bulkGet", databaseName ?? Db.DefaultDatabaseName, cancellationToken, keys);
         }
 
-        public async Task<TKey> BulkPut(IEnumerable<T> items, CancellationToken cancellationToken = default)
+        public async Task<TKey> BulkPut(IEnumerable<T> items, string? databaseName = null, CancellationToken cancellationToken = default)
         {
-            return await BulkPut(items, Db.DefaultDatabaseName, cancellationToken); 
+            return await Execute<TKey>("bulkPut", databaseName ?? Db.DefaultDatabaseName, cancellationToken, items);
         }
 
-        public async Task<TKey> BulkPut(IEnumerable<T> items, string databaseName, CancellationToken cancellationToken = default)
-        {
-            return await Execute<TKey>("bulkPut", databaseName, cancellationToken, items);
-        }
-
-        public async Task BulkPut(IEnumerable<T> items, IEnumerable<TKey>? keys, CancellationToken cancellationToken = default)
-        {
-            await BulkPut(items, keys, Db.DefaultDatabaseName, cancellationToken);
-        }
-
-        public async Task BulkPut(IEnumerable<T> items, IEnumerable<TKey>? keys, string databaseName, CancellationToken cancellationToken = default)
+        public async Task BulkPut(IEnumerable<T> items, IEnumerable<TKey>? keys, string? databaseName = null, CancellationToken cancellationToken = default)
         {
             await ExecuteNonQuery("bulkPut", databaseName ?? Db.DefaultDatabaseName, cancellationToken, items, keys);
         }
 
-        public async Task<List<TKey>> BulkPutReturnAllKeys(IEnumerable<T> items, CancellationToken cancellationToken = default)
-        {
-            return await BulkPutReturnAllKeys(items, Db.DefaultDatabaseName, cancellationToken);
-        }
-
-        public async Task<List<TKey>> BulkPutReturnAllKeys(IEnumerable<T> items, string databaseName, CancellationToken cancellationToken = default)
+        public async Task<List<TKey>> BulkPutReturnAllKeys(IEnumerable<T> items, string? databaseName = null, CancellationToken cancellationToken = default)
         {
             return await Execute<List<TKey>>("bulkPut", databaseName ?? Db.DefaultDatabaseName, cancellationToken, items, new { allKeys = true });
         }
 
-        public async Task Delete(TKey primaryKey, CancellationToken cancellationToken = default)
+        public async Task Delete(TKey primaryKey, string? databaseName = null, CancellationToken cancellationToken = default)
         {
-            await Delete(primaryKey, Db.DefaultDatabaseName, cancellationToken);
+            await ExecuteNonQuery("delete", databaseName ?? Db.DefaultDatabaseName, cancellationToken, primaryKey);
         }
 
-        public async Task Delete(TKey primaryKey, string databaseName, CancellationToken cancellationToken = default)
+        public async Task<T?> Get(TKey primaryKey, string? databaseName = null, CancellationToken cancellationToken = default)
         {
-            await ExecuteNonQuery("delete", databaseName, cancellationToken, primaryKey);
-        }
-
-        public async Task<T?> Get(TKey primaryKey, CancellationToken cancellationToken = default)
-        {
-            return await Get(primaryKey, Db.DefaultDatabaseName, cancellationToken);
-        }
-
-        public async Task<T?> Get(TKey primaryKey, string databaseName, CancellationToken cancellationToken = default)
-        {
-            return await Execute<T?>("get", databaseName, cancellationToken, primaryKey);
+            return await Execute<T?>("get", databaseName ?? Db.DefaultDatabaseName, cancellationToken, primaryKey);
         }
 
         public Collection<T, TKey> OrderBy(string index)
@@ -157,32 +97,17 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             return collection;
         }
 
-        public async Task<TKey> Put(T item, CancellationToken cancellationToken = default)
+        public async Task<TKey> Put(T item, string? databaseName = null, CancellationToken cancellationToken = default)
         {
-            return await Put(item, Db.DefaultDatabaseName, cancellationToken);
+            return await Execute<TKey>("put", databaseName ?? Db.DefaultDatabaseName, cancellationToken, item);
         }
 
-        public async Task<TKey> Put(T item, string databaseName, CancellationToken cancellationToken = default)
+        public async Task<TKey> Put(T item, TKey? key, string? databaseName = null, CancellationToken cancellationToken = default)
         {
-            return await Execute<TKey>("put", databaseName, cancellationToken, item);
+            return await Execute<TKey>("put", databaseName ?? Db.DefaultDatabaseName, cancellationToken, item, key);
         }
 
-        public async Task<TKey> Put(T item, TKey? key, CancellationToken cancellationToken = default)
-        {
-            return await Put(item, key, Db.DefaultDatabaseName, cancellationToken);
-        }
-
-        public async Task<TKey> Put(T item, TKey? key, string databaseName, CancellationToken cancellationToken = default)
-        {
-            return await Execute<TKey>("put", databaseName, cancellationToken, item, key);
-        }
-
-        public async Task<int> Update(TKey key, Dictionary<string, object> changes, CancellationToken cancellationToken = default) 
-        {
-            return await Update(key, changes, Db.DefaultDatabaseName, cancellationToken);
-        }
-
-        public async Task<int> Update(TKey key, Dictionary<string, object> changes, string databaseName, CancellationToken cancellationToken = default)
+        public async Task<int> Update(TKey key, Dictionary<string, object> changes, string? databaseName = null, CancellationToken cancellationToken = default)
         {
             var changesObject = new ExpandoObject();
             foreach (var change in changes)
@@ -190,7 +115,7 @@ namespace Nosthy.Blazor.DexieWrapper.Database
                 changesObject.TryAdd(Camelizer.ToCamelCase(change.Key), change.Value);
             }
 
-            return await Execute<int>("update", databaseName, cancellationToken, key, changesObject);
+            return await Execute<int>("update", databaseName ?? Db.DefaultDatabaseName, cancellationToken, key, changesObject);
         }
 
         public WhereClause<T, TKey> Where(string indexOrPrimaryKey)
@@ -215,12 +140,7 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             return collection;
         }
 
-        public async Task Clear(CancellationToken cancellationToken = default)
-        {
-            await Clear(Db.DefaultDatabaseName, cancellationToken); 
-        }
-
-        public async Task Clear(string databaseName, CancellationToken cancellationToken = default)
+        public async Task Clear(string? databaseName = null, CancellationToken cancellationToken = default)
         {
             await ExecuteNonQuery("clear", databaseName ?? Db.DefaultDatabaseName, cancellationToken);
         }
