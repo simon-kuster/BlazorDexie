@@ -1,4 +1,4 @@
-﻿namespace Nosthy.Blazor.DexieWrapper.Test
+﻿namespace Nosthy.Blazor.DexieWrapper.Test.TestItems
 {
     public class TestItemHiddenKey
     {

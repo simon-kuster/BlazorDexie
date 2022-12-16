@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Nosthy.Blazor.DexieWrapper.Test.Database;
 using Nosthy.Blazor.DexieWrapper.Test.ModuleWrappers;
+using Nosthy.Blazor.DexieWrapper.Test.TestItems;
 
 namespace Nosthy.Blazor.DexieWrapper.Test
 {
