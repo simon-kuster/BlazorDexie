@@ -35,11 +35,11 @@ export async function executeNonQuery(db, storeName, commands) {
                 break;
 
             case "addBlob":
-                query = query.add(new Blob([c.parameters[0]]), c.parameters[1]);
+                query = query.add(new Blob([c.parameters[0]], { type: c.parameters[2] }), c.parameters[1]);
                 break;
 
             case "putBlob":
-                query = query.put(new Blob([c.parameters[0]]), c.parameters[1]);
+                query = query.put(new Blob([c.parameters[0]], { type: c.parameters[2] }), c.parameters[1]);
                 break;
 
             case "getBlob":

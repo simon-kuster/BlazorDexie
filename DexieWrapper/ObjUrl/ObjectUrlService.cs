@@ -12,9 +12,9 @@ namespace Nosthy.Blazor.DexieWrapper.ObjUrl
             _objecUrlJsInterop = new ObjectUrlJsInterop(jsModuleFactory);
         }
 
-        public async Task<string> Create(byte[] data, CancellationToken cancellationToken = default)
+        public async Task<string> Create(byte[] data, string mimeType = "", CancellationToken cancellationToken = default)
         {
-            return await _objecUrlJsInterop.Create(data, cancellationToken);
+            return await _objecUrlJsInterop.Create(data, mimeType, cancellationToken);
         }
 
         public async Task Revoke(string objectUrl, CancellationToken cancellationToken = default)

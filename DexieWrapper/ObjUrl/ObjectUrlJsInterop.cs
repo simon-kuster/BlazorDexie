@@ -15,9 +15,9 @@ namespace Nosthy.Blazor.DexieWrapper.ObjUrl
             _runInBrowser = _module is EsModule;
         }
 
-        public async Task<string> Create(byte[] data, CancellationToken cancellationToken = default)
+        public async Task<string> Create(byte[] data, string mimeType, CancellationToken cancellationToken = default)
         {
-            return await _module.InvokeAsync<string>("createObjectUrlFromUint8Array", cancellationToken, data);
+            return await _module.InvokeAsync<string>("createObjectUrlFromUint8Array", cancellationToken, data, mimeType);
         }
 
         public async Task Revoke(string objectUrl, CancellationToken cancellationToken = default)

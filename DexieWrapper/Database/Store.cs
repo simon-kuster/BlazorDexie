@@ -40,9 +40,9 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             return await Execute<TKey>("add", databaseName ?? Db.DefaultDatabaseName, cancellationToken, item, key);
         }
 
-        public async Task<TKey> AddBlob(byte[] data, TKey? key, string? databaseName = null, CancellationToken cancellationToken = default)
+        public async Task<TKey> AddBlob(byte[] data, TKey? key, string mimeType = "", string? databaseName = null, CancellationToken cancellationToken = default)
         {
-            return await Execute<TKey>("addBlob", databaseName ?? Db.DefaultDatabaseName, cancellationToken, data, key);
+            return await Execute<TKey>("addBlob", databaseName ?? Db.DefaultDatabaseName, cancellationToken, data, key, mimeType);
         }
 
         public async Task<TKey> AddObjectUrl(string objectUrl, TKey? key, string? databaseName = null, CancellationToken cancellationToken = default)
@@ -127,9 +127,9 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             return await Execute<TKey>("put", databaseName ?? Db.DefaultDatabaseName, cancellationToken, item, key);
         }
 
-        public async Task<TKey> PutBlob(byte[] data, TKey? key, string? databaseName = null, CancellationToken cancellationToken = default)
+        public async Task<TKey> PutBlob(byte[] data, TKey? key, string mimeType = "", string? databaseName = null, CancellationToken cancellationToken = default)
         {
-            return await Execute<TKey>("putBlob", databaseName ?? Db.DefaultDatabaseName, cancellationToken, data, key);
+            return await Execute<TKey>("putBlob", databaseName ?? Db.DefaultDatabaseName, cancellationToken, data, key, mimeType);
         }
 
         public async Task<TKey> PutObjectUrl(string objectUrl, TKey? key, string? databaseName = null, CancellationToken cancellationToken = default)

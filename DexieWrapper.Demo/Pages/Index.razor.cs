@@ -61,7 +61,7 @@ namespace Nosthy.Blazor.DexieWrapper.Demo.Pages
             // act
             var initalData = new byte[] { 213, 23, 55, 234, 11 };
             var key = Guid.NewGuid();
-            await db.BlobData.AddBlob(initalData, key);
+            await db.BlobData.AddBlob(initalData, key, "application/octet-stream");
 
             // assert
             var data = await db.BlobData.GetBlob(key);
@@ -74,7 +74,7 @@ namespace Nosthy.Blazor.DexieWrapper.Demo.Pages
             // act
             var initalData = new byte[] { 213, 23, 55, 234, 22 };
             var key = Guid.NewGuid();
-            await db.BlobData.PutBlob(initalData, key);
+            await db.BlobData.PutBlob(initalData, key, "application/octet-stream");
 
             // assert
             var data = await db.BlobData.GetBlob(key);
@@ -86,7 +86,7 @@ namespace Nosthy.Blazor.DexieWrapper.Demo.Pages
 
             // act
             var initalData = new byte[] { 213, 23, 55, 234, 33 };
-            var initalObjectUrl = await ObjectUrlService.Create(initalData);
+            var initalObjectUrl = await ObjectUrlService.Create(initalData, "application/octet-stream");
 
             var key = Guid.NewGuid();
             await db.BlobData.AddObjectUrl(initalObjectUrl, key);
@@ -103,7 +103,7 @@ namespace Nosthy.Blazor.DexieWrapper.Demo.Pages
 
             // act
             var initalData = new byte[] { 213, 23, 55, 234, 44 };
-            var initalObjectUrl = await ObjectUrlService.Create(initalData);
+            var initalObjectUrl = await ObjectUrlService.Create(initalData, "application/octet-stream");
             var key = Guid.NewGuid();
             await db.BlobData.PutObjectUrl(initalObjectUrl, key);
 

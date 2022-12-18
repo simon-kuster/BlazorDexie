@@ -10,9 +10,9 @@ export function createObjectUrl(blob) {
     return objectUrl;
 }
 
-export function createObjectUrlFromUint8Array(data) {
+export function createObjectUrlFromUint8Array(data, mimeType) {
     if (IsRunInBroser()) {
-        const blob = new Blob([data]);
+        const blob = new Blob([data], { type: mimeType });
         return URL.createObjectURL(blob);
     }
 
