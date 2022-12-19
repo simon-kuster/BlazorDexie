@@ -35,9 +35,9 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             return Filter(filterFunction, parameters);
         }
 
-        public async Task<int> Count(string? databaseName = null, CancellationToken cancellationToken = default)
+        public async Task<int> Count(CancellationToken cancellationToken = default)
         {
-            return await Execute<int>("count", databaseName ?? Db.DefaultDatabaseName, cancellationToken);
+            return await Execute<int>("count", cancellationToken);
         }
 
         public Collection<T, TKey> Filter(string filterFunction, IEnumerable<object>? parameters = null)
@@ -75,14 +75,14 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             return collection;
         }
 
-        public async Task<T[]> ToArray(string? databaseName = null, CancellationToken cancellationToken = default)
+        public async Task<T[]> ToArray(CancellationToken cancellationToken = default)
         {
-            return await Execute<T[]>("toArray", databaseName ?? Db.DefaultDatabaseName, cancellationToken);
+            return await Execute<T[]>("toArray", cancellationToken);
         }
 
-        public async Task<List<T>> ToList(string? databaseName = null, CancellationToken cancellationToken = default)
+        public async Task<List<T>> ToList(CancellationToken cancellationToken = default)
         {
-            return await Execute<List<T>>("toArray", databaseName ?? Db.DefaultDatabaseName, cancellationToken);
+            return await Execute<List<T>>("toArray", cancellationToken);
         }
 
         protected virtual Collection<T, TKey> CreateNewColletion()
@@ -90,12 +90,12 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             return this;
         }
 
-        protected async Task<TRet> Execute<TRet>(string command, string databaseName, CancellationToken cancellationToken, params object?[] parameters)
+        protected async Task<TRet> Execute<TRet>(string command, CancellationToken cancellationToken, params object?[] parameters)
         {
             var commands = CurrentCommands.ToList();
             commands.Add(new Command(command, parameters));
 
-            await Db.Init(databaseName, cancellationToken);
+            await Db.Init(cancellationToken);
 
             if (typeof(TRet) == typeof(Guid))
             {
@@ -107,7 +107,7 @@ namespace Nosthy.Blazor.DexieWrapper.Database
                 }
                 else
                 {
-                    retString = await CommandExecuterJsInterop.InitDbAndExecute<string>(databaseName, Db.Versions, StoreName, commands, cancellationToken);
+                    retString = await CommandExecuterJsInterop.InitDbAndExecute<string>(Db.DatabaseName, Db.Versions, StoreName, commands, cancellationToken);
                 }
 
                 return (TRet)(object)Guid.Parse(retString);
@@ -119,16 +119,16 @@ namespace Nosthy.Blazor.DexieWrapper.Database
                     return await CommandExecuterJsInterop.Execute<TRet>(Db.DbJsReference, StoreName, commands, cancellationToken);
                 }
 
-                return await CommandExecuterJsInterop.InitDbAndExecute<TRet>(databaseName, Db.Versions, StoreName, commands, cancellationToken);
+                return await CommandExecuterJsInterop.InitDbAndExecute<TRet>(Db.DatabaseName, Db.Versions, StoreName, commands, cancellationToken);
             }
         }
 
-        protected async Task ExecuteNonQuery(string command, string databaseName, CancellationToken cancellationToken, params object?[] parameters)
+        protected async Task ExecuteNonQuery(string command, CancellationToken cancellationToken, params object?[] parameters)
         {
             var commands = CurrentCommands.ToList();
             commands.Add(new Command(command, parameters));
 
-            await Db.Init(databaseName, cancellationToken);
+            await Db.Init(cancellationToken);
 
             if (Db.DbJsReference != null)
             {
@@ -136,7 +136,7 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             }
             else
             {
-                await CommandExecuterJsInterop.InitDbAndExecuteNonQuery(databaseName, Db.Versions, StoreName, commands, cancellationToken);
+                await CommandExecuterJsInterop.InitDbAndExecuteNonQuery(Db.DatabaseName, Db.Versions, StoreName, commands, cancellationToken);
             }
         }
     }

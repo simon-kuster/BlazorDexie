@@ -30,7 +30,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
             await db.Delete();
 
             // assert
-            var exists = await _dexie.Exits(db.DefaultDatabaseName);
+            var exists = await _dexie.Exits(db.DatabaseName);
             Assert.False(exists);
         }
 
@@ -49,7 +49,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
             await db.TestItems.Put(new TestItem());
 
             // exists
-            exists = await _dexie.Exits(db.DefaultDatabaseName);
+            exists = await _dexie.Exits(db.DatabaseName);
             Assert.True(exists);
         }
 

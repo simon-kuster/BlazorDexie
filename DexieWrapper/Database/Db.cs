@@ -10,9 +10,8 @@ namespace Nosthy.Blazor.DexieWrapper.Database
     {
         private readonly CollectionCommandExecuterJsInterop _collectionCommandExecuterJsInterop;
         private readonly StaticCommandExecuterJsInterop _staticCommandExecuterJsInterop;
-        private string? _dbJsReferenceDatabaseName;
 
-        public string DefaultDatabaseName { get; }
+        public string DatabaseName { get; }
         public int VersionNumber { get; }
         public List<DbVersionDefinition> Versions { get; } = new List<DbVersionDefinition>();
         public IJSObjectReference? DbJsReference { get; private set; }
@@ -20,9 +19,9 @@ namespace Nosthy.Blazor.DexieWrapper.Database
         [JsonIgnore]
         public IEnumerable<DbVersion> PreviousVersions { get; }
 
-        public Db(string defaultDatabaseName, int currentVersionNumber, IEnumerable<DbVersion> previousVersions, IModuleFactory jsModuleFactory)
+        public Db(string databaseName, int currentVersionNumber, IEnumerable<DbVersion> previousVersions, IModuleFactory jsModuleFactory)
         {
-            DefaultDatabaseName = defaultDatabaseName;
+            DatabaseName = databaseName;
             VersionNumber = currentVersionNumber;
             PreviousVersions = previousVersions;
             _collectionCommandExecuterJsInterop = new CollectionCommandExecuterJsInterop(jsModuleFactory);
@@ -54,25 +53,19 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             }
         }
 
-        public async Task Init(string databaseName, CancellationToken cancellationToken)
+        public async Task Init(CancellationToken cancellationToken)
         {
-            if ((DbJsReference == null || _dbJsReferenceDatabaseName != databaseName) && _collectionCommandExecuterJsInterop.CanUseObjectReference)
+            if (DbJsReference == null && _collectionCommandExecuterJsInterop.CanUseObjectReference)
             {
-                if (DbJsReference != null)
-                {
-                    await DbJsReference.DisposeAsync();
-                }
-
                 // Optimized code for Blazor
                 // Create Dexie object only once
-                DbJsReference = await _collectionCommandExecuterJsInterop.InitDb(databaseName, Versions, cancellationToken);
-                _dbJsReferenceDatabaseName = databaseName;
+                DbJsReference = await _collectionCommandExecuterJsInterop.InitDb(DatabaseName, Versions, cancellationToken);
             }
         }
 
         public async Task Delete(CancellationToken cancellationToken = default)
         {
-            await _staticCommandExecuterJsInterop.ExecuteNonQuery(new Command("delete", DefaultDatabaseName), cancellationToken);
+            await _staticCommandExecuterJsInterop.ExecuteNonQuery(new Command("delete", DatabaseName), cancellationToken);
         }
 
         public async ValueTask DisposeAsync()

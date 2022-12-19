@@ -28,7 +28,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
             await db.Delete();
 
             // assert
-            var exists = await new Dexie(_moduleFactory).Exits(db.DefaultDatabaseName);
+            var exists = await new Dexie(_moduleFactory).Exits(db.DatabaseName);
             Assert.False(exists);
         }
 
