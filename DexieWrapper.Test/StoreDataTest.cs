@@ -1,23 +1,22 @@
-﻿using Jering.Javascript.NodeJS;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Xunit;
-using Nosthy.Blazor.DexieWrapper.Test.ModuleWrappers;
 using Nosthy.Blazor.DexieWrapper.ObjUrl;
 using System;
 using Nosthy.Blazor.DexieWrapper.Test.Database;
+using Nosthy.Blazor.DexieWrapper.JsModule;
 
 namespace Nosthy.Blazor.DexieWrapper.Test
 {
     public class StoreDataTest : IAsyncLifetime
     {
-        private INodeJSService _nodeJSService;
+        private IModuleFactory _moduleFactory;
         private ObjectUrlService _objectUrlService;
 
-        public StoreDataTest(INodeJSService nodeJSService)
+
+        public StoreDataTest(IModuleFactory moduleFactory, ObjectUrlService objectUrlService)
         {
-            _nodeJSService = nodeJSService;
-            var moduleFactory = new CommonJsModuleFactory(_nodeJSService, "../../../DexieWrapper/wwwroot");
-            _objectUrlService = new ObjectUrlService(moduleFactory);
+            _moduleFactory = moduleFactory;
+            _objectUrlService = objectUrlService;
         }
 
         public Task InitializeAsync()
@@ -82,8 +81,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         private MyDb CreateDb()
         {
             var databaseId = Guid.NewGuid().ToString();
-            var moduleFactory = new CommonJsModuleFactory(_nodeJSService, "../../../DexieWrapper/wwwroot");
-            return new MyDb(moduleFactory, databaseId);
+            return new MyDb(_moduleFactory, databaseId);
         }
 
         public async Task DisposeAsync()

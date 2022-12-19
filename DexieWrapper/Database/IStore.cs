@@ -6,6 +6,6 @@ namespace Nosthy.Blazor.DexieWrapper.Database
     {
         public string[] SchemaDefinitions { get; }
 
-        public void Init(Db db, string storeName, CommandExecuterJsInterop commandExecuterJsInterop);
+        public void Init(Db db, string storeName, CollectionCommandExecuterJsInterop commandExecuterJsInterop);
     }
 }

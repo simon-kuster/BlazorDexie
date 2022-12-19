@@ -110,5 +110,11 @@ namespace Nosthy.Blazor.DexieWrapper.Demo.Pages
             // assert
             var data = await db.BlobData.GetBlob(key);
         }
+
+        private async Task DeleteDb()
+        {
+            var db = new MyDb(ModuleFactory);
+            await db.Delete();
+        }
     }
 }

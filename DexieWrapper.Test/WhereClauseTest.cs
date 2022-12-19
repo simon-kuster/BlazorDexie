@@ -1,4 +1,5 @@
 ﻿using Jering.Javascript.NodeJS;
+using Nosthy.Blazor.DexieWrapper.JsModule;
 using Nosthy.Blazor.DexieWrapper.Test.Database;
 using Nosthy.Blazor.DexieWrapper.Test.ModuleWrappers;
 using Nosthy.Blazor.DexieWrapper.Test.TestItems;
@@ -11,11 +12,11 @@ namespace Nosthy.Blazor.DexieWrapper.Test
 {
     public class WhereClauseTest
     {
-        private INodeJSService _nodeJSService;
+        private IModuleFactory _moduleFactory;
 
-        public WhereClauseTest(INodeJSService nodeJSService)
+        public WhereClauseTest(IModuleFactory moduleFactory)
         {
-            _nodeJSService = nodeJSService;
+            _moduleFactory = moduleFactory;
         }
 
         [Fact]
@@ -491,8 +492,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         private MyDb CreateDb()
         {
             var databaseId = Guid.NewGuid().ToString();
-            var moduleFactory = new CommonJsModuleFactory(_nodeJSService, "../../../DexieWrapper/wwwroot");
-            return new MyDb(moduleFactory, databaseId);
+            return new MyDb(_moduleFactory, databaseId);
         }
     }
 }

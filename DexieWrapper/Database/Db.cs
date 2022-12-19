@@ -8,7 +8,8 @@ namespace Nosthy.Blazor.DexieWrapper.Database
 {
     public abstract class Db : IAsyncDisposable
     {
-        private readonly CommandExecuterJsInterop _commandExecuterJsInterop;
+        private readonly CollectionCommandExecuterJsInterop _collectionCommandExecuterJsInterop;
+        private readonly StaticCommandExecuterJsInterop _staticCommandExecuterJsInterop;
         private string? _dbJsReferenceDatabaseName;
 
         public string DefaultDatabaseName { get; }
@@ -24,7 +25,8 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             DefaultDatabaseName = defaultDatabaseName;
             VersionNumber = currentVersionNumber;
             PreviousVersions = previousVersions;
-            _commandExecuterJsInterop = new CommandExecuterJsInterop(jsModuleFactory);
+            _collectionCommandExecuterJsInterop = new CollectionCommandExecuterJsInterop(jsModuleFactory);
+            _staticCommandExecuterJsInterop = new StaticCommandExecuterJsInterop(jsModuleFactory);
 
             var latestVersion = new DbVersionDefinition(VersionNumber);
 
@@ -38,7 +40,7 @@ namespace Nosthy.Blazor.DexieWrapper.Database
                     if (store != null)
                     {
                         var storeName = property.Name;
-                        store.Init(this, storeName, _commandExecuterJsInterop);
+                        store.Init(this, storeName, _collectionCommandExecuterJsInterop);
                         latestVersion.Stores.Add(new StoreDefinition(storeName, store.SchemaDefinitions));
                     }
                 }
@@ -54,7 +56,7 @@ namespace Nosthy.Blazor.DexieWrapper.Database
 
         public async Task Init(string databaseName, CancellationToken cancellationToken)
         {
-            if ((DbJsReference == null || _dbJsReferenceDatabaseName != databaseName) && _commandExecuterJsInterop.CanUseObjectReference)
+            if ((DbJsReference == null || _dbJsReferenceDatabaseName != databaseName) && _collectionCommandExecuterJsInterop.CanUseObjectReference)
             {
                 if (DbJsReference != null)
                 {
@@ -63,9 +65,14 @@ namespace Nosthy.Blazor.DexieWrapper.Database
 
                 // Optimized code for Blazor
                 // Create Dexie object only once
-                DbJsReference = await _commandExecuterJsInterop.InitDb(databaseName, Versions, cancellationToken);
+                DbJsReference = await _collectionCommandExecuterJsInterop.InitDb(databaseName, Versions, cancellationToken);
                 _dbJsReferenceDatabaseName = databaseName;
             }
+        }
+
+        public async Task Delete(CancellationToken cancellationToken = default)
+        {
+            await _staticCommandExecuterJsInterop.ExecuteNonQuery(new Command("delete", DefaultDatabaseName), cancellationToken);
         }
 
         public async ValueTask DisposeAsync()
@@ -77,9 +84,13 @@ namespace Nosthy.Blazor.DexieWrapper.Database
 
         protected virtual async ValueTask DisposeAsyncCore()
         {
+            await _collectionCommandExecuterJsInterop.DisposeAsync().ConfigureAwait(false);
+            await _staticCommandExecuterJsInterop.DisposeAsync().ConfigureAwait(false);
+
             if (DbJsReference != null)
             {
                 await DbJsReference.DisposeAsync().ConfigureAwait(false);
+                DbJsReference = null;
             }
         }
     }

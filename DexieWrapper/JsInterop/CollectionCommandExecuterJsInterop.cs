@@ -4,15 +4,15 @@ using Nosthy.Blazor.DexieWrapper.JsModule;
 
 namespace Nosthy.Blazor.DexieWrapper.JsInterop
 {
-    public sealed class CommandExecuterJsInterop : IAsyncDisposable
+    public sealed class CollectionCommandExecuterJsInterop : IAsyncDisposable
     {
-        private readonly IModule? _module;
+        private IModule? _module;
 
         public bool CanUseObjectReference { get; set; }
 
-        public CommandExecuterJsInterop(IModuleFactory jsModuleFactory)
+        public CollectionCommandExecuterJsInterop(IModuleFactory jsModuleFactory)
         {
-            _module = jsModuleFactory.CreateModule("scripts/commandExecuter.js");
+            _module = jsModuleFactory.CreateModule("scripts/collectionCommandExecuter.js");
             CanUseObjectReference = _module is EsModule;
         }
 
@@ -47,7 +47,8 @@ namespace Nosthy.Blazor.DexieWrapper.JsInterop
         {
             if (_module != null)
             {
-                await _module.DisposeAsync().ConfigureAwait(false); 
+                await _module.DisposeAsync().ConfigureAwait(false);
+                _module = null;
             }
         }
 

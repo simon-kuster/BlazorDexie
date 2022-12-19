@@ -5,7 +5,7 @@ namespace Nosthy.Blazor.DexieWrapper.Database
     public class Collection<T, TKey>
     {
         protected Db Db = null!;
-        protected CommandExecuterJsInterop CommandExecuterJsInterop = null!;
+        protected CollectionCommandExecuterJsInterop CommandExecuterJsInterop = null!;
         protected string StoreName = null!;
         protected virtual List<Command> CurrentCommands { get; } = new List<Command>();
 
@@ -13,12 +13,12 @@ namespace Nosthy.Blazor.DexieWrapper.Database
         {
         }
 
-        public Collection(Db db, string storeName, CommandExecuterJsInterop commandExecuterJsInterop)
+        public Collection(Db db, string storeName, CollectionCommandExecuterJsInterop commandExecuterJsInterop)
         {
             Init(db, storeName, commandExecuterJsInterop);
         }
 
-        public void Init(Db db, string storeName, CommandExecuterJsInterop commandExecuterJsInterop)
+        public void Init(Db db, string storeName, CollectionCommandExecuterJsInterop commandExecuterJsInterop)
         {
             Db = db;
             StoreName = storeName;
