@@ -72,3 +72,22 @@ Usage in Blazor
 ```
 
 For more Information have look to: https://dexie.org/docs/Tutorial/Hello-World
+
+## Changes with Version 0.7.0
+
+### Breaking Changes
+
+- Remove optional Parameter databaseName in several methods of Collection and Store. 
+
+### Enhancements
+
+- Add method Delete to class Db
+- Add class Dexie with the static methods (static for Dexie not in C#) Delete and Exits
+- Add the following methods to to class Store to work with blobs:
+   - AddBlob: Add byte array as blob to the db
+   - PutBlob: Put byte array as blob to the db
+   - GetBlob: Get blob from the DB as byte array
+   - AddObjecUrl:  Add ObjectUrl as blob to the db
+   - PutObjectUrl: Put ObjectUrl as blob to the db
+   - GetObjectUrl: Get blob from the DB as ObjectUrl
+    
