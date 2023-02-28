@@ -43,6 +43,26 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         }
 
         [Fact]
+        public async Task AddObjectUrl()
+        {
+            // arrange
+            await using var db = CreateDb();
+
+            // act
+            var initialData = new byte[] { 213, 23, 55, 234, 54 };
+            var initialObjectUrl = await _objectUrlService.Create(initialData);
+            var key = Guid.NewGuid();
+            await db.BlobData.AddObjectUrl(initialObjectUrl, key);
+
+            // assert
+            var objectUrl = await db.BlobData.GetObjectUrl(key);
+            var data = await _objectUrlService.FetchData(objectUrl);
+
+            Assert.NotNull(data);
+            Assert.Equal(initialData, data);
+        }
+
+        [Fact]
         public async Task PutBlob()
         {
             // arrange
@@ -61,6 +81,26 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         }
 
         [Fact]
+        public async Task PutObjectUrl()
+        {
+            // arrange
+            await using var db = CreateDb();
+
+            // act
+            var initialData = new byte[] { 213, 23, 55, 234, 54 };
+            var initialObjectUrl = await _objectUrlService.Create(initialData);
+            var key = Guid.NewGuid();
+            await db.BlobData.PutObjectUrl(initialObjectUrl, key);
+
+            // assert
+            var objectUrl = await db.BlobData.GetObjectUrl(key);
+            var data = await _objectUrlService.FetchData(objectUrl);
+
+            Assert.NotNull(data);
+            Assert.Equal(initialData, data);
+        }
+
+        [Fact]
         public async Task GetBlob()
         {
             // arrange
@@ -74,6 +114,26 @@ namespace Nosthy.Blazor.DexieWrapper.Test
             var data = await db.BlobData.GetBlob(key);
 
             // assert
+            Assert.NotNull(data);
+            Assert.Equal(initalData, data);
+        }
+
+        [Fact]
+        public async Task GetObjectUrl()
+        {
+            // arrange
+            await using var db = CreateDb();
+
+            var initalData = new byte[] { 213, 28, 55, 234, 54 };
+            var key = Guid.NewGuid();
+            await db.BlobData.PutBlob(initalData, key);
+
+            // act
+            var objectUrl = await db.BlobData.GetObjectUrl(key);
+
+            // assert
+            var data = await _objectUrlService.FetchData(objectUrl);
+
             Assert.NotNull(data);
             Assert.Equal(initalData, data);
         }

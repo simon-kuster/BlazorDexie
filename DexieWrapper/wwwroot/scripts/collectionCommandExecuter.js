@@ -1,4 +1,5 @@
 import { createObjectUrl, fetchObjectUrl, revokeObjectUrl } from './objectUrl.js';
+const runInBrowser = typeof window !== 'undefined';
 
 export function initDbAndExecute(databaseName, versions, storeName, commands) {
     var db = initDb(databaseName, versions);
@@ -21,7 +22,6 @@ export function initDbAndExecuteNonQuery(databaseName, versions, storeName, comm
 
 export async function executeNonQuery(db, storeName, commands) {
     var query = db[storeName];
-    const runInBrowser = typeof window !== 'undefined';
 
     for (const c of commands) {
         switch (c.cmd) {

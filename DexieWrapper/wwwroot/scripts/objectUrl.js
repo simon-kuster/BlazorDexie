@@ -1,28 +1,29 @@
 const dict = {};
+const runInBrowser = typeof window !== 'undefined';
 
 export function createObjectUrl(blob) {
-    if (IsRunInBroser()) {
+    if (runInBrowser) {
         return URL.createObjectURL(blob);
+    } else {
+        const objectUrl = generateUUID();
+        dict[objectUrl] = blob;
+        return objectUrl;
     }
-
-    const objectUrl = generateUUID();
-    dict[objectUrl] = blob;
-    return objectUrl;
 }
 
 export function createObjectUrlFromUint8Array(data, mimeType) {
-    if (IsRunInBroser()) {
+    if (runInBrowser) {
         const blob = new Blob([data], { type: mimeType });
         return URL.createObjectURL(blob);
+    } else {
+        const objectUrl = generateUUID();
+        dict[objectUrl] = { data: data, type: mimeType };
+        return objectUrl;
     }
-
-    const objectUrl = generateUUID();
-    dict[objectUrl] = data;
-    return objectUrl;
 }
 
 export function revokeObjectUrl(objectUrl) {
-    if (IsRunInBroser()) {
+    if (runInBrowser) {
         URL.revokeObjectURL(objectUrl);
     } else {
         delete dict[objectUrl];
@@ -30,21 +31,25 @@ export function revokeObjectUrl(objectUrl) {
 }
 
 export async function fetchObjectUrl(objectUrl) {
-    if (IsRunInBroser()) {
+    if (runInBrowser) {
         return await fetch(objectUrl).then(r => r.blob());
+    } else {
+        return dict[objectUrl];
     }
-
-    return dict[objectUrl];
 }
 
 export async function fetchObjectUrlAsUint8Array(objectUrl) {
-    if (IsRunInBroser()) {
+    if (runInBrowser) {
         let blob = await fetch(objectUrl).then(r => r.blob());
         var data = new Uint8Array(await new Response(blob).arrayBuffer());
         return data;
+    } else {
+        var blob = dict[objectUrl];
+        if (!blob) {
+            throw "Not found"
+        }
+        return dict[objectUrl].data;
     }
-
-    return dict[objectUrl];
 }
 
 function generateUUID() { // Public Domain/MIT
@@ -63,6 +68,3 @@ function generateUUID() { // Public Domain/MIT
     });
 }
 
-function IsRunInBroser() {
-    return typeof window !== 'undefined';
-}
