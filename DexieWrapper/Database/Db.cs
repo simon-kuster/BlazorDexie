@@ -55,7 +55,7 @@ namespace Nosthy.Blazor.DexieWrapper.Database
 
         public async Task Init(CancellationToken cancellationToken)
         {
-            if (DbJsReference == null && _collectionCommandExecuterJsInterop.CanUseObjectReference)
+            if (DbJsReference == null && _collectionCommandExecuterJsInterop.RunInBrowser)
             {
                 // Optimized code for Blazor
                 // Create Dexie object only once

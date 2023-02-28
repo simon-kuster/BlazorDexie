@@ -8,12 +8,12 @@ namespace Nosthy.Blazor.DexieWrapper.JsInterop
     {
         private IModule? _module;
 
-        public bool CanUseObjectReference { get; set; }
+        public bool RunInBrowser { get; set; }
 
         public CollectionCommandExecuterJsInterop(IModuleFactory jsModuleFactory)
         {
             _module = jsModuleFactory.CreateModule("scripts/collectionCommandExecuter.js");
-            CanUseObjectReference = _module is EsModule;
+            RunInBrowser = _module is EsModule;
         }
 
         public async Task<T> InitDbAndExecute<T>(string databaseName, List<DbVersionDefinition> versions, string storeName, List<Command> commands, 

@@ -24,59 +24,59 @@ namespace Nosthy.Blazor.DexieWrapper.Test
             return Task.CompletedTask;
         }
 
-        //[Fact]
-        //public async Task AddBlob()
-        //{
-        //    // arrange
-        //    await using var db = CreateDb();
+        [Fact]
+        public async Task AddBlob()
+        {
+            // arrange
+            await using var db = CreateDb();
 
-        //    // act
-        //    var initialData = new byte[] { 213, 23, 55, 234, 54 };
-        //    var key = Guid.NewGuid();
-        //    await db.BlobData.AddBlob(initialData, key);
+            // act
+            var initialData = new byte[] { 213, 23, 55, 234, 54 };
+            var key = Guid.NewGuid();
+            await db.BlobData.AddBlob(initialData, key);
 
-        //    // assert
-        //    var data = await db.BlobData.GetBlob(key);
+            // assert
+            var data = await db.BlobData.GetBlob(key);
 
-        //    Assert.NotNull(data);
-        //    Assert.Equal(initialData, data);
-        //}
+            Assert.NotNull(data);
+            Assert.Equal(initialData, data);
+        }
 
-        //[Fact]
-        //public async Task PutBlob()
-        //{
-        //    // arrange
-        //    await using var db = CreateDb();
+        [Fact]
+        public async Task PutBlob()
+        {
+            // arrange
+            await using var db = CreateDb();
 
-        //    // act
-        //    var initalData = new byte[] { 213, 23, 55, 234, 54 };
-        //    var key = Guid.NewGuid();
-        //    await db.BlobData.PutBlob(initalData, key);
+            // act
+            var initalData = new byte[] { 213, 23, 55, 234, 54 };
+            var key = Guid.NewGuid();
+            await db.BlobData.PutBlob(initalData, key);
 
-        //    // assert
-        //    var data = await db.BlobData.GetBlob(key);
+            // assert
+            var data = await db.BlobData.GetBlob(key);
 
-        //    Assert.NotNull(data);
-        //    Assert.Equal(initalData, data);
-        //}
+            Assert.NotNull(data);
+            Assert.Equal(initalData, data);
+        }
 
-        //[Fact]
-        //public async Task GetBlob()
-        //{
-        //    // arrange
-        //    await using var db = CreateDb();
+        [Fact]
+        public async Task GetBlob()
+        {
+            // arrange
+            await using var db = CreateDb();
 
-        //    var initalData = new byte[] { 213, 23, 55, 234, 54 };
-        //    var key = Guid.NewGuid();
-        //    await db.BlobData.PutBlob(initalData, key);
+            var initalData = new byte[] { 213, 23, 55, 234, 54 };
+            var key = Guid.NewGuid();
+            await db.BlobData.PutBlob(initalData, key);
 
-        //    // act
-        //    var data = await db.BlobData.GetBlob(key);
+            // act
+            var data = await db.BlobData.GetBlob(key);
 
-        //    // assert
-        //    Assert.NotNull(data);
-        //    Assert.Equal(initalData, data);
-        //}
+            // assert
+            Assert.NotNull(data);
+            Assert.Equal(initalData, data);
+        }
 
         private MyDb CreateDb()
         {

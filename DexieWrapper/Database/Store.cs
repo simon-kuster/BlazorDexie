@@ -102,7 +102,16 @@ namespace Nosthy.Blazor.DexieWrapper.Database
 
         public async Task<byte[]> GetBlob(TKey primaryKey, CancellationToken cancellationToken = default)
         {
-            return await Execute<byte[]>("getBlob", cancellationToken, primaryKey);
+            if (CommandExecuterJsInterop.RunInBrowser)
+            {
+
+                return await Execute<byte[]>("getBlob", cancellationToken, primaryKey);
+            }
+            else
+            {
+                var base64 = await Execute<string>("getBlob", cancellationToken, primaryKey);
+                return Convert.FromBase64String(base64);
+            }
         }
 
         public async Task<string> GetObjectUrl(TKey primaryKey, CancellationToken cancellationToken = default)

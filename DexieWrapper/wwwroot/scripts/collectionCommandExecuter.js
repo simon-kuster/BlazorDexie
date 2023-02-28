@@ -21,6 +21,7 @@ export function initDbAndExecuteNonQuery(databaseName, versions, storeName, comm
 
 export async function executeNonQuery(db, storeName, commands) {
     var query = db[storeName];
+    const runInBrowser = typeof window !== 'undefined';
 
     for (const c of commands) {
         switch (c.cmd) {
@@ -35,16 +36,29 @@ export async function executeNonQuery(db, storeName, commands) {
                 break;
 
             case "addBlob":
-                query = query.add(new Blob([c.parameters[0]], { type: c.parameters[2] }), c.parameters[1]);
+                if (runInBrowser) {
+                    query = query.add(new Blob([c.parameters[0]], { type: c.parameters[2] }), c.parameters[1]);
+                } else {
+                    query = query.add({ data: c.parameters[0], type: c.parameters[2] }, c.parameters[1]);
+                }
                 break;
 
             case "putBlob":
-                query = query.put(new Blob([c.parameters[0]], { type: c.parameters[2] }), c.parameters[1]);
+                if (runInBrowser) {
+                    query = query.put(new Blob([c.parameters[0]], { type: c.parameters[2] }), c.parameters[1]);
+                } else {
+
+                    query = query.put({ data: c.parameters[0], type: c.parameters[2] }, c.parameters[1]);
+                }
                 break;
 
             case "getBlob":
                 const blob = await query.get(c.parameters[0]);
-                query = new Uint8Array(await new Response(blob).arrayBuffer());
+                if (runInBrowser) {
+                    query = new Uint8Array(await new Response(blob).arrayBuffer());
+                } else {
+                    query = blob.data;
+                }
                 break;
 
             case "addObjectUrl":
