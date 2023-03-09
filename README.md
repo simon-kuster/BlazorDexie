@@ -1,5 +1,5 @@
-# blazor-dexie (former Nosthy.Blazor.DexieWrapper)
-blazor-dexie provides an easy way to access the browers IndexedDb for Blazor applications.
+BlazorDexie (Nosthy.Blazor.DexieWrapper before)
+BlazorDexie provides an easy way to access the browers IndexedDb for Blazor applications.
 It is a wrapper around the well-known javascript library Dexie.js.
 
 ## Usage
