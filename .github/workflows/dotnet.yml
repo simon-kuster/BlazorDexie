@@ -23,9 +23,9 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.x
-    - name: Npm install DexieWrapper.Test
+    - name: Npm install BlazorDexie.Test
       run: npm install 
-      working-directory: DexieWrapper.Test
+      working-directory: BlazorDexie.Test
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
@@ -36,4 +36,4 @@ jobs:
       run: dotnet pack --configuration Release
       working-directory: DexieWrapper
     - name: Push
-      run: dotnet nuget push "DexieWrapper/bin/Release/Nosthy.Blazor.DexieWrapper.*.nupkg" --api-key ${{secrets.NUGET_API_KEY}} --source "https://api.nuget.org/v3/index.json"
+      run: dotnet nuget push "BlazorDexie/bin/Release/BlazorDexie.*.nupkg" --api-key ${{secrets.NUGET_API_KEY}} --source "https://api.nuget.org/v3/index.json"
