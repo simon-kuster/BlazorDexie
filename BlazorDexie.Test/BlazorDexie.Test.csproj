@@ -24,11 +24,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DexieWrapper\BlazorDexie.csproj" />
+    <Folder Include="wwwroot\scripts\lib\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\scripts\lib\" />
+    <ProjectReference Include="..\BlazorDexie\BlazorDexie.csproj" />
   </ItemGroup>
 
 </Project>

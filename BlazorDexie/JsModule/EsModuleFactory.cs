@@ -4,7 +4,7 @@ namespace BlazorDexie.JsModule
 {
     public class EsModuleFactory : IModuleFactory
     {
-        private const string BasePath = "./_content/Nosthy.Blazor.DexieWrapper";
+        private const string BasePath = "./_content/BlazorDexie";
         private IJSRuntime _jsRuntime;
 
         public EsModuleFactory(IJSRuntime jsRuntime)

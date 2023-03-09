@@ -81,7 +81,7 @@ namespace BlazorDexie.Test
             await db.TestItems.BulkPut(initialItems);
 
             // act
-            var testItems = await db.TestItems.FilterModule("../../../DexieWrapper.Test/wwwroot/scripts/customFilter.mjs", new[] { "CC" }).ToArray();
+            var testItems = await db.TestItems.FilterModule("../../../BlazorDexie.Test/wwwroot/scripts/customFilter.mjs", new[] { "CC" }).ToArray();
 
             // assert
             Assert.Single(testItems);
