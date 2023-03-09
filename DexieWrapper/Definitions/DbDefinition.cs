@@ -1,4 +1,4 @@
-﻿namespace Nosthy.Blazor.DexieWrapper.Definitions
+﻿namespace BlazorDexie.Definitions
 {
     public class DbDefinition
     {

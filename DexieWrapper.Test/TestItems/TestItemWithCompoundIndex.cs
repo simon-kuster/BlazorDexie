@@ -1,4 +1,4 @@
-﻿namespace Nosthy.Blazor.DexieWrapper.Test.TestItems
+﻿namespace BlazorDexie.Test.TestItems
 {
     public class TestItemWithCompoundIndex
     {

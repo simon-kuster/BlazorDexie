@@ -1,6 +1,6 @@
-﻿using Nosthy.Blazor.DexieWrapper.JsModule;
+﻿using BlazorDexie.JsModule;
 
-namespace Nosthy.Blazor.DexieWrapper.ObjUrl
+namespace BlazorDexie.ObjUrl
 {
     public sealed class ObjectUrlJsInterop : IAsyncDisposable
     {

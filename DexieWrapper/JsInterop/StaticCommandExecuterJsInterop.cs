@@ -1,6 +1,6 @@
-﻿using Nosthy.Blazor.DexieWrapper.JsModule;
+﻿using BlazorDexie.JsModule;
 
-namespace Nosthy.Blazor.DexieWrapper.JsInterop
+namespace BlazorDexie.JsInterop
 {
     public sealed class StaticCommandExecuterJsInterop : IAsyncDisposable
     {

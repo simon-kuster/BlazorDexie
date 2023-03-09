@@ -1,8 +1,8 @@
-﻿using Microsoft.JSInterop;
-using Nosthy.Blazor.DexieWrapper.Definitions;
-using Nosthy.Blazor.DexieWrapper.JsModule;
+﻿using BlazorDexie.Definitions;
+using BlazorDexie.JsModule;
+using Microsoft.JSInterop;
 
-namespace Nosthy.Blazor.DexieWrapper.JsInterop
+namespace BlazorDexie.JsInterop
 {
     public sealed class CollectionCommandExecuterJsInterop : IAsyncDisposable
     {
@@ -16,7 +16,7 @@ namespace Nosthy.Blazor.DexieWrapper.JsInterop
             RunInBrowser = _module is EsModule;
         }
 
-        public async Task<T> InitDbAndExecute<T>(string databaseName, List<DbVersionDefinition> versions, string storeName, List<Command> commands, 
+        public async Task<T> InitDbAndExecute<T>(string databaseName, List<DbVersionDefinition> versions, string storeName, List<Command> commands,
             CancellationToken cancellationToken)
         {
             return await GetModule().InvokeAsync<T>("initDbAndExecute", cancellationToken, databaseName, versions, storeName, commands);
@@ -27,7 +27,7 @@ namespace Nosthy.Blazor.DexieWrapper.JsInterop
             return await GetModule().InvokeAsync<T>("execute", cancellationToken, dbJsObjectRef, storeName, commands);
         }
 
-        public async Task InitDbAndExecuteNonQuery(string databaseName, List<DbVersionDefinition> versions, string storeName, List<Command> commands, 
+        public async Task InitDbAndExecuteNonQuery(string databaseName, List<DbVersionDefinition> versions, string storeName, List<Command> commands,
             CancellationToken cancellationToken)
         {
             await GetModule().InvokeVoidAsync("initDbAndExecuteNonQuery", cancellationToken, databaseName, versions, storeName, commands);

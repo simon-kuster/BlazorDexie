@@ -1,9 +1,9 @@
+using BlazorDexie.Demo;
+using BlazorDexie.Demo.Database;
+using BlazorDexie.Demo.Persons;
+using BlazorDexie.Extensions;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Nosthy.Blazor.DexieWrapper.Demo;
-using Nosthy.Blazor.DexieWrapper.Demo.Database;
-using Nosthy.Blazor.DexieWrapper.Demo.Persons;
-using Nosthy.Blazor.DexieWrapper.Extensions;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");

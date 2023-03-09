@@ -1,9 +1,9 @@
 ﻿using Jering.Javascript.NodeJS;
 using Microsoft.Extensions.DependencyInjection;
-using Nosthy.Blazor.DexieWrapper.Test.ModuleWrappers;
-using Nosthy.Blazor.DexieWrapper.Extensions;
+using BlazorDexie.Extensions;
+using BlazorDexie.Test.ModuleWrappers;
 
-namespace DexieWrapper.Test
+namespace BlazorDexie.Test
 {
     public class Startup
     {

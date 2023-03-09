@@ -1,10 +1,10 @@
-﻿using Microsoft.JSInterop;
-using Nosthy.Blazor.DexieWrapper.Definitions;
-using Nosthy.Blazor.DexieWrapper.JsInterop;
-using Nosthy.Blazor.DexieWrapper.JsModule;
+﻿using BlazorDexie.Definitions;
+using BlazorDexie.JsInterop;
+using BlazorDexie.JsModule;
+using Microsoft.JSInterop;
 using System.Text.Json.Serialization;
 
-namespace Nosthy.Blazor.DexieWrapper.Database
+namespace BlazorDexie.Database
 {
     public abstract class Db : IAsyncDisposable
     {

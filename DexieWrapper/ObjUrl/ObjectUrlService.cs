@@ -1,6 +1,6 @@
-﻿using Nosthy.Blazor.DexieWrapper.JsModule;
+﻿using BlazorDexie.JsModule;
 
-namespace Nosthy.Blazor.DexieWrapper.ObjUrl
+namespace BlazorDexie.ObjUrl
 {
     public sealed class ObjectUrlService : IAsyncDisposable
     {
@@ -24,7 +24,7 @@ namespace Nosthy.Blazor.DexieWrapper.ObjUrl
 
         public async Task<byte[]> FetchData(string objectUrl, CancellationToken cancellationToken = default)
         {
-           return await _objecUrlJsInterop.FetchData(objectUrl, cancellationToken);
+            return await _objecUrlJsInterop.FetchData(objectUrl, cancellationToken);
         }
 
         public async ValueTask DisposeAsync()

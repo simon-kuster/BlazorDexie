@@ -1,8 +1,8 @@
-﻿using Nosthy.Blazor.DexieWrapper.JsInterop;
-using Nosthy.Blazor.DexieWrapper.Utils;
+﻿using BlazorDexie.JsInterop;
+using BlazorDexie.Utils;
 using System.Dynamic;
 
-namespace Nosthy.Blazor.DexieWrapper.Database
+namespace BlazorDexie.Database
 {
     public class Store<T, TKey> : Collection<T, TKey>, IStore
     {
@@ -27,7 +27,7 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             .TrimStart('*'))
                 .ToArray();
 
-            PrimaryKey = Indices.First();   
+            PrimaryKey = Indices.First();
         }
 
         public async Task<TKey> Add(T item, CancellationToken cancellationToken = default)
@@ -40,17 +40,17 @@ namespace Nosthy.Blazor.DexieWrapper.Database
             return await Execute<TKey>("add", cancellationToken, item, key);
         }
 
-        public async Task<TKey> AddBlob(byte[] data, TKey? key, string mimeType = "",CancellationToken cancellationToken = default)
+        public async Task<TKey> AddBlob(byte[] data, TKey? key, string mimeType = "", CancellationToken cancellationToken = default)
         {
             return await Execute<TKey>("addBlob", cancellationToken, data, key, mimeType);
         }
 
-        public async Task<TKey> AddObjectUrl(string objectUrl, TKey? key,CancellationToken cancellationToken = default)
+        public async Task<TKey> AddObjectUrl(string objectUrl, TKey? key, CancellationToken cancellationToken = default)
         {
             return await Execute<TKey>("addObjectUrl", cancellationToken, objectUrl, key);
         }
 
-        public async Task<TKey> BulkAdd(IEnumerable<T> items,CancellationToken cancellationToken = default)
+        public async Task<TKey> BulkAdd(IEnumerable<T> items, CancellationToken cancellationToken = default)
         {
             return await Execute<TKey>("bulkAdd", cancellationToken, items);
         }
@@ -186,7 +186,7 @@ namespace Nosthy.Blazor.DexieWrapper.Database
 
         public bool HasIndex(string index)
         {
-            return Indices.Contains(index); 
+            return Indices.Contains(index);
         }
 
         protected override Collection<T, TKey> CreateNewColletion()

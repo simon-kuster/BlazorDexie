@@ -1,8 +1,8 @@
-﻿using Nosthy.Blazor.DexieWrapper.Database;
-using Nosthy.Blazor.DexieWrapper.Demo.Persons;
-using Nosthy.Blazor.DexieWrapper.JsModule;
+﻿using BlazorDexie.Database;
+using BlazorDexie.Demo.Persons;
+using BlazorDexie.JsModule;
 
-namespace Nosthy.Blazor.DexieWrapper.Demo.Database
+namespace BlazorDexie.Demo.Database
 {
     public class MyDb : Db
     {

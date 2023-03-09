@@ -1,12 +1,12 @@
-﻿using Nosthy.Blazor.DexieWrapper.JsModule;
-using Nosthy.Blazor.DexieWrapper.Test.Database;
-using Nosthy.Blazor.DexieWrapper.Test.TestItems;
+﻿using BlazorDexie.JsModule;
+using BlazorDexie.Test.Database;
+using BlazorDexie.Test.TestItems;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Nosthy.Blazor.DexieWrapper.Test
+namespace BlazorDexie.Test
 {
     public class CollectionTest
     {
@@ -105,7 +105,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
             await db.TestItems.BulkPut(initialItems);
 
             // act
-            var testItems = await db.TestItems.OrderBy(nameof(TestItem.Name)).Offset(1).Limit(2).ToArray();    
+            var testItems = await db.TestItems.OrderBy(nameof(TestItem.Name)).Offset(1).Limit(2).ToArray();
 
             // assert
 

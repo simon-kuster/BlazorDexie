@@ -1,7 +1,7 @@
-﻿using Nosthy.Blazor.DexieWrapper.Demo.Database;
-using Nosthy.Blazor.DexieWrapper.JsModule;
+﻿using BlazorDexie.Demo.Database;
+using BlazorDexie.JsModule;
 
-namespace Nosthy.Blazor.DexieWrapper.Demo.Persons
+namespace BlazorDexie.Demo.Persons
 {
     public class PersonRepository
     {

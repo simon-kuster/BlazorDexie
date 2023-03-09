@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>Nosthy.Blazor.DexieWrapper.Demo</RootNamespace>
+    <RootNamespace>BlazorDexie.Demo</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DexieWrapper\DexieWrapper.csproj" />
+    <ProjectReference Include="..\DexieWrapper\BlazorDexie.csproj" />
   </ItemGroup>
 
 </Project>

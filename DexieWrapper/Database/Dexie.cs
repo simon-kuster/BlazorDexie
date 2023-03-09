@@ -1,7 +1,7 @@
-﻿using Nosthy.Blazor.DexieWrapper.JsInterop;
-using Nosthy.Blazor.DexieWrapper.JsModule;
+﻿using BlazorDexie.JsInterop;
+using BlazorDexie.JsModule;
 
-namespace Nosthy.Blazor.DexieWrapper.Database
+namespace BlazorDexie.Database
 {
     public sealed class Dexie
     {

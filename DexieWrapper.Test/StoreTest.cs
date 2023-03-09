@@ -3,11 +3,11 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
-using Nosthy.Blazor.DexieWrapper.Test.Database;
-using Nosthy.Blazor.DexieWrapper.Test.TestItems;
-using Nosthy.Blazor.DexieWrapper.JsModule;
+using BlazorDexie.Test.Database;
+using BlazorDexie.Test.TestItems;
+using BlazorDexie.JsModule;
 
-namespace Nosthy.Blazor.DexieWrapper.Test
+namespace BlazorDexie.Test
 {
     public class StoreTest
     {
@@ -362,7 +362,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
 
             // assert
             Assert.Equal(3, testItems.Length);
-            Assert.Equal(new string[] {"A", "B", "C" }, testItems.Select(t => t.Name).ToArray());
+            Assert.Equal(new string[] { "A", "B", "C" }, testItems.Select(t => t.Name).ToArray());
         }
 
 
@@ -501,7 +501,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
 
             // assert
             Assert.Equal("Id", db.TestItems.PrimaryKey);
-            Assert.Equal(new []{ "Id", "Year", "Name" }, db.TestItems.Indices);
+            Assert.Equal(new[] { "Id", "Year", "Name" }, db.TestItems.Indices);
         }
 
         [Fact]

@@ -1,12 +1,12 @@
-﻿using Nosthy.Blazor.DexieWrapper.Test.TestItems;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System;
 using Xunit;
-using Nosthy.Blazor.DexieWrapper.Test.Database;
-using Nosthy.Blazor.DexieWrapper.Database;
-using Nosthy.Blazor.DexieWrapper.JsModule;
+using BlazorDexie.Test.Database;
+using BlazorDexie.JsModule;
+using BlazorDexie.Test.TestItems;
+using BlazorDexie.Database;
 
-namespace Nosthy.Blazor.DexieWrapper.Test
+namespace BlazorDexie.Test
 {
     public class DbTest
     {
@@ -35,7 +35,7 @@ namespace Nosthy.Blazor.DexieWrapper.Test
         private MyDb CreateDb()
         {
             var databaseId = Guid.NewGuid().ToString();
-           return new MyDb(_moduleFactory, databaseId);
+            return new MyDb(_moduleFactory, databaseId);
         }
     }
 }

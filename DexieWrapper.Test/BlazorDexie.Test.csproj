@@ -1,12 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
-
     <IsPackable>false</IsPackable>
-
-    <RootNamespace>Nosthy.Blazor.DexieWrapper.Test</RootNamespace>
+    <RootNamespace>BlazorDexie.Test</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DexieWrapper\DexieWrapper.csproj" />
+    <ProjectReference Include="..\DexieWrapper\BlazorDexie.csproj" />
   </ItemGroup>
 
   <ItemGroup>

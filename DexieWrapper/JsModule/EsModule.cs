@@ -1,6 +1,6 @@
 ﻿using Microsoft.JSInterop;
 
-namespace Nosthy.Blazor.DexieWrapper.JsModule
+namespace BlazorDexie.JsModule
 {
     public sealed class EsModule : IModule
     {
@@ -25,11 +25,11 @@ namespace Nosthy.Blazor.DexieWrapper.JsModule
 
         public async ValueTask DisposeAsync()
         {
-            if(_jsObjectReferenceTask?.IsValueCreated == true)
+            if (_jsObjectReferenceTask?.IsValueCreated == true)
             {
                 var jsObjectReference = await GetJsObjectReference();
 
-                await jsObjectReference.DisposeAsync().ConfigureAwait(false); 
+                await jsObjectReference.DisposeAsync().ConfigureAwait(false);
                 _jsObjectReferenceTask = null;
             }
         }

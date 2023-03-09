@@ -1,12 +1,12 @@
-﻿using Nosthy.Blazor.DexieWrapper.Database;
-using Nosthy.Blazor.DexieWrapper.JsModule;
-using Nosthy.Blazor.DexieWrapper.Test.Database;
-using Nosthy.Blazor.DexieWrapper.Test.TestItems;
+﻿using BlazorDexie.Database;
+using BlazorDexie.JsModule;
+using BlazorDexie.Test.Database;
+using BlazorDexie.Test.TestItems;
 using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Nosthy.Blazor.DexieWrapper.Test
+namespace BlazorDexie.Test
 {
     public class DexieTest
     {

@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Xunit;
-using Nosthy.Blazor.DexieWrapper.ObjUrl;
 using System;
-using Nosthy.Blazor.DexieWrapper.Test.Database;
-using Nosthy.Blazor.DexieWrapper.JsModule;
+using BlazorDexie.Test.Database;
+using BlazorDexie.ObjUrl;
+using BlazorDexie.JsModule;
 
-namespace Nosthy.Blazor.DexieWrapper.Test
+namespace BlazorDexie.Test
 {
     public class StoreDataTest : IAsyncLifetime
     {

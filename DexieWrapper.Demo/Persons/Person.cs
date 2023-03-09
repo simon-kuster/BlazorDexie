@@ -1,4 +1,4 @@
-﻿namespace Nosthy.Blazor.DexieWrapper.Demo.Persons
+﻿namespace BlazorDexie.Demo.Persons
 {
     public class Person
     {

@@ -1,4 +1,4 @@
-﻿namespace Nosthy.Blazor.DexieWrapper.Database
+﻿namespace BlazorDexie.Database
 {
     public class CompoundIndex
     {

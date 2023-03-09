@@ -1,6 +1,6 @@
-﻿using Nosthy.Blazor.DexieWrapper.JsInterop;
+﻿using BlazorDexie.JsInterop;
 
-namespace Nosthy.Blazor.DexieWrapper.Database
+namespace BlazorDexie.Database
 {
     public interface IStore
     {

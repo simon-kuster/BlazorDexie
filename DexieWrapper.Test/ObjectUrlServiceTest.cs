@@ -1,15 +1,15 @@
-﻿using Jering.Javascript.NodeJS;
-using Nosthy.Blazor.DexieWrapper.ObjUrl;
+﻿using BlazorDexie.ObjUrl;
+using Jering.Javascript.NodeJS;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Nosthy.Blazor.DexieWrapper.Test
+namespace BlazorDexie.Test
 {
     public class ObjectUrlServiceTest : IAsyncLifetime
     {
         private ObjectUrlService _objectUrlService;
 
-        public ObjectUrlServiceTest(ObjectUrlService objectUrlService) 
+        public ObjectUrlServiceTest(ObjectUrlService objectUrlService)
         {
             _objectUrlService = objectUrlService;
         }

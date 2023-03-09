@@ -1,6 +1,6 @@
 ﻿using Microsoft.JSInterop;
 
-namespace Nosthy.Blazor.DexieWrapper.JsModule
+namespace BlazorDexie.JsModule
 {
     public class EsModuleFactory : IModuleFactory
     {

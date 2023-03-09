@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <PackageId>BlazorDexie</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Simon Kuster</Authors>
+    <Product>BlazorDexie</Product>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RootNamespace>BlazorDexie</RootNamespace>
+    <Copyright>Copyright 2022(c) Simon Kuster. All rights reserved.</Copyright>
+    <Description>BlazorDexie provides an easy way to access the browers IndexedDb for Blazor applications. It is a wrapper around the well-known javascript library Dexie.js.</Description>
+    <PackageProjectUrl>https://github.com/simon-kuster/BlazorDexie</PackageProjectUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\package.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="package.json" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.9" />
+  </ItemGroup>
+
+</Project>

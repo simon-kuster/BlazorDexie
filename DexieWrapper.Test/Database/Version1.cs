@@ -1,8 +1,8 @@
-﻿using Nosthy.Blazor.DexieWrapper.Database;
-using Nosthy.Blazor.DexieWrapper.Test.TestItems;
+﻿using BlazorDexie.Database;
+using BlazorDexie.Test.TestItems;
 using System;
 
-namespace Nosthy.Blazor.DexieWrapper.Test.Database
+namespace BlazorDexie.Test.Database
 {
     public class Version1 : DbVersion
     {
