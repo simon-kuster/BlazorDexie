@@ -10,7 +10,7 @@
     <Product>BlazorDexie</Product>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RootNamespace>BlazorDexie</RootNamespace>
-    <Copyright>Copyright 2022(c) Simon Kuster. All rights reserved.</Copyright>
+    <Copyright>Copyright 2023(c) Simon Kuster. All rights reserved.</Copyright>
     <Description>BlazorDexie provides an easy way to access the browers IndexedDb for Blazor applications. It is a wrapper around the well-known javascript library Dexie.js.</Description>
     <PackageProjectUrl>https://github.com/simon-kuster/BlazorDexie</PackageProjectUrl>
   </PropertyGroup>
