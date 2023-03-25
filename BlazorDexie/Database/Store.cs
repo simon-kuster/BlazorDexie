@@ -1,5 +1,6 @@
 ﻿using BlazorDexie.JsInterop;
 using BlazorDexie.Utils;
+using System;
 using System.Dynamic;
 
 namespace BlazorDexie.Database
@@ -124,6 +125,13 @@ namespace BlazorDexie.Database
             var collection = CreateNewColletion();
             collection.AddCommand("orderBy", Camelizer.ToCamelCase(index));
             return collection;
+        }
+
+        public async override Task<TKey[]> PrimaryKeys(CancellationToken cancellationToken = default)
+        {
+            var collection = CreateNewColletion();
+            collection.AddCommand("toCollection");
+            return await collection.PrimaryKeys(cancellationToken);
         }
 
         public async Task<TKey> Put(T item, CancellationToken cancellationToken = default)

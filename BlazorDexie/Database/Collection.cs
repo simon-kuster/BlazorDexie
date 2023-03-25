@@ -54,6 +54,11 @@ namespace BlazorDexie.Database
             return collection;
         }
 
+        public async Task<TIndex[]> Keys<TIndex>(CancellationToken cancellationToken = default)
+        {
+            return await Execute<TIndex[]>("keys", cancellationToken);
+        }
+
         public Collection<T, TKey> Limit(int count)
         {
             var collection = CreateNewColletion();
@@ -66,6 +71,11 @@ namespace BlazorDexie.Database
             var collection = CreateNewColletion();
             collection.AddCommand("offset", count);
             return collection;
+        }
+
+        public virtual async Task<TKey[]> PrimaryKeys(CancellationToken cancellationToken = default)
+        {
+            return await Execute<TKey[]>("primaryKeys", cancellationToken);
         }
 
         public Collection<T, TKey> Reverse()

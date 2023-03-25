@@ -138,6 +138,29 @@ namespace BlazorDexie.Test
             Assert.Equal(initalData, data);
         }
 
+        [Fact]
+        public async Task GetPrimaryKeys()
+        {
+            // arrange
+            await using var db = CreateDb();
+
+            var initalData = new byte[] { 213, 28, 55, 234, 54 };
+            var key = Guid.NewGuid();
+            await db.BlobData.PutBlob(initalData, key);
+
+            var initalData2 = new byte[] { 213, 28, 55, 234, 54 };
+            var key2 = Guid.NewGuid();
+            await db.BlobData.PutBlob(initalData2, key2);
+
+            // act
+            var primaryKeys = await db.BlobData.PrimaryKeys();
+
+            // assert
+            Assert.Equal(2, primaryKeys.Length);
+            Assert.Contains(key, primaryKeys);
+            Assert.Contains(key2, primaryKeys);
+        }
+
         private MyDb CreateDb()
         {
             var databaseId = Guid.NewGuid().ToString();

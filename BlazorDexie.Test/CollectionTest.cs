@@ -89,6 +89,65 @@ namespace BlazorDexie.Test
         }
 
         [Fact]
+        public async Task Keys()
+        {
+            // arrange
+            await using var db = CreateDb();
+
+            var initialItems = new TestItem[]
+            {
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "BB" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "CC" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD" }
+            };
+
+            await db.TestItems.BulkPut(initialItems);
+
+            // act
+            var names = await db.TestItems
+                .OrderBy(nameof(TestItem.Name))
+                .Keys<string>();
+
+            // assert
+            var initialNames = initialItems.Select(i => i.Name).ToList();
+            Assert.Equal(initialItems.Length, names.Length);
+            foreach (var name in names)
+            {
+                Assert.Contains(name, initialNames);
+            }
+        }
+
+        [Fact]
+        public async Task PrimaryKeys()
+        {
+            // arrange
+            await using var db = CreateDb();
+
+            var initialItems = new TestItem[]
+            {
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "BB" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "CC" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "DD" }
+            };
+
+            await db.TestItems.BulkPut(initialItems);
+
+            // act
+            var primaryKeys = await db.TestItems.PrimaryKeys();
+
+            // assert
+            Assert.Equal(initialItems.Length, primaryKeys.Length);
+
+            var initialPrimaryKeys = initialItems.Select(i => i.Id).ToList();
+            foreach (var primaryKey in primaryKeys)
+            {
+                Assert.Contains(primaryKey, initialPrimaryKeys);
+            }
+        }
+
+        [Fact]
         public async Task OffsetLimit()
         {
             // arrange
