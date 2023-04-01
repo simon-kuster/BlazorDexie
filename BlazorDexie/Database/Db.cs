@@ -2,6 +2,7 @@
 using BlazorDexie.JsInterop;
 using BlazorDexie.JsModule;
 using Microsoft.JSInterop;
+using System;
 using System.Text.Json.Serialization;
 
 namespace BlazorDexie.Database
@@ -16,18 +17,20 @@ namespace BlazorDexie.Database
         public List<DbVersionDefinition> Versions { get; } = new List<DbVersionDefinition>();
         public IJSObjectReference? DbJsReference { get; private set; }
 
-        [JsonIgnore]
-        public IEnumerable<DbVersion> PreviousVersions { get; }
-
-        public Db(string databaseName, int currentVersionNumber, IEnumerable<DbVersion> previousVersions, IModuleFactory jsModuleFactory)
+        public Db(
+            string databaseName, 
+            int currentVersionNumber, 
+            IEnumerable<DbVersion> previousVersions, 
+            IModuleFactory jsModuleFactory,
+            string? upgrade = null, 
+            string? upgradeModule = null)
         {
             DatabaseName = databaseName;
             VersionNumber = currentVersionNumber;
-            PreviousVersions = previousVersions;
             _collectionCommandExecuterJsInterop = new CollectionCommandExecuterJsInterop(jsModuleFactory);
             _staticCommandExecuterJsInterop = new StaticCommandExecuterJsInterop(jsModuleFactory);
 
-            var latestVersion = new DbVersionDefinition(VersionNumber);
+            var latestVersion = new DbVersionDefinition(VersionNumber, upgrade, upgradeModule);
 
             var properties = GetType().GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
             foreach (var property in properties)
@@ -45,12 +48,15 @@ namespace BlazorDexie.Database
                 }
             }
 
-            Versions.Add(latestVersion);
+            var versions = new List<DbVersionDefinition>() { latestVersion };
+            
+            versions.AddRange(previousVersions
+                    .Select(v => v.GetDefinition())
+                    .ToList());
 
-            foreach (var version in PreviousVersions)
-            {
-                Versions.Add(version.GetDefinition());
-            }
+            Versions = versions
+                .OrderByDescending(v => v.VersionNumber)
+                .ToList();
         }
 
         public async Task Init(CancellationToken cancellationToken)
