@@ -74,7 +74,87 @@ Usage in Blazor
 
 For more Information have look to: https://dexie.org/docs/Tutorial/Hello-World
 
-### 
+### Database Versioning
+
+**Version 1**
+
+The database is defined in in the class MyDb
+
+```
+public class MyDb : Db
+{
+    public Store<Friend1, int> Friends { get; set; } = new("++" + nameof(Friend.Id), nameof(Friend.Name), nameof(Friend.Age));
+
+    public Db1(IModuleFactory jsModuleFactory)
+        : base("TestDb", 1, new DbVersion[0], jsModuleFactory)
+    {
+    }
+}
+```
+
+**Version 2**
+
+Create a a new class DbVersion1 and move the Properties and the VersionNumber from MyDb to it.
+Maybe the nameofs should be replaced by string literals because the properties used in the nameof can be changed.
+
+```
+public class Version1 : DbVersion
+{
+    public Store<Friend1, int> Friends { get; set; } = new("++id", "name" + "age");
+
+    public Version1() : base(1)
+    {
+    }
+}
+```
+Change the Properties in MyDb and increase the VersionNumber. An upgrade function can be pass to the base constructor if needed. The uprade function is a string with JavaScript code. The parameter tx (transaction) will be pass to the function from the framework.
+
+```
+public class MyDb : Db
+{
+    public Store<Friend, int> Friends { get; set; } = new("++" + nameof(Friend.Id), nameof(Friend.Name), nameof(Friend.BirthDate));
+
+    public Db2(IModuleFactory jsModuleFactory)
+        : base("TestDb", 2, new DbVersion[] { new V1.Version1() }, jsModuleFactory, GetUpgrade())
+    {
+    }
+
+    private static string GetUpgrade()
+    {
+        return
+            "var YEAR = 365 * 24 * 60 * 60 * 1000; " +
+            "return tx.table(\"Friends\").toCollection().modify(friend => { " +
+            "    friend.birthdate = new Date(Date.now() - (friend.age * YEAR)); " +
+            "    delete friend.age; " +
+            "}); ";
+    }
+}
+```
+**Alternative:**
+
+Instead of pass the code as string it is also possible to create a ES-Module with the upgrade function an pass the path of the module to the constructor
+
+```
+public class MyDb : Db
+{
+    public Store<Friend, int> Friends { get; set; } = new("++" + nameof(Friend.Id), nameof(Friend.Name), nameof(Friend.BirthDate));
+
+    public Db2(IModuleFactory jsModuleFactory)
+        : base("TestDb", 2, new DbVersion[] { new V1.Version1() }, jsModuleFactory, upgradeModule: "dbUpgrade2.js")
+    {
+    }
+}
+```
+dbUpgrade2.js
+```
+export default function update(tx) {
+    var YEAR = 365 * 24 * 60 * 60 * 1000; 
+    return tx.table(\"Friends\").toCollection().modify(friend => { 
+        friend.birthdate = new Date(Date.now() - (friend.age * YEAR)); 
+        delete friend.age; 
+    });
+}
+```
 
 ## Version 1.1.0
 - Add parameters upgrade and upgradeModule to constructor of classes Db and Version to call Version.upgrade in Dexie.js.
