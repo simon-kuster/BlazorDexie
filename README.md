@@ -78,7 +78,7 @@ For more Information have look to: https://dexie.org/docs/Tutorial/Hello-World
 
 **Version 1**
 
-The database is defined in in the class MyDb
+- The database is defined in in the class MyDb
 
 ```
 public class MyDb : Db
@@ -94,8 +94,8 @@ public class MyDb : Db
 
 **Version 2**
 
-Create a a new class DbVersion1 and move the Properties and the VersionNumber from MyDb to it.
-Maybe the nameofs should be replaced by string literals because the properties used in the nameof can be changed.
+- Create a a new class DbVersion1 and move the Properties and the VersionNumber from MyDb to it.
+- Maybe the nameofs should be replaced by string literals because the properties used in the nameof can be changed.
 
 ```
 public class Version1 : DbVersion
@@ -107,7 +107,10 @@ public class Version1 : DbVersion
     }
 }
 ```
-Change the Properties in MyDb and increase the VersionNumber. An upgrade function can be pass to the base constructor if needed. The uprade function is a string with JavaScript code. The parameter tx (transaction) will be pass to the function from the framework.
+- Change the Properties in MyDb
+- Increase the VersionNumber.
+- Add an instance of Version1 to DbVersion Array passed to the base contructor
+- An upgrade function can be pass to the base constructor if needed. The uprade function is a string with JavaScript code. The parameter tx (transaction) will be pass to the function from the framework.
 
 ```
 public class MyDb : Db
@@ -115,7 +118,7 @@ public class MyDb : Db
     public Store<Friend, int> Friends { get; set; } = new("++" + nameof(Friend.Id), nameof(Friend.Name), nameof(Friend.BirthDate));
 
     public Db2(IModuleFactory jsModuleFactory)
-        : base("TestDb", 2, new DbVersion[] { new V1.Version1() }, jsModuleFactory, GetUpgrade())
+        : base("TestDb", 2, new DbVersion[] { new Version1() }, jsModuleFactory, GetUpgrade())
     {
     }
 
@@ -132,7 +135,7 @@ public class MyDb : Db
 ```
 **Alternative:**
 
-Instead of pass the code as string it is also possible to create a ES-Module with the upgrade function an pass the path of the module to the constructor
+- Instead of pass the code as string it is also possible to create a ES-Module with the upgrade function an pass the path of the module to the constructor
 
 ```
 public class MyDb : Db
