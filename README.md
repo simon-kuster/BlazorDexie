@@ -74,7 +74,16 @@ Usage in Blazor
 
 For more Information have look to: https://dexie.org/docs/Tutorial/Hello-World
 
-## Changes with Version 0.7.0
+### 
+
+## Version 1.1.0
+- Add parameters upgrade and upgradeModule to constructor of classes Db and Version to call Version.upgrade in Dexie.js.
+
+## Version 1.0.0 
+
+- Rename project to BlazorDexie (Nosthy.Blazor.DexieWrapper before)
+
+## Version 0.7.0
 
 ### Breaking Changes
 
