@@ -8,7 +8,7 @@ namespace BlazorDexie.Test.V2
         public Store<Friend2, int> Friends { get; set; } = new("++" + nameof(Friend2.Id), nameof(Friend2.Name), nameof(Friend2.BirthDate));
 
         public Db2(IModuleFactory jsModuleFactory, string databaseId)
-            : base($"VersioningDb{databaseId}", 2, new DbVersion[] { new V1.Version1() }, jsModuleFactory, GetUpgrade())
+            : base($"VersioningDb{databaseId}", 2, new DbVersion[] { new V1.Version1() }, jsModuleFactory, GetUpgrade(), camelCaseStoreNames: true)
         {
         }
 

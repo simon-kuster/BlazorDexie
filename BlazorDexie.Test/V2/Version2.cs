@@ -14,7 +14,7 @@ namespace BlazorDexie.Test.V2
         {
             return
                 "var YEAR = 365 * 24 * 60 * 60 * 1000; " +
-                "return tx.table(\"Friends\").toCollection().modify(friend => { " +
+                "return tx.table(\"friends\").toCollection().modify(friend => { " +
                 "    friend.birthdate = new Date(Date.now() - (friend.age * YEAR)); " +
                 "    delete friend.age; " +
                 "}); ";

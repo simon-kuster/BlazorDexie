@@ -1,9 +1,8 @@
 ﻿using BlazorDexie.Definitions;
 using BlazorDexie.JsInterop;
 using BlazorDexie.JsModule;
+using BlazorDexie.Utils;
 using Microsoft.JSInterop;
-using System;
-using System.Text.Json.Serialization;
 
 namespace BlazorDexie.Database
 {
@@ -23,7 +22,8 @@ namespace BlazorDexie.Database
             IEnumerable<DbVersion> previousVersions, 
             IModuleFactory jsModuleFactory,
             string? upgrade = null, 
-            string? upgradeModule = null)
+            string? upgradeModule = null,
+            bool camelCaseStoreNames = false)
         {
             DatabaseName = databaseName;
             VersionNumber = currentVersionNumber;
@@ -41,7 +41,7 @@ namespace BlazorDexie.Database
 
                     if (store != null)
                     {
-                        var storeName = property.Name;
+                        var storeName = camelCaseStoreNames ? Camelizer.ToCamelCase(property.Name) : property.Name;
                         store.Init(this, storeName, _collectionCommandExecuterJsInterop);
                         latestVersion.Stores.Add(new StoreDefinition(storeName, store.SchemaDefinitions));
                     }
@@ -51,7 +51,7 @@ namespace BlazorDexie.Database
             var versions = new List<DbVersionDefinition>() { latestVersion };
             
             versions.AddRange(previousVersions
-                    .Select(v => v.GetDefinition())
+                    .Select(v => v.GetDefinition(camelCaseStoreNames))
                     .ToList());
 
             Versions = versions

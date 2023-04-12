@@ -1,4 +1,5 @@
 ﻿using BlazorDexie.Definitions;
+using BlazorDexie.Utils;
 
 namespace BlazorDexie.Database
 {
@@ -16,7 +17,7 @@ namespace BlazorDexie.Database
             _upgradeModule = upgradeModule; 
         }
 
-        public DbVersionDefinition GetDefinition()
+        public DbVersionDefinition GetDefinition(bool camelCaseStoreNames)
         {
             var currentVersion = new DbVersionDefinition(VersionNumber, _upgrade, _upgradeModule);
 
@@ -29,7 +30,7 @@ namespace BlazorDexie.Database
 
                     if (store != null)
                     {
-                        var storeName = property.Name;
+                        var storeName = camelCaseStoreNames ? Camelizer.ToCamelCase(property.Name) : property.Name;
                         currentVersion.Stores.Add(new StoreDefinition(storeName, store.SchemaDefinitions));
                     }
                 }
