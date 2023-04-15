@@ -87,7 +87,7 @@ public class MyDb : Db
 {
     public Store<Friend1, int> Friends { get; set; } = new("++" + nameof(Friend.Id), nameof(Friend.Name), nameof(Friend.Age));
 
-    public Db1(IModuleFactory jsModuleFactory)
+    public MyDb(IModuleFactory jsModuleFactory)
         : base("TestDb", 1, new DbVersion[0], jsModuleFactory)
     {
     }
@@ -119,7 +119,7 @@ public class MyDb : Db
 {
     public Store<Friend, int> Friends { get; set; } = new("++" + nameof(Friend.Id), nameof(Friend.Name), nameof(Friend.BirthDate));
 
-    public Db2(IModuleFactory jsModuleFactory)
+    public MyDb(IModuleFactory jsModuleFactory)
         : base("TestDb", 2, new DbVersion[] { new Version1() }, jsModuleFactory, GetUpgrade())
     {
     }
@@ -144,7 +144,7 @@ public class MyDb : Db
 {
     public Store<Friend, int> Friends { get; set; } = new("++" + nameof(Friend.Id), nameof(Friend.Name), nameof(Friend.BirthDate));
 
-    public Db2(IModuleFactory jsModuleFactory)
+    public MyDb(IModuleFactory jsModuleFactory)
         : base("TestDb", 2, new DbVersion[] { new V1.Version1() }, jsModuleFactory, upgradeModule: "dbUpgrade2.js")
     {
     }
