@@ -56,7 +56,7 @@ namespace BlazorDexie.Demo.Pages
 
         private async Task AddBlob()
         {
-            var db = new MyDb(ModuleFactory);
+            await using var db = new MyDb(ModuleFactory);
 
             // act
             var initalData = new byte[] { 213, 23, 55, 234, 11 };
@@ -69,7 +69,7 @@ namespace BlazorDexie.Demo.Pages
 
         private async Task PutBlob()
         {
-            var db = new MyDb(ModuleFactory);
+            await using var db = new MyDb(ModuleFactory);
 
             // act
             var initalData = new byte[] { 213, 23, 55, 234, 22 };
@@ -82,7 +82,7 @@ namespace BlazorDexie.Demo.Pages
 
         private async Task AddObjectUrl()
         {
-            var db = new MyDb(ModuleFactory);
+            await using var db = new MyDb(ModuleFactory);
 
             // act
             var initalData = new byte[] { 213, 23, 55, 234, 33 };
@@ -99,7 +99,7 @@ namespace BlazorDexie.Demo.Pages
 
         private async Task PutObjectUrl()
         {
-            var db = new MyDb(ModuleFactory);
+            await using var db = new MyDb(ModuleFactory);
 
             // act
             var initalData = new byte[] { 213, 23, 55, 234, 44 };
@@ -113,7 +113,7 @@ namespace BlazorDexie.Demo.Pages
 
         private async Task DeleteDb()
         {
-            var db = new MyDb(ModuleFactory);
+            await using var db = new MyDb(ModuleFactory);
             await db.Delete();
         }
     }
