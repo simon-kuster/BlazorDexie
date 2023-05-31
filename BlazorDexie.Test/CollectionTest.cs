@@ -2,6 +2,8 @@
 using BlazorDexie.Test.Database;
 using BlazorDexie.Test.TestItems;
 using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -81,11 +83,17 @@ namespace BlazorDexie.Test
             await db.TestItems.BulkPut(initialItems);
 
             // act
-            var testItems = await db.TestItems.FilterModule("../../../BlazorDexie.Test/wwwroot/scripts/customFilter.mjs", new[] { "CC" }).ToArray();
+            IEnumerable<object> test = (new[] { 4 }).Cast<object>();
+
+            var ccItem = await db.TestItems.FilterModule("../../../BlazorDexie.Test/wwwroot/scripts/nameFilter.mjs", new[] { "CC" }).ToArray();
+            var y2020Item = await db.TestItems.FilterModule("../../../BlazorDexie.Test/wwwroot/scripts/yearFilter.mjs", (new[] { 2022 }).Cast<object>()).ToArray();
 
             // assert
-            Assert.Single(testItems);
-            Assert.Equal(initialItems[2].Id, testItems[0].Id);
+            Assert.Single(ccItem);
+            Assert.Equal(initialItems[2].Id, ccItem[0].Id);
+
+            Assert.Single(y2020Item);
+            Assert.Equal(initialItems[1].Id, y2020Item[0].Id);
         }
 
         [Fact]
