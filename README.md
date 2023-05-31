@@ -3,6 +3,8 @@
 BlazorDexie provides an easy way to access the browers IndexedDb for Blazor applications.
 It is a wrapper around the well-known javascript library Dexie.js.
 
+Nuget package: https://www.nuget.org/packages/BlazorDexie
+
 ## Usage
 
 Friend represent object to store in table
@@ -85,7 +87,7 @@ public class MyDb : Db
 {
     public Store<Friend1, int> Friends { get; set; } = new("++" + nameof(Friend.Id), nameof(Friend.Name), nameof(Friend.Age));
 
-    public Db1(IModuleFactory jsModuleFactory)
+    public MyDb(IModuleFactory jsModuleFactory)
         : base("TestDb", 1, new DbVersion[0], jsModuleFactory)
     {
     }
@@ -117,7 +119,7 @@ public class MyDb : Db
 {
     public Store<Friend, int> Friends { get; set; } = new("++" + nameof(Friend.Id), nameof(Friend.Name), nameof(Friend.BirthDate));
 
-    public Db2(IModuleFactory jsModuleFactory)
+    public MyDb(IModuleFactory jsModuleFactory)
         : base("TestDb", 2, new DbVersion[] { new Version1() }, jsModuleFactory, GetUpgrade())
     {
     }
@@ -142,7 +144,7 @@ public class MyDb : Db
 {
     public Store<Friend, int> Friends { get; set; } = new("++" + nameof(Friend.Id), nameof(Friend.Name), nameof(Friend.BirthDate));
 
-    public Db2(IModuleFactory jsModuleFactory)
+    public MyDb(IModuleFactory jsModuleFactory)
         : base("TestDb", 2, new DbVersion[] { new V1.Version1() }, jsModuleFactory, upgradeModule: "dbUpgrade2.js")
     {
     }
@@ -158,6 +160,11 @@ export default function update(tx) {
     });
 }
 ```
+
+## Version 1.2.0
+- In previous versions the store name was written to the IndexedDB in pascal case. Now it is possible to write it in camel case, as it is common. To be backward compatible the default behaviour is like in the previous versions. To use camel case for store names pass the following optional parameter to the constuctor of the class Db.
+
+```camelCaseStoreNames : true```
 
 ## Version 1.1.0
 - Add parameters upgrade and upgradeModule to constructor of classes Db and Version to call Version.upgrade in Dexie.js.
