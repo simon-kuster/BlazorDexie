@@ -2,12 +2,12 @@ import { createObjectUrl, fetchObjectUrl, revokeObjectUrl } from './objectUrl.js
 const runInBrowser = typeof window !== 'undefined';
 
 export async function initDbAndExecute(databaseName, versions, storeName, commands) {
-    var db = await initDb(databaseName, versions);
+    const db = await initDb(databaseName, versions);
     return await execute(db, storeName, commands);
 }
 
 export async function execute(db, storeName, commands) {
-    var result = await executeNonQuery(db, storeName, commands);
+    const result = await executeNonQuery(db, storeName, commands);
     if (result === undefined) {
         return null;
     }
@@ -16,22 +16,22 @@ export async function execute(db, storeName, commands) {
 }
 
 export async function initDbAndExecuteNonQuery(databaseName, versions, storeName, commands) {
-    var db = await initDb(databaseName, versions);
+    const db = await initDb(databaseName, versions);
     return await executeNonQuery(db, storeName, commands);
 }
 
 export async function executeNonQuery(db, storeName, commands) {
-    var query = db[storeName];
+    let query = db[storeName];
 
     for (const c of commands) {
         switch (c.cmd) {
             case "filter":
-                var filterFunction = new Function('i', 'p', c.parameters[0]);
+                const filterFunction = new Function('i', 'p', c.parameters[0]);
                 query = await query.filter((i) => filterFunction(i, c.parameters[1]));
                 break;
 
             case "filterModule":
-                var filterModule = await import(c.parameters[0]);
+                const filterModule = await import(c.parameters[0]);
                 query = await query.filter((i) => filterModule.default(i, c.parameters[1]));
                 break;
 
@@ -94,13 +94,13 @@ export async function initDb(databaseName, versions) {
     const db = new Dexie(databaseName);
 
     for (const version of versions) {
-        var storeDefinitions = {};
+        const storeDefinitions = {};
 
         version.stores.forEach(store => {
             storeDefinitions[store.storeName] = store.indices;
         });
 
-        var dbWithVersion = db.version(version.versionNumber).stores(storeDefinitions);
+        const dbWithVersion = db.version(version.versionNumber).stores(storeDefinitions);
 
         if (version.upgrade) {
             const upgradeFunction = new Function('tx', version.upgrade);

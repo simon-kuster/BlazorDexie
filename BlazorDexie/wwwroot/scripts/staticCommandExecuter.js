@@ -3,7 +3,7 @@ export async function executeNonQuery(c) {
 }
 
 export async function execute(c) {
-    var result = await Dexie[c.cmd](...c.parameters);;
+    const result = await Dexie[c.cmd](...c.parameters);;
     if (result === undefined) {
         return null;
     }
