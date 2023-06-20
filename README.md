@@ -8,7 +8,7 @@ nuget package: https://www.nuget.org/packages/BlazorDexie
 
 The following example is similar to the "Hello World" from Dexie.js, which you can find at the following link: https://dexie.org/docs/Tutorial/Hello-World 
 
-The Friend class represents the object to be stored in the DB
+The Friend class represents the object to be stored in the IndexedDb
 ```
 public class Friend
 {
