@@ -1,6 +1,6 @@
-# BlazorDexie 
+# BlazorDexie: Accessing IndexedDB in Blazor Applications with Dexie.js 
 
-BlazorDexie provides an easy way to access the browsers IndexedDb from Blazor applications. It is a wrapper around the well-known javascript library Dexie.js. The code can be written in C# with few exceptions.
+BlazorDexie provides an easy way to access the browsers IndexedDb in Blazor applications. It is a wrapper around the well-known javascript library Dexie.js. The code can be written in C# with few exceptions.
 
 nuget package: https://www.nuget.org/packages/BlazorDexie
 
