@@ -1,13 +1,14 @@
-# BlazorDexie (Nosthy.Blazor.DexieWrapper before)
+# BlazorDexie: Accessing IndexedDB in Blazor Applications with Dexie.js 
 
-BlazorDexie provides an easy way to access the browers IndexedDb for Blazor applications.
-It is a wrapper around the well-known javascript library Dexie.js.
+BlazorDexie provides an easy way to access the browsers IndexedDb in Blazor applications. It is a wrapper around the well-known javascript library Dexie.js. The code can be written in C# with few exceptions.
 
-Nuget package: https://www.nuget.org/packages/BlazorDexie
+nuget package: https://www.nuget.org/packages/BlazorDexie
 
 ## Usage
 
-Friend represent object to store in table
+The following example is similar to the "Hello World" from Dexie.js, which you can find at the following link: https://dexie.org/docs/Tutorial/Hello-World 
+
+The Friend class represents the object to be stored in the IndexedDb
 ```
 public class Friend
 {
@@ -18,7 +19,7 @@ public class Friend
 }
 ```
 MyDb with single table "friends" with primary key "id" and
-indexes on properties "name" and "age"
+indices on properties "name" and "age"
 ```
 public class MyDb : Db
 {
@@ -73,9 +74,6 @@ Usage in Blazor
         }
     }
 ```
-
-For more Information have look to: https://dexie.org/docs/Tutorial/Hello-World
-
 ### Database Versioning
 
 **Version 1**
