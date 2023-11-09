@@ -8,9 +8,9 @@ namespace BlazorDexie.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static void AddDexieWrapper(this IServiceCollection services)
+        public static void AddDexieWrapper(this IServiceCollection services, string userModuleBasePath = "")
         {
-            services.AddDexieWrapper(p => new EsModuleFactory(p.GetRequiredService<IJSRuntime>()));
+            services.AddDexieWrapper(p => new EsModuleFactory(p.GetRequiredService<IJSRuntime>(), userModuleBasePath));
         }
 
         public static void AddDexieWrapper(this IServiceCollection services, Func<IServiceProvider, IModuleFactory> moduleFactoryFactory)

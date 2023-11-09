@@ -9,7 +9,7 @@ namespace BlazorDexie.Test.V3
 
         public Db3(IModuleFactory jsModuleFactory, string databaseId)
             : base($"VersioningDb{databaseId}", 3, new DbVersion[] { new V2.Version2(), new V1.Version1() }, jsModuleFactory, 
-                  upgradeModule: "../../../BlazorDexie.Test/wwwroot/scripts/dbUpgrade3.mjs", camelCaseStoreNames: true)
+                  upgradeModule: "scripts/dbUpgrade3.mjs", camelCaseStoreNames: true)
         {
         }
     }

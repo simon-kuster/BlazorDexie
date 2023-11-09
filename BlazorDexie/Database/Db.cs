@@ -67,6 +67,8 @@ namespace BlazorDexie.Database
                 // Create Dexie object only once
                 DbJsReference = await _collectionCommandExecuterJsInterop.InitDb(DatabaseName, Versions, cancellationToken);
             }
+
+            await _collectionCommandExecuterJsInterop.SetUserModuleBasePath(cancellationToken);
         }
 
         public async Task Delete(CancellationToken cancellationToken = default)

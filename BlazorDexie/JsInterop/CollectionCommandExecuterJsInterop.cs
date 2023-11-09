@@ -16,6 +16,12 @@ namespace BlazorDexie.JsInterop
             RunInBrowser = _module is EsModule;
         }
 
+        public async Task SetUserModuleBasePath(CancellationToken cancellationToken)
+        {
+            var module = GetModule();
+            await module.InvokeVoidAsync("setUserModuleBasePath", cancellationToken, module.GetUserModuleBasePath());
+        }
+
         public async Task<T> InitDbAndExecute<T>(string databaseName, List<DbVersionDefinition> versions, string storeName, List<Command> commands,
             CancellationToken cancellationToken)
         {

@@ -1,5 +1,10 @@
 import { createObjectUrl, fetchObjectUrl, revokeObjectUrl } from './objectUrl.js';
 const runInBrowser = typeof window !== 'undefined';
+let _userModuleBasePath = '';
+
+export function setUserModuleBasePath(userModuleBasePath) {
+    _userModuleBasePath = userModuleBasePath;
+}
 
 export async function initDbAndExecute(databaseName, versions, storeName, commands) {
     const db = await initDb(databaseName, versions);
@@ -31,7 +36,8 @@ export async function executeNonQuery(db, storeName, commands) {
                 break;
 
             case "filterModule":
-                const filterModule = await import(c.parameters[0]);
+                const filterModulePath = combinePathes(_userModuleBasePath, c.parameters[0]);
+                const filterModule = await import(filterModulePath);
                 query = await query.filter((i) => filterModule.default(i, c.parameters[1]));
                 break;
 
@@ -108,10 +114,27 @@ export async function initDb(databaseName, versions) {
         }
 
         if (version.upgradeModule) {
-            const upgradeModule = await import(version.upgradeModule);
+            const upgradeModulePath = combinePathes(_userModuleBasePath, version.upgradeModule);
+            const upgradeModule = await import(upgradeModulePath);
             dbWithVersion.upgrade(tx => upgradeModule.default(tx));
         }
     }
 
     return db;
+}
+
+function combinePathes(pathA, pathB) {
+    if (!pathA && !pathB) {
+        return '';
+    }
+
+    if (!pathA) {
+        return pathB;
+    }
+
+    if (!pathB) {
+        return pathA;
+    }
+
+    return pathA.replace(/\/+$/g, '') + '/' + pathB.replace(/^\/+/g, '')
 }

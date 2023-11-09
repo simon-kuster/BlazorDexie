@@ -7,12 +7,18 @@ namespace BlazorDexie.JsModule
         private Lazy<Task<IJSObjectReference>>? _jsObjectReferenceTask;
         private CancellationTokenSource _internalCancellationTokenSource = new CancellationTokenSource();
         private CancellationToken _internalCancellationToken;
+        private readonly string _userModuleBasePath;
 
-
-        public EsModule(IJSRuntime jsRuntime, string modulePath)
+        public EsModule(IJSRuntime jsRuntime, string modulePath, string userModuleBasePath)
         {
             _internalCancellationToken = _internalCancellationTokenSource.Token;
             _jsObjectReferenceTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>("import", modulePath).AsTask());
+            _userModuleBasePath = userModuleBasePath;
+        }
+
+        public string GetUserModuleBasePath()
+        {
+            return _userModuleBasePath;
         }
 
         public async Task<T> InvokeAsync<T>(string identifier, CancellationToken cancellationToken, params object[] args)

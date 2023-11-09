@@ -6,15 +6,17 @@ namespace BlazorDexie.JsModule
     {
         private const string BasePath = "./_content/BlazorDexie";
         private IJSRuntime _jsRuntime;
+        private readonly string _userModulePathBase;
 
-        public EsModuleFactory(IJSRuntime jsRuntime)
+        public EsModuleFactory(IJSRuntime jsRuntime, string userModulePathBase)
         {
             _jsRuntime = jsRuntime;
+            _userModulePathBase = userModulePathBase;
         }
 
         public IModule CreateModule(string modulePath)
         {
-            return new EsModule(_jsRuntime, Path.Combine(BasePath, modulePath));
+            return new EsModule(_jsRuntime, Path.Combine(BasePath, modulePath), _userModulePathBase);
         }
     }
 }

@@ -11,11 +11,18 @@ namespace BlazorDexie.Test.ModuleWrappers
         private INodeJSService _nodeJSService;
         private const string ModuleWrapperPath = "../../../wwwroot/scripts/es-module-wrapper.js";
         private string _modulePath;
+        private readonly string _userModuleBasePath;
 
-        public CommonJsModule(INodeJSService nodeJSService, string modulePath)
+        public CommonJsModule(INodeJSService nodeJSService, string modulePath, string userModuleBasePath)
         {
             _nodeJSService = nodeJSService;
             _modulePath = modulePath;
+            _userModuleBasePath = userModuleBasePath;
+        }
+
+        public string GetUserModuleBasePath()
+        {
+            return _userModuleBasePath;
         }
 
         public async Task<T> InvokeAsync<T>(string identifier, CancellationToken cancellationToken, params object[] args)

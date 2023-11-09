@@ -86,8 +86,8 @@ namespace BlazorDexie.Test
             IEnumerable<object> test = (new[] { 4 }).Cast<object>();
 
             var filteredItems = await db.TestItems
-                .FilterModule("../../../BlazorDexie.Test/wwwroot/scripts/nameFilter.mjs", new[] { "BB" })
-                .FilterModule("../../../BlazorDexie.Test/wwwroot/scripts/yearFilter.mjs", (new[] { 2022 }).Cast<object>()).ToArray();
+                .FilterModule("scripts/nameFilter.mjs", new[] { "BB" })
+                .FilterModule("scripts/yearFilter.mjs", (new[] { 2022 }).Cast<object>()).ToArray();
 
             // assert
             Assert.Single(filteredItems);
