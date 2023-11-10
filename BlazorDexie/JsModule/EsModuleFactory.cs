@@ -8,7 +8,7 @@ namespace BlazorDexie.JsModule
         private IJSRuntime _jsRuntime;
         private readonly string _userModulePathBase;
 
-        public EsModuleFactory(IJSRuntime jsRuntime, string userModulePathBase)
+        public EsModuleFactory(IJSRuntime jsRuntime, string userModulePathBase = "")
         {
             _jsRuntime = jsRuntime;
             _userModulePathBase = userModulePathBase;
