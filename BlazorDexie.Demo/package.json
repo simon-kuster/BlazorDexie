@@ -13,6 +13,6 @@
     "dexie": "^3.2.2"
   },
   "devDependencies": {
-    "copy-files-from-to": "3.2.2"
+    "copy-files-from-to": "^3.9.1"
   }
 }
