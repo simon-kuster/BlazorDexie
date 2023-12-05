@@ -161,8 +161,8 @@ export default function update(tx) {
 
 ## Version 1.2.0
 - In previous versions the store name was written to the IndexedDB in pascal case. Now it is possible to write it in camel case, as it is common. To be backward compatible the default behaviour is like in the previous versions. To use camel case for store names pass the following optional parameter to the constuctor of the class Db.
-
 ```camelCaseStoreNames : true```
+- Add support for .NET 7.0 and .NET 8.0
 
 ## Version 1.1.0
 - Add parameters upgrade and upgradeModule to constructor of classes Db and Version to call Version.upgrade in Dexie.js.
