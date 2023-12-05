@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFrameworks>net6.0; net7.0;net8.0</TargetFrameworks>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <PackageId>BlazorDexie</PackageId>
@@ -29,7 +29,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.9" Condition="'$(TargetFramework)' == 'net6.0'" />
+	<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.14" Condition="'$(TargetFramework)' == 'net7.0'" />
+	<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.0" Condition="'$(TargetFramework)' == 'net8.0'" />
   </ItemGroup>
 
 </Project>
