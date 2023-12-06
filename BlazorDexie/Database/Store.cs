@@ -1,11 +1,10 @@
 ﻿using BlazorDexie.JsInterop;
 using BlazorDexie.Utils;
-using System;
 using System.Dynamic;
 
 namespace BlazorDexie.Database
 {
-    public class Store<T, TKey> : Collection<T, TKey>, IStore
+    public class Store<T, TKey> : CollectionBase<T, TKey>, IStore
     {
         public string[] SchemaDefinitions { get; }
         public string PrimaryKey { get; }

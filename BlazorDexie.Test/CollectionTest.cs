@@ -232,6 +232,54 @@ namespace BlazorDexie.Test
             }
         }
 
+        [Fact]
+        public async Task SortBy()
+        {
+            // arrange
+            await using var db = CreateDb();
+
+            var initialItems = new TestItem[]{
+                new TestItem() { Id = Guid.NewGuid(), Name = "C" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "A" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "B" }
+            };
+
+            var exceptedNames = new string[] { "A", "B", "C" };
+
+            await db.TestItems.BulkPut(initialItems);
+
+            // act
+            var testItems = await db.TestItems.Where(nameof(TestItem.Name)).NotEqual("??").SortBy(nameof(TestItem.Name));
+
+            // assert
+            Assert.Equal(3, testItems.Length);
+            Assert.Equal(exceptedNames, testItems.Select(t => t.Name).ToArray());
+        }
+
+        [Fact]
+        public async Task SortByReverse()
+        {
+            // arrange
+            await using var db = CreateDb();
+
+            var initialItems = new TestItem[]{
+                new TestItem() { Id = Guid.NewGuid(), Name = "C" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "A" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "B" }
+            };
+
+            var exceptedNames = new string[] { "C", "B", "A" };
+
+            await db.TestItems.BulkPut(initialItems);
+
+            // act
+            var testItems = await db.TestItems.Where(nameof(TestItem.Name)).NotEqual("??").Reverse().SortBy(nameof(TestItem.Name));
+
+            // assert
+            Assert.Equal(3, testItems.Length);
+            Assert.Equal(exceptedNames, testItems.Select(t => t.Name).ToArray());
+        }
+
         private MyDb CreateDb()
         {
             var databaseId = Guid.NewGuid().ToString();
