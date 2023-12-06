@@ -158,6 +158,8 @@ export default function update(tx) {
     });
 }
 ```
+## Version 1.3.0
+- Add methods SortBy and SortByToList (same as SortBy but returns a list instead of an array) to Collection.
 
 ## Version 1.2.0
 - In previous versions the store name was written to the IndexedDB in pascal case. Now it is possible to write it in camel case, as it is common. To be backward compatible the default behaviour is like in the previous versions. To use camel case for store names pass the following optional parameter to the constuctor of the class Db.
