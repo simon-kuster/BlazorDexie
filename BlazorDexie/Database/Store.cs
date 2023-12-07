@@ -4,7 +4,7 @@ using System.Dynamic;
 
 namespace BlazorDexie.Database
 {
-    public class Store<T, TKey> : CollectionBase<T, TKey>, IStore
+    public class Store<T, TKey> : Collection<T, TKey>, IStore
     {
         public string[] SchemaDefinitions { get; }
         public string PrimaryKey { get; }
@@ -194,6 +194,16 @@ namespace BlazorDexie.Database
         public bool HasIndex(string index)
         {
             return Indices.Contains(index);
+        }
+
+        public override Task<T[]> SortBy(string keyPath, CancellationToken cancellationToken = default)
+        {
+            throw new NotSupportedException($"{nameof(SortBy)} only supported on Collection not on Store");
+        }
+
+        public override Task<List<T>> SortByToList(string keyPath, CancellationToken cancellationToken = default)
+        {
+            throw new NotSupportedException($"{nameof(SortByToList)} only supported on Collection not on Store");
         }
 
         protected override Collection<T, TKey> CreateNewColletion()
