@@ -186,6 +186,13 @@ namespace BlazorDexie.Database
             return collection;
         }
 
+        public Collection<T, TKey> ToCollection()
+        {
+            var collection = CreateNewColletion();
+            collection.AddCommand("toCollection");
+            return collection;
+        }
+
         public async Task Clear(CancellationToken cancellationToken = default)
         {
             await ExecuteNonQuery("clear", cancellationToken);
