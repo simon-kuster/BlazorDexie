@@ -158,6 +158,9 @@ export default function update(tx) {
     });
 }
 ```
+## Version 1.4.0
+- Add methods ToCollecton on Store
+
 ## Version 1.3.0
 - Add methods SortBy and SortByToList (same as SortBy but returns a list instead of an array) to Collection.
 
