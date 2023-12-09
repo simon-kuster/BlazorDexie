@@ -76,10 +76,24 @@ namespace BlazorDexie.Database
             await _staticCommandExecuterJsInterop.ExecuteNonQuery(new Command("delete", DatabaseName), cancellationToken);
         }
 
+        public async Task Transaction(
+            string mode, 
+            string[] storeNames, 
+            int timeout, 
+            Func<Task> body,
+            Func<Task> complete, 
+            Func<string, Task> failed,
+            CancellationToken cancellationToken = default)
+        {
+            var camelizedStoreNames = storeNames.Select(Camelizer.ToCamelCase).ToArray();
+            var transactionHandlers = new TransactionHandlers(body, complete, failed);
+            var command = new Command("transaction", DbJsReference, mode, camelizedStoreNames, timeout, DotNetObjectReference.Create(transactionHandlers));
+            await _staticCommandExecuterJsInterop.ExecuteNonQuery(command, cancellationToken);
+        }
+
         public async ValueTask DisposeAsync()
         {
             await DisposeAsyncCore().ConfigureAwait(false);
-
             GC.SuppressFinalize(this);
         }
 

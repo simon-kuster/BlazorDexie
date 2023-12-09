@@ -1,5 +1,14 @@
 export async function executeNonQuery(c) {
-    Dexie[c.cmd](...c.parameters);
+
+    switch (c.cmd) {
+        case "transaction":
+            await executeTransaction(c.parameters[0], c.parameters[1], c.parameters[2], c.parameters[3], c.parameters[4]);
+            break;
+
+        default:
+            Dexie[c.cmd](...c.parameters);
+            break;
+    }
 }
 
 export async function execute(c) {
@@ -9,4 +18,19 @@ export async function execute(c) {
     }
 
     return result;
+}
+
+async function executeTransaction(db, mode, storeNames, timeout, transactionHandlers) {
+
+    var stores = storeNames.map(storeName => db[storeName]);
+
+    await db.transaction(mode, ...stores, async () => {
+        await Dexie.waitFor(transactionHandlers.invokeMethodAsync('CallBody'), timeout);
+
+    }).then(async () => {
+        await transactionHandlers.invokeMethodAsync('CallComplete');
+
+    }).catch(async error => {
+        await transactionHandlers.invokeMethodAsync('CallFailed', error.message);
+    });
 }

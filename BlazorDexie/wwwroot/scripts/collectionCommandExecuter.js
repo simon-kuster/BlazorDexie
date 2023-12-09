@@ -80,7 +80,6 @@ export async function executeNonQuery(db, storeName, commands) {
                 query = createObjectUrl(blob2);
                 break;
 
-
             default:
                 query = await query[c.cmd](...c.parameters);
                 break;
