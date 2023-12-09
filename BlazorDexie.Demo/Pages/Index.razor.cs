@@ -124,20 +124,19 @@ namespace BlazorDexie.Demo.Pages
             var key = await db.Persons.Put(new Person() { FirstName = "Hans", Birthday = new DateTime(1970, 1, 1) });
 
             // act
-            await db.Transaction("rw", [nameof(MyDb.Persons)], 60000, async () =>
+            try
             {
-                var person = await db.Persons.Get(key) ?? throw new InvalidOperationException();
-                person.Birthday = new DateTime(1971, 1, 1);
-                await db.Persons.Put(person);
-            }, 
-            async () =>
+                await db.Transaction("rw", [nameof(MyDb.Persons)], 60000, async () =>
+                {
+                    var person = await db.Persons.Get(key) ?? throw new InvalidOperationException();
+                    person.Birthday = new DateTime(1971, 1, 1);
+                    await db.Persons.Put(person);
+                });
+            }
+            catch (Exception e)
             {
-                await Task.CompletedTask;
-            }, 
-            async error =>
-            {
-                await Task.CompletedTask;
-            });
+                // handle error
+            }
 
             var check = await db.Persons.Get(key) ?? throw new InvalidOperationException();
         }
@@ -149,22 +148,20 @@ namespace BlazorDexie.Demo.Pages
             var key = await db.Persons.Put(new Person() { FirstName = "Hans", Birthday = new DateTime(1970, 1, 1) });
 
             // act
-            await db.Transaction("rw", [nameof(MyDb.Persons)], 60000, 
-            async () =>
+            try
             {
-                var person = await db.Persons.Get(key) ?? throw new InvalidOperationException();
-                person.Birthday = new DateTime(1971, 1, 1);
-                await db.Persons.Put(person);
-                await db.BlobData.Get(key);
-            }, 
-            async () =>
+                await db.Transaction("rw", [nameof(MyDb.Persons)], 60000, async () =>
+                {
+                    var person = await db.Persons.Get(key) ?? throw new InvalidOperationException();
+                    person.Birthday = new DateTime(1971, 1, 1);
+                    await db.Persons.Put(person);
+                    await db.BlobData.Get(key);
+                });
+            }
+            catch(Exception e)
             {
-                await Task.CompletedTask;
-            }, 
-            async error =>
-            {
-                await Task.CompletedTask;
-            });
+                // handle error
+            }
 
             var check = await db.Persons.Get(key) ?? throw new InvalidOperationException();
         }

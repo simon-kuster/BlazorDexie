@@ -20,17 +20,11 @@ export async function execute(c) {
     return result;
 }
 
-async function executeTransaction(db, mode, storeNames, timeout, transactionHandlers) {
+async function executeTransaction(db, mode, storeNames, timeout, transactionBodyWrapper) {
 
     var stores = storeNames.map(storeName => db[storeName]);
 
     await db.transaction(mode, ...stores, async () => {
-        await Dexie.waitFor(transactionHandlers.invokeMethodAsync('CallBody'), timeout);
-
-    }).then(async () => {
-        await transactionHandlers.invokeMethodAsync('CallComplete');
-
-    }).catch(async error => {
-        await transactionHandlers.invokeMethodAsync('CallFailed', error.message);
+        await Dexie.waitFor(transactionBodyWrapper.invokeMethodAsync('CallTransactionBody'), timeout);
     });
 }
