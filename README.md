@@ -74,6 +74,23 @@ Usage in Blazor
         }
     }
 ```
+### Transactions
+
+```
+try
+{
+    await db.Transaction("rw", [nameof(MyDb.Friends)], 60000, async () =>
+    {
+        var friend = await db.Friends.Get(key) ?? throw new InvalidOperationException();
+        friend.Age = 30;
+        await db.Friends.Put(friend);
+    });
+}
+catch (Exception e)
+{
+    // handle error
+}
+```
 ### Database Versioning
 
 **Version 1**
