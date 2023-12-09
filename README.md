@@ -175,6 +175,9 @@ export default function update(tx) {
     });
 }
 ```
+## Version 1.5.0
+- Add support for transactions
+  
 ## Version 1.4.0
 - Add methods ToCollecton on Store
 
