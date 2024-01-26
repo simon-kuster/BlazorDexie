@@ -97,12 +97,6 @@ export async function executeNonQuery(db, storeName, commands) {
     return query;
 }
 
-async function ObjectUrlToBlob(objectUrl) {
-    const blob = await fetchObjectUrl(objectUrl);
-    revokeObjectUrl(objectUrl);
-    return blob;
-}
-
 export async function initDb(databaseName, versions) {
     const db = new Dexie(databaseName);
 
@@ -128,6 +122,16 @@ export async function initDb(databaseName, versions) {
     }
 
     return db;
+}
+
+export function close(db) {
+    db.close();
+}
+
+async function ObjectUrlToBlob(objectUrl) {
+    const blob = await fetchObjectUrl(objectUrl);
+    revokeObjectUrl(objectUrl);
+    return blob;
 }
 
 function combinePathes(pathA, pathB) {

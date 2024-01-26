@@ -49,6 +49,11 @@ namespace BlazorDexie.JsInterop
             return await GetModule().InvokeAsync<IJSObjectReference>("initDb", cancellationToken, databaseName, versions);
         }
 
+        public async Task Close(IJSObjectReference dbJsObjectRef, CancellationToken cancellationToken)
+        {
+            await GetModule().InvokeVoidAsync("close", cancellationToken, dbJsObjectRef);
+        }
+
         public async ValueTask DisposeAsync()
         {
             if (_module != null)

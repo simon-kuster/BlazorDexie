@@ -71,6 +71,14 @@ namespace BlazorDexie.Database
             await _collectionCommandExecuterJsInterop.SetUserModuleBasePath(cancellationToken);
         }
 
+        public async Task Close(CancellationToken cancellationToken = default)
+        {
+            if (DbJsReference != null)
+            {
+                await _collectionCommandExecuterJsInterop.Close(DbJsReference, cancellationToken);
+            }
+        }
+
         public async Task Delete(CancellationToken cancellationToken = default)
         {
             await _staticCommandExecuterJsInterop.ExecuteNonQuery(new Command("delete", DatabaseName), cancellationToken);
@@ -92,14 +100,15 @@ namespace BlazorDexie.Database
 
         protected virtual async ValueTask DisposeAsyncCore()
         {
-            await _collectionCommandExecuterJsInterop.DisposeAsync().ConfigureAwait(false);
-            await _staticCommandExecuterJsInterop.DisposeAsync().ConfigureAwait(false);
-
             if (DbJsReference != null)
             {
+                await Close();
                 await DbJsReference.DisposeAsync().ConfigureAwait(false);
                 DbJsReference = null;
             }
+
+            await _collectionCommandExecuterJsInterop.DisposeAsync().ConfigureAwait(false);
+            await _staticCommandExecuterJsInterop.DisposeAsync().ConfigureAwait(false);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using BlazorDexie.Demo.Database;
+﻿using BlazorDexie.Database;
+using BlazorDexie.Demo.Database;
 using BlazorDexie.Demo.Persons;
 using BlazorDexie.JsModule;
 using BlazorDexie.ObjUrl;
@@ -130,7 +131,12 @@ namespace BlazorDexie.Demo.Pages
         private async Task DeleteDb()
         {
             await using var db = new MyDb(ModuleFactory);
-            await db.Delete();
+            var test = await db.Persons.ToList();
+
+            await db.DisposeAsync();
+
+
+            await new Dexie(ModuleFactory).Delete("MyDatabase");
         }
 
         private async Task TransactionCompleted()
@@ -180,6 +186,11 @@ namespace BlazorDexie.Demo.Pages
             }
 
             var check = await db.Persons.Get(key) ?? throw new InvalidOperationException();
+        }
+
+        private async Task ChangeDb()
+        {
+            await using var db = new MyDb(ModuleFactory);
         }
     }
 }
