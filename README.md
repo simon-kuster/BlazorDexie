@@ -74,6 +74,23 @@ Usage in Blazor
         }
     }
 ```
+### Transactions
+
+```
+try
+{
+    await db.Transaction("rw", [nameof(MyDb.Friends)], 60000, async () =>
+    {
+        var friend = await db.Friends.Get(key) ?? throw new InvalidOperationException();
+        friend.Age = 30;
+        await db.Friends.Put(friend);
+    });
+}
+catch (Exception e)
+{
+    // handle error
+}
+```
 ### Database Versioning
 
 **Version 1**
@@ -158,6 +175,9 @@ export default function update(tx) {
     });
 }
 ```
+## Version 1.5.0
+- Add support for transactions
+  
 ## Version 1.4.0
 - Add methods ToCollecton on Store
 
