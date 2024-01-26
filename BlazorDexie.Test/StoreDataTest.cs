@@ -4,6 +4,7 @@ using System;
 using BlazorDexie.Test.Database;
 using BlazorDexie.ObjUrl;
 using BlazorDexie.JsModule;
+using System.Linq;
 
 namespace BlazorDexie.Test
 {
@@ -159,6 +160,31 @@ namespace BlazorDexie.Test
             Assert.Equal(2, primaryKeys.Length);
             Assert.Contains(key, primaryKeys);
             Assert.Contains(key2, primaryKeys);
+        }
+
+        [Fact]
+        public async Task BulkAddBlob()
+        {
+            // arrange
+            await using var db = CreateDb();
+
+            // act
+            var initialData = new byte[][] { [213, 23, 55, 234, 54], [23, 23, 44], [11, 22, 33] };
+            var keys = Enumerable.Range(0, initialData.Length).Select(_ => Guid.NewGuid()).ToArray();
+
+#pragma warning disable CS0618 // Type or member is obsolete
+            await db.BlobData.BulkAddBlob(initialData, keys);
+#pragma warning restore CS0618 // Type or member is obsolete
+
+            // assert
+            var data = await Task.WhenAll(keys.Select(async k => await db.BlobData.GetBlob(k)));
+
+            Assert.NotNull(data);
+
+            for (int i = 0; i < 2;  i++)
+            {
+                Assert.Equal(initialData[i], data[i]);
+            }
         }
 
         private MyDb CreateDb()

@@ -60,6 +60,12 @@ namespace BlazorDexie.Database
             await ExecuteNonQuery("bulkAdd", cancellationToken, items, keys);
         }
 
+        [Obsolete("Experimental Feature (maybe removed in the future)")]
+        public async Task<TKey> BulkAddBlob(IEnumerable<byte[]> datas, IEnumerable<TKey>? keys, string mimeType = "", CancellationToken cancellationToken = default)
+        {
+            return await Execute<TKey>("bulkAddBlob", cancellationToken, datas, keys, mimeType);
+        }
+
         public async Task<List<TKey>> BulkAddReturnAllKeys(IEnumerable<T> items, CancellationToken cancellationToken = default)
         {
             return await Execute<List<TKey>>("bulkAdd", cancellationToken, items, new { allKeys = true });

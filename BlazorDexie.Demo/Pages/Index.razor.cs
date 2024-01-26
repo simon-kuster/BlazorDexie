@@ -67,6 +67,22 @@ namespace BlazorDexie.Demo.Pages
             var data = await db.BlobData.GetBlob(key);
         }
 
+        private async Task BulkAddBlob()
+        {
+            await using var db = new MyDb(ModuleFactory);
+
+            // act
+            var initialDatas = new byte[][] { [213, 23, 55, 234, 54], [23, 23, 44], [11, 22, 33] };
+            var keys = Enumerable.Range(0, initialDatas.Length).Select(_ => Guid.NewGuid()).ToArray();
+
+#pragma warning disable CS0618 // Type or member is obsolete
+            await db.BlobData.BulkAddBlob(initialDatas, keys, "application/octet-stream");
+#pragma warning restore CS0618 // Type or member is obsolete
+
+            // assert
+            var data = await db.BlobData.GetBlob(keys[0]);
+        }
+
         private async Task PutBlob()
         {
             await using var db = new MyDb(ModuleFactory);

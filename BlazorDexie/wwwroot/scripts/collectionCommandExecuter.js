@@ -49,6 +49,14 @@ export async function executeNonQuery(db, storeName, commands) {
                 }
                 break;
 
+            case "bulkAddBlob":
+                if (runInBrowser) {
+                    query = await query.bulkAdd(c.parameters[0].map(d => new Blob([d], { type: c.parameters[2] })), c.parameters[1]);
+                } else {
+                    query = await query.bulkAdd(c.parameters[0].map(d => ({ data: d, type: c.parameters[2] })), c.parameters[1]);
+                }
+                break;
+
             case "putBlob":
                 if (runInBrowser) {
                     query = await query.put(new Blob([c.parameters[0]], { type: c.parameters[2] }), c.parameters[1]);
