@@ -74,6 +74,29 @@ Usage in Blazor
         }
     }
 ```
+### Auto Increment
+
+```
+public class Friend
+{
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public int Id { get; set; }
+    ...
+}
+```
+
+```
+public class MyDb : Db
+{
+    public Store<Friend, int> Friends { get; set; } = new($"++{nameof(Friend.Id)}", nameof(Friend.Name), nameof(Friend.Age));
+    ...
+}
+```
+
+```
+ await db.Friends.Put(new Friend(){ Name = "Josephine", Age = 21 });
+```
+
 ### Transactions
 
 ```
