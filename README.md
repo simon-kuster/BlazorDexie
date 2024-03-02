@@ -173,6 +173,10 @@ public class MyDb : Db
     }
 }
 ```
+Note: Depending on whether the camelCaseStoreNames parameter is set to true or false (default) when creating a Db instance, either 
+tx.table(\"Friends\") ... or tx.table(\"friends\") ...
+must be written.
+
 **Alternative:**
 
 - Instead of pass the code as string it is also possible to create a ES-Module with the upgrade function an pass the path of the module to the constructor
@@ -198,6 +202,10 @@ export default function update(tx) {
     });
 }
 ```
+Note: Depending on whether the camelCaseStoreNames parameter is set to true or false (default) when creating a Db instance, either 
+tx.table(\"Friends\") ... or tx.table(\"friends\") ...
+must be written.
+
 ## Version 1.5.0
 - Add support for transactions
   
