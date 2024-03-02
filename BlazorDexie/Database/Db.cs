@@ -10,6 +10,7 @@ namespace BlazorDexie.Database
     {
         private readonly CollectionCommandExecuterJsInterop _collectionCommandExecuterJsInterop;
         private readonly StaticCommandExecuterJsInterop _staticCommandExecuterJsInterop;
+        private readonly bool _camelCaseStoreNames;
 
         public string DatabaseName { get; }
         public int VersionNumber { get; }
@@ -27,6 +28,7 @@ namespace BlazorDexie.Database
         {
             DatabaseName = databaseName;
             VersionNumber = currentVersionNumber;
+            _camelCaseStoreNames = camelCaseStoreNames;
             _collectionCommandExecuterJsInterop = new CollectionCommandExecuterJsInterop(jsModuleFactory);
             _staticCommandExecuterJsInterop = new StaticCommandExecuterJsInterop(jsModuleFactory);
 
@@ -86,9 +88,9 @@ namespace BlazorDexie.Database
 
         public async Task Transaction(string mode, string[] storeNames, int timeout, Func<Task> transactionBody, CancellationToken cancellationToken = default)
         {
-            var camelizedStoreNames = storeNames.Select(Camelizer.ToCamelCase).ToArray();
+            var transformedStoreNames = _camelCaseStoreNames ? storeNames.Select(Camelizer.ToCamelCase).ToArray() : storeNames;           
             var transactionBodyWrapper = new TransactionBodyWrapper(transactionBody);
-            var command = new Command("transaction", DbJsReference, mode, camelizedStoreNames, timeout, DotNetObjectReference.Create(transactionBodyWrapper));
+            var command = new Command("transaction", DbJsReference, mode, transformedStoreNames, timeout, DotNetObjectReference.Create(transactionBodyWrapper));
             await _staticCommandExecuterJsInterop.ExecuteNonQuery(command, cancellationToken);
         }
 
