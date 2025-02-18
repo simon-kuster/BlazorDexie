@@ -25,4 +25,8 @@
     <ProjectReference Include="..\BlazorDexie\BlazorDexie.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\scripts\lib\" />
+  </ItemGroup>
+
 </Project>

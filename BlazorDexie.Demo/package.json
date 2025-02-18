@@ -1,18 +1,18 @@
 {
-  "type": "module",
-  "scripts": {
-    "postinstall": "copy-files-from-to"
-  },
-  "copyFiles": [
-    {
-      "from": "node_modules/dexie/dist/dexie.min.js",
-      "to": "wwwroot/scripts/lib/dexie.min.js"
+    "type": "module",
+    "scripts": {
+        "postinstall": "copy-files-from-to"
+    },
+    "copyFiles": [
+        {
+            "from": "node_modules/dexie/dist/dexie.min.js",
+            "to": "wwwroot/scripts/lib/dexie.min.js"
+        }
+    ],
+    "dependencies": {
+        "dexie": "^4.0.11"
+    },
+    "devDependencies": {
+        "copy-files-from-to": "^3.12.0"
     }
-  ],
-  "dependencies": {
-    "dexie": "^3.2.2"
-  },
-  "devDependencies": {
-    "copy-files-from-to": "^3.9.1"
-  }
 }
