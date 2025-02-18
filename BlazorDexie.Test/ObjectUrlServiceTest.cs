@@ -23,10 +23,10 @@ namespace BlazorDexie.Test
             var initalMimetype = "application/test";
 
             // act
-            var objectUrl = await _objectUrlService.Create(initalData, mimeType: initalMimetype);
+            var objectUrl = await _objectUrlService.Create(initalData, mimeType: initalMimetype, cancellationToken: TestContext.Current.CancellationToken);
 
             // assert
-            var data = await _objectUrlService.FetchData(objectUrl);
+            var data = await _objectUrlService.FetchData(objectUrl, TestContext.Current.CancellationToken);
             Assert.Equal(initalData, data);
         }
 
@@ -37,10 +37,10 @@ namespace BlazorDexie.Test
             // arrange
             var initalData = new byte[] { 52, 124, 142, 144 };
             var initalMimetype = "application/test";
-            var objectUrl = await _objectUrlService.Create(initalData, mimeType: initalMimetype);
+            var objectUrl = await _objectUrlService.Create(initalData, mimeType: initalMimetype, cancellationToken: TestContext.Current.CancellationToken);
 
             // act
-            var data = await _objectUrlService.FetchData(objectUrl);
+            var data = await _objectUrlService.FetchData(objectUrl, TestContext.Current.CancellationToken);
 
             // assert
 
@@ -53,13 +53,13 @@ namespace BlazorDexie.Test
             // arrange
             var initalData = new byte[] { 52, 124, 142, 148 };
             var initalMimetype = "application/test";
-            var objectUrl = await _objectUrlService.Create(initalData, mimeType: initalMimetype);
+            var objectUrl = await _objectUrlService.Create(initalData, mimeType: initalMimetype, cancellationToken: TestContext.Current.CancellationToken);
 
             // act
-            await _objectUrlService.Revoke(objectUrl);
+            await _objectUrlService.Revoke(objectUrl, TestContext.Current.CancellationToken);
 
             // assert
-            await Assert.ThrowsAsync<InvocationException>(async () => await _objectUrlService.FetchData(objectUrl));
+            await Assert.ThrowsAsync<InvocationException>(async () => await _objectUrlService.FetchData(objectUrl, TestContext.Current.CancellationToken));
         }
 
         public ValueTask InitializeAsync()

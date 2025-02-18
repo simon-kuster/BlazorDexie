@@ -24,12 +24,12 @@ namespace BlazorDexie.Test
             // arrange
             var databaseId = Guid.NewGuid().ToString();
             await using var dbVersion1 = new Db1(_moduleFactory, databaseId);
-            await dbVersion1.Friends.Add(new Friend1() { Name = "David", Age = 40, Sex = "Male" });
-            await dbVersion1.Friends.Add(new Friend1() { Name = "Ylva", Age = 39, Sex = "Female" });
+            await dbVersion1.Friends.Add(new Friend1() { Name = "David", Age = 40, Sex = "Male" }, TestContext.Current.CancellationToken);
+            await dbVersion1.Friends.Add(new Friend1() { Name = "Ylva", Age = 39, Sex = "Female" }, TestContext.Current.CancellationToken);
 
             // act
             await using var dbVersion3 = new Db3(_moduleFactory, databaseId);
-            var david3 = (await dbVersion3.Friends.Where(nameof(Friend3.Name)).IsEqual("David").ToList()).First();
+            var david3 = (await dbVersion3.Friends.Where(nameof(Friend3.Name)).IsEqual("David").ToList(TestContext.Current.CancellationToken)).First();
 
             // assert
             var secondsInYear = 365 * 24 * 60 * 60;

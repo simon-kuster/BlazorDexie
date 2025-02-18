@@ -34,10 +34,10 @@ namespace BlazorDexie.Test
             // act
             var initialData = new byte[] { 213, 23, 55, 234, 54 };
             var key = Guid.NewGuid();
-            await db.BlobData.AddBlob(initialData, key);
+            await db.BlobData.AddBlob(initialData, key, cancellationToken: TestContext.Current.CancellationToken);
 
             // assert
-            var data = await db.BlobData.GetBlob(key);
+            var data = await db.BlobData.GetBlob(key, TestContext.Current.CancellationToken);
 
             Assert.NotNull(data);
             Assert.Equal(initialData, data);
@@ -51,13 +51,13 @@ namespace BlazorDexie.Test
 
             // act
             var initialData = new byte[] { 213, 23, 55, 234, 54 };
-            var initialObjectUrl = await _objectUrlService.Create(initialData);
+            var initialObjectUrl = await _objectUrlService.Create(initialData, cancellationToken: TestContext.Current.CancellationToken);
             var key = Guid.NewGuid();
-            await db.BlobData.AddObjectUrl(initialObjectUrl, key);
+            await db.BlobData.AddObjectUrl(initialObjectUrl, key, TestContext.Current.CancellationToken);
 
             // assert
-            var objectUrl = await db.BlobData.GetObjectUrl(key);
-            var data = await _objectUrlService.FetchData(objectUrl);
+            var objectUrl = await db.BlobData.GetObjectUrl(key, TestContext.Current.CancellationToken);
+            var data = await _objectUrlService.FetchData(objectUrl, TestContext.Current.CancellationToken);
 
             Assert.NotNull(data);
             Assert.Equal(initialData, data);
@@ -72,10 +72,10 @@ namespace BlazorDexie.Test
             // act
             var initalData = new byte[] { 213, 23, 55, 234, 54 };
             var key = Guid.NewGuid();
-            await db.BlobData.PutBlob(initalData, key);
+            await db.BlobData.PutBlob(initalData, key, cancellationToken: TestContext.Current.CancellationToken);
 
             // assert
-            var data = await db.BlobData.GetBlob(key);
+            var data = await db.BlobData.GetBlob(key, TestContext.Current.CancellationToken);
 
             Assert.NotNull(data);
             Assert.Equal(initalData, data);
@@ -89,13 +89,13 @@ namespace BlazorDexie.Test
 
             // act
             var initialData = new byte[] { 213, 23, 55, 234, 54 };
-            var initialObjectUrl = await _objectUrlService.Create(initialData);
+            var initialObjectUrl = await _objectUrlService.Create(initialData, cancellationToken: TestContext.Current.CancellationToken);
             var key = Guid.NewGuid();
-            await db.BlobData.PutObjectUrl(initialObjectUrl, key);
+            await db.BlobData.PutObjectUrl(initialObjectUrl, key, TestContext.Current.CancellationToken);
 
             // assert
-            var objectUrl = await db.BlobData.GetObjectUrl(key);
-            var data = await _objectUrlService.FetchData(objectUrl);
+            var objectUrl = await db.BlobData.GetObjectUrl(key, TestContext.Current.CancellationToken);
+            var data = await _objectUrlService.FetchData(objectUrl, TestContext.Current.CancellationToken);
 
             Assert.NotNull(data);
             Assert.Equal(initialData, data);
@@ -109,10 +109,10 @@ namespace BlazorDexie.Test
 
             var initalData = new byte[] { 213, 23, 55, 234, 54 };
             var key = Guid.NewGuid();
-            await db.BlobData.PutBlob(initalData, key);
+            await db.BlobData.PutBlob(initalData, key, cancellationToken: TestContext.Current.CancellationToken);
 
             // act
-            var data = await db.BlobData.GetBlob(key);
+            var data = await db.BlobData.GetBlob(key, TestContext.Current.CancellationToken);
 
             // assert
             Assert.NotNull(data);
@@ -127,13 +127,13 @@ namespace BlazorDexie.Test
 
             var initalData = new byte[] { 213, 28, 55, 234, 54 };
             var key = Guid.NewGuid();
-            await db.BlobData.PutBlob(initalData, key);
+            await db.BlobData.PutBlob(initalData, key, cancellationToken: TestContext.Current.CancellationToken);
 
             // act
-            var objectUrl = await db.BlobData.GetObjectUrl(key);
+            var objectUrl = await db.BlobData.GetObjectUrl(key, TestContext.Current.CancellationToken);
 
             // assert
-            var data = await _objectUrlService.FetchData(objectUrl);
+            var data = await _objectUrlService.FetchData(objectUrl, TestContext.Current.CancellationToken);
 
             Assert.NotNull(data);
             Assert.Equal(initalData, data);
@@ -147,14 +147,14 @@ namespace BlazorDexie.Test
 
             var initalData = new byte[] { 213, 28, 55, 234, 54 };
             var key = Guid.NewGuid();
-            await db.BlobData.PutBlob(initalData, key);
+            await db.BlobData.PutBlob(initalData, key, cancellationToken: TestContext.Current.CancellationToken);
 
             var initalData2 = new byte[] { 213, 28, 55, 234, 54 };
             var key2 = Guid.NewGuid();
-            await db.BlobData.PutBlob(initalData2, key2);
+            await db.BlobData.PutBlob(initalData2, key2, cancellationToken: TestContext.Current.CancellationToken);
 
             // act
-            var primaryKeys = await db.BlobData.PrimaryKeys();
+            var primaryKeys = await db.BlobData.PrimaryKeys(TestContext.Current.CancellationToken);
 
             // assert
             Assert.Equal(2, primaryKeys.Length);
@@ -173,7 +173,7 @@ namespace BlazorDexie.Test
             var keys = Enumerable.Range(0, initialData.Length).Select(_ => Guid.NewGuid()).ToArray();
 
 #pragma warning disable CS0618 // Type or member is obsolete
-            await db.BlobData.BulkAddBlob(initialData, keys);
+            await db.BlobData.BulkAddBlob(initialData, keys, cancellationToken: TestContext.Current.CancellationToken);
 #pragma warning restore CS0618 // Type or member is obsolete
 
             // assert

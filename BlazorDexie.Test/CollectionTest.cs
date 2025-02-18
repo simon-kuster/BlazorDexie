@@ -33,10 +33,10 @@ namespace BlazorDexie.Test
                 new TestItem() { Id = Guid.NewGuid(), Name = "DD" }
             };
 
-            await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // act
-            int count = await db.TestItems.Count();
+            int count = await db.TestItems.Count(TestContext.Current.CancellationToken);
 
             // assert
             Assert.Equal(4, count);
@@ -56,10 +56,10 @@ namespace BlazorDexie.Test
                 new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2011 }
             };
 
-            await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // act
-            var testItems = await db.TestItems.Filter("return i.name === p[0]", new[] { "CC" }).ToArray();
+            var testItems = await db.TestItems.Filter("return i.name === p[0]", new[] { "CC" }).ToArray(TestContext.Current.CancellationToken);
 
             // assert
             Assert.Single(testItems);
@@ -80,14 +80,14 @@ namespace BlazorDexie.Test
                 new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2011 }
             };
 
-            await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // act
             IEnumerable<object> test = (new[] { 4 }).Cast<object>();
 
             var filteredItems = await db.TestItems
                 .FilterModule("scripts/nameFilter.mjs", new[] { "BB" })
-                .FilterModule("scripts/yearFilter.mjs", (new[] { 2022 }).Cast<object>()).ToArray();
+                .FilterModule("scripts/yearFilter.mjs", (new[] { 2022 }).Cast<object>()).ToArray(TestContext.Current.CancellationToken);
 
             // assert
             Assert.Single(filteredItems);
@@ -108,12 +108,12 @@ namespace BlazorDexie.Test
                 new TestItem() { Id = Guid.NewGuid(), Name = "DD" }
             };
 
-            await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // act
             var names = await db.TestItems
                 .OrderBy(nameof(TestItem.Name))
-                .Keys<string>();
+                .Keys<string>(TestContext.Current.CancellationToken);
 
             // assert
             var initialNames = initialItems.Select(i => i.Name).ToList();
@@ -138,10 +138,10 @@ namespace BlazorDexie.Test
                 new TestItem() { Id = Guid.NewGuid(), Name = "DD" }
             };
 
-            await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // act
-            var primaryKeys = await db.TestItems.PrimaryKeys();
+            var primaryKeys = await db.TestItems.PrimaryKeys(TestContext.Current.CancellationToken);
 
             // assert
             Assert.Equal(initialItems.Length, primaryKeys.Length);
@@ -167,10 +167,10 @@ namespace BlazorDexie.Test
                 new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2011 }
             };
 
-            await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // act
-            var testItems = await db.TestItems.OrderBy(nameof(TestItem.Name)).Offset(1).Limit(2).ToArray();
+            var testItems = await db.TestItems.OrderBy(nameof(TestItem.Name)).Offset(1).Limit(2).ToArray(TestContext.Current.CancellationToken);
 
             // assert
 
@@ -191,10 +191,10 @@ namespace BlazorDexie.Test
 
             var exceptedNames = initialItems.OrderByDescending(i => i.Id).Select(i => i.Name).ToArray();
 
-            await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // act
-            var testItems = await db.TestItems.Reverse().ToArray();
+            var testItems = await db.TestItems.Reverse().ToArray(TestContext.Current.CancellationToken);
 
             // assert
             Assert.Equal(3, testItems.Length);
@@ -215,11 +215,11 @@ namespace BlazorDexie.Test
                 new TestItem() { Id = Guid.NewGuid(), Name = "DD" }
             };
 
-            await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // act
-            var testItemArray = await db.TestItems.ToArray();
-            var testItemList = await db.TestItems.ToList();
+            var testItemArray = await db.TestItems.ToArray(TestContext.Current.CancellationToken);
+            var testItemList = await db.TestItems.ToList(TestContext.Current.CancellationToken);
 
             // assert
             Assert.Equal(4, testItemArray.Length);
@@ -246,10 +246,10 @@ namespace BlazorDexie.Test
 
             var exceptedNames = new string[] { "A", "B", "C" };
 
-            await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // act
-            var testItems = await db.TestItems.Where(nameof(TestItem.Name)).NotEqual("??").SortBy(nameof(TestItem.Name));
+            var testItems = await db.TestItems.Where(nameof(TestItem.Name)).NotEqual("??").SortBy(nameof(TestItem.Name), TestContext.Current.CancellationToken);
 
             // assert
             Assert.Equal(3, testItems.Length);
@@ -270,10 +270,10 @@ namespace BlazorDexie.Test
 
             var exceptedNames = new string[] { "C", "B", "A" };
 
-            await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // act
-            var testItems = await db.TestItems.Where(nameof(TestItem.Name)).NotEqual("??").Reverse().SortBy(nameof(TestItem.Name));
+            var testItems = await db.TestItems.Where(nameof(TestItem.Name)).NotEqual("??").Reverse().SortBy(nameof(TestItem.Name), TestContext.Current.CancellationToken);
 
             // assert
             Assert.Equal(3, testItems.Length);

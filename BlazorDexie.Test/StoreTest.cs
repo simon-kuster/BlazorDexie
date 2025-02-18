@@ -26,10 +26,10 @@ namespace BlazorDexie.Test
 
             // act
             var testItem = new TestItem() { Id = Guid.NewGuid(), Name = "BB" };
-            var key = await db.TestItems.Add(testItem);
+            var key = await db.TestItems.Add(testItem, TestContext.Current.CancellationToken);
 
             // assert
-            var checkItem = await db.TestItems.Get(testItem.Id);
+            var checkItem = await db.TestItems.Get(testItem.Id, TestContext.Current.CancellationToken);
 
             Assert.NotNull(checkItem);
             Assert.Equal("BB", checkItem!.Name);
@@ -45,10 +45,10 @@ namespace BlazorDexie.Test
             // act
             var testItem = new TestItemHiddenKey() { Name = "BB" };
             var key = Guid.NewGuid();
-            await db.TestItemsHiddenKey.Add(testItem, key);
+            await db.TestItemsHiddenKey.Add(testItem, key, TestContext.Current.CancellationToken);
 
             // assert
-            var checkItem = await db.TestItemsHiddenKey.Get(key);
+            var checkItem = await db.TestItemsHiddenKey.Get(key, TestContext.Current.CancellationToken);
 
             Assert.NotNull(checkItem);
             Assert.Equal("BB", checkItem!.Name);
@@ -69,10 +69,10 @@ namespace BlazorDexie.Test
             };
 
             // act
-            var lastkey = await db.TestItems.BulkAdd(initialItems);
+            var lastkey = await db.TestItems.BulkAdd(initialItems, TestContext.Current.CancellationToken);
 
             // assert
-            var testItems = await db.TestItems.BulkGet(new Guid[] { initialItems[0].Id, initialItems[1].Id, initialItems[2].Id, initialItems[3].Id });
+            var testItems = await db.TestItems.BulkGet(new Guid[] { initialItems[0].Id, initialItems[1].Id, initialItems[2].Id, initialItems[3].Id }, TestContext.Current.CancellationToken);
 
             Assert.Equal(initialItems[3].Id, lastkey);
             Assert.NotNull(testItems);
@@ -98,10 +98,10 @@ namespace BlazorDexie.Test
             };
 
             // act
-            var keys = await db.TestItems.BulkAddReturnAllKeys(initialItems);
+            var keys = await db.TestItems.BulkAddReturnAllKeys(initialItems, TestContext.Current.CancellationToken);
 
             // assert
-            var testItems = await db.TestItems.BulkGet(new Guid[] { initialItems[0].Id, initialItems[1].Id, initialItems[2].Id, initialItems[3].Id });
+            var testItems = await db.TestItems.BulkGet(new Guid[] { initialItems[0].Id, initialItems[1].Id, initialItems[2].Id, initialItems[3].Id }, TestContext.Current.CancellationToken);
 
             Assert.Equal(initialItems[0].Id, keys[0]);
             Assert.Equal(initialItems[1].Id, keys[1]);
@@ -133,10 +133,10 @@ namespace BlazorDexie.Test
             var keys = new Guid[] { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() };
 
             // act
-            await db.TestItemsHiddenKey.BulkAdd(initialItems, keys);
+            await db.TestItemsHiddenKey.BulkAdd(initialItems, keys, TestContext.Current.CancellationToken);
 
             // assert
-            var testItems = await db.TestItemsHiddenKey.BulkGet(keys);
+            var testItems = await db.TestItemsHiddenKey.BulkGet(keys, TestContext.Current.CancellationToken);
 
             Assert.NotNull(testItems);
             Assert.Equal("AA", testItems![0]!.Name);
@@ -159,13 +159,13 @@ namespace BlazorDexie.Test
                 new TestItem() { Id = Guid.NewGuid(), Name = "DD" }
             };
 
-            await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // act
-            await db.TestItems.BulkDelete(new Guid[] { initialItems[1].Id, initialItems[3].Id });
+            await db.TestItems.BulkDelete(new Guid[] { initialItems[1].Id, initialItems[3].Id }, TestContext.Current.CancellationToken);
 
             // assert
-            var testItems = await db.TestItems.ToArray();
+            var testItems = await db.TestItems.ToArray(TestContext.Current.CancellationToken);
             var expectedItems = new TestItem[] { initialItems[0], initialItems[2] };
 
             Assert.Equal(2, testItems.Length);
@@ -191,10 +191,10 @@ namespace BlazorDexie.Test
                 new TestItem() { Id = Guid.NewGuid(), Name = "DD" }
             };
 
-            await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // act
-            var testItems = await db.TestItems.BulkGet(new Guid[] { initialItems[0].Id, initialItems[3].Id });
+            var testItems = await db.TestItems.BulkGet(new Guid[] { initialItems[0].Id, initialItems[3].Id }, TestContext.Current.CancellationToken);
 
             // assert
             Assert.NotNull(testItems);
@@ -218,10 +218,10 @@ namespace BlazorDexie.Test
             };
 
             // act
-            var lastkey = await db.TestItems.BulkPut(initialItems);
+            var lastkey = await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // assert
-            var testItems = await db.TestItems.BulkGet(new Guid[] { initialItems[0].Id, initialItems[1].Id, initialItems[2].Id, initialItems[3].Id });
+            var testItems = await db.TestItems.BulkGet(new Guid[] { initialItems[0].Id, initialItems[1].Id, initialItems[2].Id, initialItems[3].Id }, TestContext.Current.CancellationToken);
 
             Assert.Equal(initialItems[3].Id, lastkey);
             Assert.NotNull(testItems);
@@ -247,10 +247,10 @@ namespace BlazorDexie.Test
             };
 
             // act
-            var keys = await db.TestItems.BulkPutReturnAllKeys(initialItems);
+            var keys = await db.TestItems.BulkPutReturnAllKeys(initialItems, TestContext.Current.CancellationToken);
 
             // assert
-            var testItems = await db.TestItems.BulkGet(new Guid[] { initialItems[0].Id, initialItems[1].Id, initialItems[2].Id, initialItems[3].Id });
+            var testItems = await db.TestItems.BulkGet(new Guid[] { initialItems[0].Id, initialItems[1].Id, initialItems[2].Id, initialItems[3].Id }, TestContext.Current.CancellationToken);
 
             Assert.Equal(initialItems[0].Id, keys[0]);
             Assert.Equal(initialItems[1].Id, keys[1]);
@@ -282,10 +282,10 @@ namespace BlazorDexie.Test
             var keys = new Guid[] { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() };
 
             // act
-            await db.TestItemsHiddenKey.BulkPut(initialItems, keys);
+            await db.TestItemsHiddenKey.BulkPut(initialItems, keys, TestContext.Current.CancellationToken);
 
             // assert
-            var testItems = await db.TestItemsHiddenKey.BulkGet(keys);
+            var testItems = await db.TestItemsHiddenKey.BulkGet(keys, TestContext.Current.CancellationToken);
 
             Assert.NotNull(testItems);
             Assert.Equal("AA", testItems![0]!.Name);
@@ -301,13 +301,13 @@ namespace BlazorDexie.Test
             await using var db = CreateDb();
 
             TestItem initialItem = new TestItem() { Id = Guid.NewGuid(), Name = "AA" };
-            await db.TestItems.Put(initialItem);
+            await db.TestItems.Put(initialItem, TestContext.Current.CancellationToken);
 
             // act
-            await db.TestItems.Clear();
+            await db.TestItems.Clear(TestContext.Current.CancellationToken);
 
             // assert
-            Assert.True((await db.TestItems.ToArray()).Length == 0);
+            Assert.True((await db.TestItems.ToArray(TestContext.Current.CancellationToken)).Length == 0);
         }
 
         [Fact]
@@ -317,13 +317,13 @@ namespace BlazorDexie.Test
             await using var db = CreateDb();
 
             var initialItem = new TestItem() { Id = Guid.NewGuid(), Name = "AA" };
-            await db.TestItems.Put(initialItem);
+            await db.TestItems.Put(initialItem, TestContext.Current.CancellationToken);
 
             // act
-            await db.TestItems.Delete(initialItem.Id);
+            await db.TestItems.Delete(initialItem.Id, TestContext.Current.CancellationToken);
 
             // assert
-            Assert.True(await db.TestItems.Get(initialItem.Id) == null);
+            Assert.True(await db.TestItems.Get(initialItem.Id, TestContext.Current.CancellationToken) == null);
         }
 
         [Fact]
@@ -333,10 +333,10 @@ namespace BlazorDexie.Test
             await using var db = CreateDb();
 
             var initialItem = new TestItem() { Id = Guid.NewGuid(), Name = "AA" };
-            await db.TestItems.Put(initialItem);
+            await db.TestItems.Put(initialItem, TestContext.Current.CancellationToken);
 
             // act
-            var testItem = await db.TestItems.Get(initialItem.Id);
+            var testItem = await db.TestItems.Get(initialItem.Id, TestContext.Current.CancellationToken);
 
             // assert
             Assert.NotNull(testItem);
@@ -355,10 +355,10 @@ namespace BlazorDexie.Test
                 new TestItem() { Id = Guid.NewGuid(), Name = "B" }
             };
 
-            await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // act
-            var testItems = await db.TestItems.OrderBy(nameof(TestItem.Name)).ToArray();
+            var testItems = await db.TestItems.OrderBy(nameof(TestItem.Name)).ToArray(TestContext.Current.CancellationToken);
 
             // assert
             Assert.Equal(3, testItems.Length);
@@ -378,11 +378,11 @@ namespace BlazorDexie.Test
                 new TestItemWithCompoundIndex() { Firstname = "A", Secondname = "B" }
             };
 
-            await db.TestItemsWithCompoundIndex.BulkPut(initialItems);
+            await db.TestItemsWithCompoundIndex.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
 
             // act
-            var testItems = await db.TestItemsWithCompoundIndex.OrderBy(db.TestItemsWithCompoundIndex.Indices[1]).ToArray();
+            var testItems = await db.TestItemsWithCompoundIndex.OrderBy(db.TestItemsWithCompoundIndex.Indices[1]).ToArray(TestContext.Current.CancellationToken);
 
             // assert
             Assert.Equal(3, testItems.Length);
@@ -397,10 +397,10 @@ namespace BlazorDexie.Test
 
             // act
             var testItem = new TestItem() { Id = Guid.NewGuid(), Name = "BB" };
-            var key = await db.TestItems.Put(testItem);
+            var key = await db.TestItems.Put(testItem, TestContext.Current.CancellationToken);
 
             // assert
-            var checkItem = await db.TestItems.Get(testItem.Id);
+            var checkItem = await db.TestItems.Get(testItem.Id, TestContext.Current.CancellationToken);
 
             Assert.Equal(key, testItem.Id);
             Assert.NotNull(checkItem);
@@ -416,10 +416,10 @@ namespace BlazorDexie.Test
             // act
             var testItem = new TestItemHiddenKey() { Name = "BB" };
             var key = Guid.NewGuid();
-            await db.TestItemsHiddenKey.Put(testItem, key);
+            await db.TestItemsHiddenKey.Put(testItem, key, TestContext.Current.CancellationToken);
 
             // assert
-            var checkItem = await db.TestItemsHiddenKey.Get(key);
+            var checkItem = await db.TestItemsHiddenKey.Get(key, TestContext.Current.CancellationToken);
 
             Assert.NotNull(checkItem);
             Assert.Equal("BB", checkItem!.Name);
@@ -432,13 +432,13 @@ namespace BlazorDexie.Test
             await using var db = CreateDb();
 
             var initialItem = new TestItem() { Id = Guid.NewGuid(), Name = "BB" };
-            await db.TestItems.Put(initialItem);
+            await db.TestItems.Put(initialItem, TestContext.Current.CancellationToken);
 
             // act
-            var updatedRecord = await db.TestItems.Update(initialItem.Id, new Dictionary<string, object> { { nameof(TestItem.Name), "CC" } });
+            var updatedRecord = await db.TestItems.Update(initialItem.Id, new Dictionary<string, object> { { nameof(TestItem.Name), "CC" } }, TestContext.Current.CancellationToken);
 
             // assert
-            var checkItem = await db.TestItems.Get(initialItem.Id);
+            var checkItem = await db.TestItems.Get(initialItem.Id, TestContext.Current.CancellationToken);
 
             Assert.Equal(1, updatedRecord);
             Assert.NotNull(checkItem);
@@ -453,13 +453,13 @@ namespace BlazorDexie.Test
 
             var key = Guid.NewGuid();
             var initialItem = new TestItemHiddenKey() { Name = "BB" };
-            await db.TestItemsHiddenKey.Put(initialItem, key);
+            await db.TestItemsHiddenKey.Put(initialItem, key, TestContext.Current.CancellationToken);
 
             // act
-            var updatedRecord = await db.TestItemsHiddenKey.Update(key, new Dictionary<string, object> { { nameof(TestItem.Name), "CC" } });
+            var updatedRecord = await db.TestItemsHiddenKey.Update(key, new Dictionary<string, object> { { nameof(TestItem.Name), "CC" } }, TestContext.Current.CancellationToken);
 
             // assert
-            var checkItem = await db.TestItemsHiddenKey.Get(key);
+            var checkItem = await db.TestItemsHiddenKey.Get(key, TestContext.Current.CancellationToken);
 
             Assert.Equal(1, updatedRecord);
             Assert.NotNull(checkItem);
@@ -480,13 +480,13 @@ namespace BlazorDexie.Test
                 new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2015 }
             };
 
-            await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // act
             var testItems = await db.TestItems.Where(new Dictionary<string, object>
             {
                 { nameof(TestItem.Year), 2015 }
-            }).ToArray();
+            }).ToArray(TestContext.Current.CancellationToken);
 
             // assert
             Assert.Equal(1, testItems?.Length);

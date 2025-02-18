@@ -31,10 +31,10 @@ namespace BlazorDexie.Test
                 new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2011 }
             };
 
-            await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // act
-            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).Above(2020).ToArray();
+            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).Above(2020).ToArray(TestContext.Current.CancellationToken);
 
             // assert
             TestItem[] expectedItems = new TestItem[] { initialItems[0], initialItems[1] };
@@ -60,10 +60,10 @@ namespace BlazorDexie.Test
                 new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2011 }
             };
 
-            await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // act
-            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).AboveOrEqual(2020).ToArray();
+            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).AboveOrEqual(2020).ToArray(TestContext.Current.CancellationToken);
 
             // assert
             TestItem[] expectedItems = new TestItem[] { initialItems[0], initialItems[1], initialItems[2] };
@@ -89,10 +89,10 @@ namespace BlazorDexie.Test
                 new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2011 }
             };
 
-            await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // act
-            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).AnyOf(2022, 2020, 2023).ToArray();
+            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).AnyOf(2022, 2020, 2023).ToArray(TestContext.Current.CancellationToken);
 
             // assert
             TestItem[] expectedItems = new TestItem[] { initialItems[0], initialItems[1], initialItems[2] };
@@ -117,10 +117,10 @@ namespace BlazorDexie.Test
                 new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2011 }
             };
 
-            await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // act
-            var testItems = await db.TestItems.Where(nameof(TestItem.Name)).AnyOfIgnoreCase("bB", "aA", "cC").ToArray();
+            var testItems = await db.TestItems.Where(nameof(TestItem.Name)).AnyOfIgnoreCase("bB", "aA", "cC").ToArray(TestContext.Current.CancellationToken);
 
             // assert
             TestItem[] expectedItems = new TestItem[] { initialItems[0], initialItems[1], initialItems[2] };
@@ -145,10 +145,10 @@ namespace BlazorDexie.Test
                 new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2011 }
             };
 
-            await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // act
-            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).Below(2022).ToArray();
+            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).Below(2022).ToArray(TestContext.Current.CancellationToken);
 
             // assert
             TestItem[] expectedItems = new TestItem[] { initialItems[2], initialItems[3] };
@@ -174,10 +174,10 @@ namespace BlazorDexie.Test
                 new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2011 }
             };
 
-            await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // act
-            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).BelowOrEqual(2022).ToArray();
+            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).BelowOrEqual(2022).ToArray(TestContext.Current.CancellationToken);
 
             // assert
             TestItem[] expectedItems = new TestItem[] { initialItems[1], initialItems[2], initialItems[3] };
@@ -203,10 +203,10 @@ namespace BlazorDexie.Test
                 new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2011 }
             };
 
-            await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // act
-            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).Between(2020, 2023).ToArray();
+            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).Between(2020, 2023).ToArray(TestContext.Current.CancellationToken);
 
             // assert
             TestItem[] expectedItems = new TestItem[] { initialItems[1], initialItems[2] };
@@ -232,10 +232,10 @@ namespace BlazorDexie.Test
                 new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2015 }
             };
 
-            await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // act
-            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).IsEqual(2012).ToArray();
+            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).IsEqual(2012).ToArray(TestContext.Current.CancellationToken);
 
             // assert
             var expectedItems = new TestItem[] { initialItems[1], initialItems[2] };
@@ -262,10 +262,10 @@ namespace BlazorDexie.Test
                 new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2015 }
             };
 
-            await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // act
-            var testItems = await db.TestItems.Where(nameof(TestItem.Name)).EqualIgnoreCase("BB").ToArray();
+            var testItems = await db.TestItems.Where(nameof(TestItem.Name)).EqualIgnoreCase("BB").ToArray(TestContext.Current.CancellationToken);
 
             // assert
             TestItem[] expectedItems = new TestItem[] { initialItems[1], initialItems[2] };
@@ -295,10 +295,10 @@ namespace BlazorDexie.Test
                 new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2016 }
             };
 
-            await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // act
-            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).InAnyRange(new object[][] { new object[] { 2010, 2011 }, new object[] { 2014, 2016 } }).ToArray();
+            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).InAnyRange(new object[][] { new object[] { 2010, 2011 }, new object[] { 2014, 2016 } }).ToArray(TestContext.Current.CancellationToken);
 
             // assert
             TestItem[] expectedItems = new TestItem[] { initialItems[0], initialItems[4], initialItems[5] };
@@ -325,10 +325,10 @@ namespace BlazorDexie.Test
                 new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2015 }
             };
 
-            await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // act
-            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).NoneOf(2010, 2012).ToArray();
+            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).NoneOf(2010, 2012).ToArray(TestContext.Current.CancellationToken);
 
             // assert
             TestItem[] expectedItems = new TestItem[] { initialItems[2], initialItems[3] };
@@ -355,10 +355,10 @@ namespace BlazorDexie.Test
                 new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2015 }
             };
 
-            await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // act
-            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).NotEqual(2012).ToArray();
+            var testItems = await db.TestItems.Where(nameof(TestItem.Year)).NotEqual(2012).ToArray(TestContext.Current.CancellationToken);
 
             // assert
             TestItem[] expectedItems = new TestItem[] { initialItems[0], initialItems[2], initialItems[3] };
@@ -385,10 +385,10 @@ namespace BlazorDexie.Test
                 new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2015 }
             };
 
-            await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // act
-            var testItems = await db.TestItems.Where(nameof(TestItem.Name)).StartsWith("A").ToArray();
+            var testItems = await db.TestItems.Where(nameof(TestItem.Name)).StartsWith("A").ToArray(TestContext.Current.CancellationToken);
 
             // assert
             TestItem[] expectedItems = new TestItem[] { initialItems[0], initialItems[1], initialItems[2] };
@@ -414,10 +414,10 @@ namespace BlazorDexie.Test
                 new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2015 }
             };
 
-            await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // act
-            var testItems = await db.TestItems.Where(nameof(TestItem.Name)).StartsWithAnyOf("A", "B").ToArray();
+            var testItems = await db.TestItems.Where(nameof(TestItem.Name)).StartsWithAnyOf("A", "B").ToArray(TestContext.Current.CancellationToken);
 
             // assert
             TestItem[] expectedItems = new TestItem[] { initialItems[0], initialItems[1] };
@@ -443,10 +443,10 @@ namespace BlazorDexie.Test
                 new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2015 }
             };
 
-            await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // act
-            var testItems = await db.TestItems.Where(nameof(TestItem.Name)).StartsWithIgnoreCase("a").ToArray();
+            var testItems = await db.TestItems.Where(nameof(TestItem.Name)).StartsWithIgnoreCase("a").ToArray(TestContext.Current.CancellationToken);
 
             // assert
             TestItem[] expectedItems = new TestItem[] { initialItems[0], initialItems[1], initialItems[2] };
@@ -472,10 +472,10 @@ namespace BlazorDexie.Test
                 new TestItem() { Id = Guid.NewGuid(), Name = "DD", Year = 2015 }
             };
 
-            await db.TestItems.BulkPut(initialItems);
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
 
             // act
-            var testItems = await db.TestItems.Where(nameof(TestItem.Name)).StartsWithAnyOfIgnoreCase("a", "b").ToArray();
+            var testItems = await db.TestItems.Where(nameof(TestItem.Name)).StartsWithAnyOfIgnoreCase("a", "b").ToArray(TestContext.Current.CancellationToken);
 
             // assert
             TestItem[] expectedItems = new TestItem[] { initialItems[0], initialItems[1] };
