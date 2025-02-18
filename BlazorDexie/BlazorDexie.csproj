@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <PackageId>BlazorDexie</PackageId>
-    <Version>1.5.2</Version>
+    <Version>1.6.0</Version>
     <Authors>Simon Kuster</Authors>
     <Product>BlazorDexie</Product>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

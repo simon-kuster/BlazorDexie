@@ -31,7 +31,6 @@ export async function executeNonQuery(db, storeName, commands) {
     // logging
     const startTime = performance.now();
     const commandNames = []; 
-    let logMessage;    
 
     for (const [index, c] of commands.entries()) {
 
@@ -40,10 +39,6 @@ export async function executeNonQuery(db, storeName, commands) {
             commandNames.push(`.${c.cmd}(data)`);
         } else {
             commandNames.push(`.${c.cmd}(${c.parameters})`);
-        }
-
-        if (index === commands.length - 1) {
-            logMessage = `BlazorDexie: ${storeName}${commandNames.join('')}`;
         }
 
         switch (c.cmd) {
@@ -113,7 +108,7 @@ export async function executeNonQuery(db, storeName, commands) {
 
     // logging
     const endTime = performance.now();
-    console.log(`${logMessage} [${(endTime - startTime).toFixed(0)}ms]`);
+    console.log(`BlazorDexie: ${storeName}${commandNames.join('')} [${(endTime - startTime).toFixed(0)}ms]`);
 
     return query;
 }
