@@ -206,6 +206,11 @@ Note: Depending on whether the camelCaseStoreNames parameter is set to true or f
 tx.table(\"Friends\") ... or tx.table(\"friends\") ...
 must be written.
 
+## Version 1.6.0
+- Add support for .NET 9.0
+- Remove support for .NET 6.0 and .NET 7.0
+- Add console log
+
 ## Version 1.5.0
 - Add support for transactions
   
