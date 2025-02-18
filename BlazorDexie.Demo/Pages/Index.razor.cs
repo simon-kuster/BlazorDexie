@@ -155,7 +155,7 @@ namespace BlazorDexie.Demo.Pages
                     await db.Persons.Put(person);
                 });
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // handle error
             }
@@ -180,7 +180,7 @@ namespace BlazorDexie.Demo.Pages
                     await db.BlobData.Get(key);
                 });
             }
-            catch(Exception e)
+            catch (Exception)
             {
                 // handle error
             }
