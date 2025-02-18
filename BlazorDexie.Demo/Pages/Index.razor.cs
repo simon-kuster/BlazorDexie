@@ -143,7 +143,7 @@ namespace BlazorDexie.Demo.Pages
         {
             // arrange
             await using var db = new MyDb(ModuleFactory);
-            var key = await db.Persons.Put(new Person() { FirstName = "Hans", Birthday = new DateTime(1970, 1, 1) });
+            var key = await db.Persons.Put(new Person() { Id = Guid.NewGuid(), FirstName = "Hans", Birthday = new DateTime(1970, 1, 1) });
 
             // act
             try
@@ -191,6 +191,12 @@ namespace BlazorDexie.Demo.Pages
         private async Task ChangeDb()
         {
             await using var db = new MyDb(ModuleFactory);
+        }
+
+        private async Task Test()
+        {
+            await using var db = new MyDb(ModuleFactory);
+            await db.Persons.Where(nameof(Person.Id)).IsEqual(1).ToArray();
         }
     }
 }

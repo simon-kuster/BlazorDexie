@@ -18,7 +18,7 @@ namespace BlazorDexie.Test.Database
         public Store<byte[], Guid> BlobData { get; set; } = new(string.Empty);
 
         public MyDb(IModuleFactory jsModuleFactory, string databaseId)
-            : base($"MyDatabase_{databaseId}", 1, new DbVersion[0], jsModuleFactory, camelCaseStoreNames: true)
+            : base($"MyDatabase_{databaseId}", 1, Array.Empty<DbVersion>(), jsModuleFactory, camelCaseStoreNames: true)
         {
         }
     }

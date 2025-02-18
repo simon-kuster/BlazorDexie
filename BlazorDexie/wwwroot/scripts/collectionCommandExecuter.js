@@ -28,7 +28,24 @@ export async function initDbAndExecuteNonQuery(databaseName, versions, storeName
 export async function executeNonQuery(db, storeName, commands) {
     let query = db[storeName];
 
-    for (const c of commands) {
+    // logging
+    const startTime = performance.now();
+    const commandNames = []; 
+    let logMessage;    
+
+    for (const [index, c] of commands.entries()) {
+
+        // logging
+        if (c.cmd === 'addBlob' || c.cmd === 'bulkAddBlob' || c.cmd === 'putBlob') {
+            commandNames.push(`.${c.cmd}(data)`);
+        } else {
+            commandNames.push(`.${c.cmd}(${c.parameters})`);
+        }
+
+        if (index === commands.length - 1) {
+            logMessage = `BlazorDexie: ${storeName}${commandNames.join('')}`;
+        }
+
         switch (c.cmd) {
             case "filter":
                 const filterFunction = new Function('i', 'p', c.parameters[0]);
@@ -88,11 +105,15 @@ export async function executeNonQuery(db, storeName, commands) {
                 query = createObjectUrl(blob2);
                 break;
 
-            default:
+            default:         
                 query = await query[c.cmd](...c.parameters);
                 break;
         }
     }
+
+    // logging
+    const endTime = performance.now();
+    console.log(`${logMessage} [${(endTime - startTime).toFixed(0)}ms]`);
 
     return query;
 }
