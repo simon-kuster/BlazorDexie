@@ -1,5 +1,6 @@
 ﻿using BlazorDexie.ObjUrl;
 using Jering.Javascript.NodeJS;
+using System;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -61,12 +62,12 @@ namespace BlazorDexie.Test
             await Assert.ThrowsAsync<InvocationException>(async () => await _objectUrlService.FetchData(objectUrl));
         }
 
-        public Task InitializeAsync()
+        public ValueTask InitializeAsync()
         {
-            return Task.CompletedTask;
+            return ValueTask.CompletedTask;
         }
 
-        public async Task DisposeAsync()
+        public async ValueTask DisposeAsync()
         {
             await _objectUrlService.DisposeAsync().ConfigureAwait(false);
         }

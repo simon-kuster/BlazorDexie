@@ -20,9 +20,9 @@ namespace BlazorDexie.Test
             _objectUrlService = objectUrlService;
         }
 
-        public Task InitializeAsync()
+        public ValueTask InitializeAsync()
         {
-            return Task.CompletedTask;
+            return ValueTask.CompletedTask;
         }
 
         [Fact]
@@ -193,7 +193,7 @@ namespace BlazorDexie.Test
             return new MyDb(_moduleFactory, databaseId);
         }
 
-        public async Task DisposeAsync()
+        public async ValueTask DisposeAsync()
         {
             await _objectUrlService.DisposeAsync().ConfigureAwait(false);
         }

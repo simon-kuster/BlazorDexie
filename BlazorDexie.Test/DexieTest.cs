@@ -41,7 +41,7 @@ namespace BlazorDexie.Test
             string databaseId = Guid.NewGuid().ToString();
 
             // not exits
-            var exists = await _dexie.Exits(databaseId);
+            var exists = await _dexie.Exits(databaseId, TestContext.Current.CancellationToken);
             Assert.False(exists);
 
             // create db
