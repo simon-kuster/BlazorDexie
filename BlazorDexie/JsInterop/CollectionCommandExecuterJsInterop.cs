@@ -18,6 +18,7 @@ namespace BlazorDexie.JsInterop
 
         public async Task SetUserModuleBasePath(CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             var module = GetModule();
             await module.InvokeVoidAsync("setUserModuleBasePath", cancellationToken, module.GetUserModuleBasePath());
         }
@@ -25,33 +26,38 @@ namespace BlazorDexie.JsInterop
         public async Task<T> InitDbAndExecute<T>(string databaseName, List<DbVersionDefinition> versions, string storeName, List<Command> commands,
             CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             return await GetModule().InvokeAsync<T>("initDbAndExecute", cancellationToken, databaseName, versions, storeName, commands);
         }
 
         public async Task<T> Execute<T>(IJSObjectReference dbJsObjectRef, string storeName, List<Command> commands, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             return await GetModule().InvokeAsync<T>("execute", cancellationToken, dbJsObjectRef, storeName, commands);
         }
 
         public async Task InitDbAndExecuteNonQuery(string databaseName, List<DbVersionDefinition> versions, string storeName, List<Command> commands,
             CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             await GetModule().InvokeVoidAsync("initDbAndExecuteNonQuery", cancellationToken, databaseName, versions, storeName, commands);
         }
 
         public async Task ExecuteNonQuery(IJSObjectReference dbJsObjectRef, string storeName, List<Command> commands, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             await GetModule().InvokeVoidAsync("executeNonQuery", cancellationToken, dbJsObjectRef, storeName, commands);
         }
 
         public async Task<IJSObjectReference> InitDb(string databaseName, List<DbVersionDefinition> versions, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             return await GetModule().InvokeAsync<IJSObjectReference>("initDb", cancellationToken, databaseName, versions);
         }
 
-        public async Task Close(IJSObjectReference dbJsObjectRef, CancellationToken cancellationToken)
+        public async Task Close(IJSObjectReference dbJsObjectRef)
         {
-            await GetModule().InvokeVoidAsync("close", cancellationToken, dbJsObjectRef);
+            await GetModule().InvokeVoidAsync("close", CancellationToken.None, dbJsObjectRef);
         }
 
         public async ValueTask DisposeAsync()

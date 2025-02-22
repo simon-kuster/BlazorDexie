@@ -13,11 +13,13 @@ namespace BlazorDexie.JsInterop
 
         public async Task<T> Execute<T>(Command command, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             return await GetModule().InvokeAsync<T>("execute", cancellationToken, command);
         }
 
         public async Task ExecuteNonQuery(Command command, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             await GetModule().InvokeVoidAsync("executeNonQuery", cancellationToken, command);
         }
 

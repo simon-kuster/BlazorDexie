@@ -75,9 +75,11 @@ namespace BlazorDexie.Database
 
         public async Task Close(CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             if (DbJsReference != null)
             {
-                await _collectionCommandExecuterJsInterop.Close(DbJsReference, cancellationToken);
+                await _collectionCommandExecuterJsInterop.Close(DbJsReference);
             }
         }
 

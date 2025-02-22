@@ -17,16 +17,20 @@ namespace BlazorDexie.ObjUrl
 
         public async Task<string> Create(byte[] data, string mimeType, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             return await _module.InvokeAsync<string>("createObjectUrlFromUint8Array", cancellationToken, data, mimeType);
         }
 
         public async Task Revoke(string objectUrl, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             await _module.InvokeAsync<string>("revokeObjectUrl", cancellationToken, objectUrl);
         }
 
         public async Task<byte[]> FetchData(string objectUrl, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             if (_runInBrowser)
             {
                 return await _module.InvokeAsync<byte[]>("fetchObjectUrlAsUint8Array", cancellationToken, objectUrl);
