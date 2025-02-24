@@ -3,6 +3,7 @@ using BlazorDexie.JsInterop;
 using BlazorDexie.JsModule;
 using BlazorDexie.Utils;
 using Microsoft.JSInterop;
+using System.Reflection;
 
 namespace BlazorDexie.Database
 {
@@ -14,27 +15,44 @@ namespace BlazorDexie.Database
 
         public string DatabaseName { get; }
         public int VersionNumber { get; }
-        public List<DbVersionDefinition> Versions { get; } = new List<DbVersionDefinition>();
+        public List<DbVersionDefinition> Versions { get; internal protected set; } = new List<DbVersionDefinition>();
         public IJSObjectReference? DbJsReference { get; private set; }
 
+        [Obsolete("Use Db<TConcrete> instead for better performance")]
         public Db(
-            string databaseName, 
-            int currentVersionNumber, 
-            IEnumerable<DbVersion> previousVersions, 
-            IModuleFactory jsModuleFactory,
-            string? upgrade = null, 
+            string databaseName,
+            int currentVersionNumber,
+            IEnumerable<DbVersion> previousVersions,
+            IModuleFactory moduleFactory,
+            string? upgrade = null,
             string? upgradeModule = null,
+            bool camelCaseStoreNames = false) : this(databaseName, currentVersionNumber, moduleFactory, camelCaseStoreNames)
+        {
+            var properties = GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
+            Versions = InitStoresAndGetVersionDefinitions(previousVersions, properties, upgrade, upgradeModule);
+        }
+
+        internal protected Db(
+            string databaseName,
+            int currentVersionNumber,
+            IModuleFactory moduleFactory,
             bool camelCaseStoreNames = false)
         {
             DatabaseName = databaseName;
             VersionNumber = currentVersionNumber;
             _camelCaseStoreNames = camelCaseStoreNames;
-            _collectionCommandExecuterJsInterop = new CollectionCommandExecuterJsInterop(jsModuleFactory);
-            _staticCommandExecuterJsInterop = new StaticCommandExecuterJsInterop(jsModuleFactory);
+            _collectionCommandExecuterJsInterop = new CollectionCommandExecuterJsInterop(moduleFactory);
+            _staticCommandExecuterJsInterop = new StaticCommandExecuterJsInterop(moduleFactory);
+        }
 
+        protected List<DbVersionDefinition> InitStoresAndGetVersionDefinitions(
+            IEnumerable<DbVersion> previousVersions,
+            PropertyInfo[] properties,
+            string? upgrade = null,
+            string? upgradeModule = null)
+        {
             var latestVersion = new DbVersionDefinition(VersionNumber, upgrade, upgradeModule);
 
-            var properties = GetType().GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
             foreach (var property in properties)
             {
                 if (typeof(IStore).IsAssignableFrom(property.PropertyType))
@@ -43,7 +61,7 @@ namespace BlazorDexie.Database
 
                     if (store != null)
                     {
-                        var storeName = camelCaseStoreNames ? Camelizer.ToCamelCase(property.Name) : property.Name;
+                        var storeName = _camelCaseStoreNames ? Camelizer.ToCamelCase(property.Name) : property.Name;
                         store.Init(this, storeName, _collectionCommandExecuterJsInterop);
                         latestVersion.Stores.Add(new StoreDefinition(storeName, store.SchemaDefinitions));
                     }
@@ -51,12 +69,12 @@ namespace BlazorDexie.Database
             }
 
             var versions = new List<DbVersionDefinition>() { latestVersion };
-            
+
             versions.AddRange(previousVersions
-                    .Select(v => v.GetDefinition(camelCaseStoreNames))
+                    .Select(v => v.GetDefinition(_camelCaseStoreNames))
                     .ToList());
 
-            Versions = versions
+            return versions
                 .OrderByDescending(v => v.VersionNumber)
                 .ToList();
         }
@@ -90,7 +108,7 @@ namespace BlazorDexie.Database
 
         public async Task Transaction(string mode, string[] storeNames, int timeout, Func<Task> transactionBody, CancellationToken cancellationToken = default)
         {
-            var transformedStoreNames = _camelCaseStoreNames ? storeNames.Select(Camelizer.ToCamelCase).ToArray() : storeNames;           
+            var transformedStoreNames = _camelCaseStoreNames ? storeNames.Select(Camelizer.ToCamelCase).ToArray() : storeNames;
             var transactionBodyWrapper = new TransactionBodyWrapper(transactionBody);
             var command = new Command("transaction", DbJsReference, mode, transformedStoreNames, timeout, DotNetObjectReference.Create(transactionBodyWrapper));
             await _staticCommandExecuterJsInterop.ExecuteNonQuery(command, cancellationToken);
@@ -113,6 +131,24 @@ namespace BlazorDexie.Database
 
             await _collectionCommandExecuterJsInterop.DisposeAsync().ConfigureAwait(false);
             await _staticCommandExecuterJsInterop.DisposeAsync().ConfigureAwait(false);
+        }
+    }
+
+    /// <typeparam name="TConcrete">Concrete class that inherits form Db<TConcrete></typeparam>
+    public abstract class Db<TConcrete> : Db
+    {
+        private static PropertyInfo[] Properties = typeof(TConcrete).GetProperties(BindingFlags.Instance | BindingFlags.Public);
+
+        protected Db(
+            string databaseName,
+            int currentVersionNumber,
+            IEnumerable<DbVersion> previousVersions,
+            IModuleFactory moduleFactory,
+            string? upgrade = null,
+            string? upgradeModule = null,
+            bool camelCaseStoreNames = false) : base(databaseName, currentVersionNumber, moduleFactory, camelCaseStoreNames)
+        {
+            Versions = InitStoresAndGetVersionDefinitions(previousVersions, Properties, upgrade, upgradeModule);
         }
     }
 }

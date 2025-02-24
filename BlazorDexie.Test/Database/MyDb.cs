@@ -5,7 +5,7 @@ using System;
 
 namespace BlazorDexie.Test.Database
 {
-    public class MyDb : Db
+    public class MyDb : Db<MyDb>
     {
         public Store<TestItem, Guid> TestItems { get; set; } = new(nameof(TestItem.Id), nameof(TestItem.Year), nameof(TestItem.Name));
 

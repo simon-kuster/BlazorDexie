@@ -4,7 +4,7 @@ using BlazorDexie.JsModule;
 
 namespace BlazorDexie.Demo.Database
 {
-    public class MyDb : Db
+    public class MyDb : Db<MyDb>
     {
         public Store<Person, Guid> Persons { get; set; } = new(nameof(Person.Id));
 

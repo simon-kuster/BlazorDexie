@@ -3,7 +3,7 @@ using BlazorDexie.JsModule;
 
 namespace BlazorDexie.Test.V3
 {
-    public class Db3 : Db
+    public class Db3 : Db<Db3>
     {
         public Store<Friend3, int> Friends { get; set; } = new("++" + nameof(Friend3.Id), nameof(Friend3.Name), nameof(Friend3.BirthDate));
 
