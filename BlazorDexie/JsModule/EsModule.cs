@@ -25,6 +25,7 @@ namespace BlazorDexie.JsModule
         {
             var combinedCancellationToken = CancellationTokenSource.CreateLinkedTokenSource(_internalCancellationToken, cancellationToken).Token;
             var jsObjectReference = await GetJsObjectReference(combinedCancellationToken);
+            combinedCancellationToken.ThrowIfCancellationRequested();
             return await jsObjectReference.InvokeAsync<T>(identifier, combinedCancellationToken, args);
         }
 
@@ -32,6 +33,7 @@ namespace BlazorDexie.JsModule
         {
             var combinedCancellationToken = CancellationTokenSource.CreateLinkedTokenSource(_internalCancellationToken, cancellationToken).Token;
             var jsObjectReference = await GetJsObjectReference(combinedCancellationToken);
+            combinedCancellationToken.ThrowIfCancellationRequested();
             await jsObjectReference.InvokeVoidAsync(identifier, combinedCancellationToken, args);
         }
 
@@ -50,10 +52,7 @@ namespace BlazorDexie.JsModule
 
         private async Task<IJSObjectReference> GetJsObjectReference(CancellationToken cancellationToken)
         {
-            if (cancellationToken.IsCancellationRequested)
-            {
-                throw new OperationCanceledException();
-            }
+            cancellationToken.ThrowIfCancellationRequested();
 
             if (_jsObjectReferenceTask == null)
             {
