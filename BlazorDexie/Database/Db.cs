@@ -29,7 +29,7 @@ namespace BlazorDexie.Database
             bool camelCaseStoreNames = false) : this(databaseName, currentVersionNumber, moduleFactory, camelCaseStoreNames)
         {
             var properties = GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
-            Versions = InitStoresAndGetVersionDefinitions(previousVersions, properties, upgrade, upgradeModule);
+            Versions = InitStoresAndGetVersionDefinitions(previousVersions, properties, null, upgrade, upgradeModule);
         }
 
         internal protected Db(
@@ -48,6 +48,7 @@ namespace BlazorDexie.Database
         protected List<DbVersionDefinition> InitStoresAndGetVersionDefinitions(
             IEnumerable<DbVersion> previousVersions,
             PropertyInfo[] properties,
+            Dictionary<Type, Func<object, object?>>? propertyGetterDictionary,
             string? upgrade = null,
             string? upgradeModule = null)
         {
@@ -57,7 +58,9 @@ namespace BlazorDexie.Database
             {
                 if (typeof(IStore).IsAssignableFrom(property.PropertyType))
                 {
-                    var store = (IStore?)property.GetValue(this);
+                    var store = propertyGetterDictionary != null
+                        ? (IStore?)propertyGetterDictionary[property.PropertyType](this)
+                        : (IStore?)property.GetValue(this);
 
                     if (store != null)
                     {
@@ -137,7 +140,8 @@ namespace BlazorDexie.Database
     /// <typeparam name="TConcrete">Concrete class that inherits form Db<TConcrete></typeparam>
     public abstract class Db<TConcrete> : Db
     {
-        private static PropertyInfo[] Properties = typeof(TConcrete).GetProperties(BindingFlags.Instance | BindingFlags.Public);
+        private static PropertyInfo[] Properties;
+        private static Dictionary<Type, Func<object, object?>> PropertyGetterDictionary;
 
         protected Db(
             string databaseName,
@@ -148,7 +152,13 @@ namespace BlazorDexie.Database
             string? upgradeModule = null,
             bool camelCaseStoreNames = false) : base(databaseName, currentVersionNumber, moduleFactory, camelCaseStoreNames)
         {
-            Versions = InitStoresAndGetVersionDefinitions(previousVersions, Properties, upgrade, upgradeModule);
+            Versions = InitStoresAndGetVersionDefinitions(previousVersions, Properties, PropertyGetterDictionary, upgrade, upgradeModule);
+        }
+
+        static Db()
+        {
+            Properties = typeof(TConcrete).GetProperties(BindingFlags.Instance | BindingFlags.Public);
+            PropertyGetterDictionary = Properties.ToDictionary(p => p.PropertyType, p => PropertyAccessorDelegateBuilder.BuildPropertyGetter(p));
         }
     }
 }

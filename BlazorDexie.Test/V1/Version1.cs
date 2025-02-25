@@ -2,7 +2,7 @@
 
 namespace BlazorDexie.Test.V1
 {
-    public class Version1 : DbVersion
+    public class Version1 : DbVersion<Version1>
     {
         public Store<Friend1, int> Friends { get; set; } = new("++" + nameof(Friend1.Id), nameof(Friend1.Name), nameof(Friend1.Age));
 
