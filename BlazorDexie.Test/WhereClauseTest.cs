@@ -245,7 +245,31 @@ namespace BlazorDexie.Test
             {
                 Assert.Equal(exptectedItem.Id, testItems.First(i => i.Name == exptectedItem.Name).Id);
             }
+        }
 
+        [Fact]
+        public async Task IsEqualCompound()
+        {
+            // arrange
+            await using var db = CreateDb();
+
+            var initialItems = new TestItemWithCompoundIndex[]{
+                new TestItemWithCompoundIndex() { Firstname = "B", Secondname = "1" },
+                new TestItemWithCompoundIndex() { Firstname = "A", Secondname = "2" },
+                new TestItemWithCompoundIndex() { Firstname = "A", Secondname = "3" }
+            };
+
+            await db.TestItemsWithCompoundIndex.BulkPut(initialItems, TestContext.Current.CancellationToken);
+
+            // act
+            var testItems = await db.TestItemsWithCompoundIndex.Where(MyDb.CompoundIndex).IsEqual(new string[] { "A", "2" }).ToArray(TestContext.Current.CancellationToken);
+
+            // assert
+            var expectedItem =  initialItems[1];
+
+            Assert.Single(testItems);
+            Assert.Equal(expectedItem?.Firstname, testItems.First().Firstname);
+            Assert.Equal(expectedItem?.Secondname, testItems.First().Secondname);
         }
 
         [Fact]
