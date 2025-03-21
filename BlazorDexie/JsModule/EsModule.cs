@@ -25,7 +25,12 @@ namespace BlazorDexie.JsModule
         {
             var combinedCancellationToken = CancellationTokenSource.CreateLinkedTokenSource(_internalCancellationToken, cancellationToken).Token;
             var jsObjectReference = await GetJsObjectReference(combinedCancellationToken);
-            combinedCancellationToken.ThrowIfCancellationRequested();
+
+            if (combinedCancellationToken.IsCancellationRequested)
+            {
+                throw new OperationCanceledException();
+            }
+
             return await jsObjectReference.InvokeAsync<T>(identifier, combinedCancellationToken, args);
         }
 
