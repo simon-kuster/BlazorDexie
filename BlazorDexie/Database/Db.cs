@@ -7,8 +7,12 @@ using System.Reflection;
 
 namespace BlazorDexie.Database
 {
-    public abstract class Db : IAsyncDisposable
+    /// <typeparam name="TConcrete">Concrete class that inherits form Db<TConcrete></typeparam>
+    public abstract class Db<TConcrete> : IAsyncDisposable, IDb
     {
+        private static PropertyInfo[] Properties;
+        private static Dictionary<Type, Func<object, object?>> PropertyGetterDictionary;
+
         private readonly CollectionCommandExecuterJsInterop _collectionCommandExecuterJsInterop;
         private readonly StaticCommandExecuterJsInterop _staticCommandExecuterJsInterop;
         private readonly bool _camelCaseStoreNames;
@@ -18,24 +22,13 @@ namespace BlazorDexie.Database
         public List<DbVersionDefinition> Versions { get; internal protected set; } = new List<DbVersionDefinition>();
         public IJSObjectReference? DbJsReference { get; private set; }
 
-        [Obsolete("Use Db<TConcrete> instead for better performance")]
-        public Db(
+        protected Db(
             string databaseName,
             int currentVersionNumber,
             IEnumerable<DbVersion> previousVersions,
             IModuleFactory moduleFactory,
             string? upgrade = null,
             string? upgradeModule = null,
-            bool camelCaseStoreNames = false) : this(databaseName, currentVersionNumber, moduleFactory, camelCaseStoreNames)
-        {
-            var properties = GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
-            Versions = InitStoresAndGetVersionDefinitions(previousVersions, properties, null, upgrade, upgradeModule);
-        }
-
-        internal protected Db(
-            string databaseName,
-            int currentVersionNumber,
-            IModuleFactory moduleFactory,
             bool camelCaseStoreNames = false)
         {
             DatabaseName = databaseName;
@@ -43,6 +36,13 @@ namespace BlazorDexie.Database
             _camelCaseStoreNames = camelCaseStoreNames;
             _collectionCommandExecuterJsInterop = new CollectionCommandExecuterJsInterop(moduleFactory);
             _staticCommandExecuterJsInterop = new StaticCommandExecuterJsInterop(moduleFactory);
+            Versions = InitStoresAndGetVersionDefinitions(previousVersions, Properties, PropertyGetterDictionary, upgrade, upgradeModule);
+        }
+
+        static Db()
+        {
+            Properties = typeof(TConcrete).GetProperties(BindingFlags.Instance | BindingFlags.Public);
+            PropertyGetterDictionary = Properties.ToDictionary(p => p.PropertyType, p => PropertyAccessorDelegateBuilder.BuildPropertyGetter(p));
         }
 
         protected List<DbVersionDefinition> InitStoresAndGetVersionDefinitions(
@@ -134,31 +134,6 @@ namespace BlazorDexie.Database
 
             await _collectionCommandExecuterJsInterop.DisposeAsync().ConfigureAwait(false);
             await _staticCommandExecuterJsInterop.DisposeAsync().ConfigureAwait(false);
-        }
-    }
-
-    /// <typeparam name="TConcrete">Concrete class that inherits form Db<TConcrete></typeparam>
-    public abstract class Db<TConcrete> : Db
-    {
-        private static PropertyInfo[] Properties;
-        private static Dictionary<Type, Func<object, object?>> PropertyGetterDictionary;
-
-        protected Db(
-            string databaseName,
-            int currentVersionNumber,
-            IEnumerable<DbVersion> previousVersions,
-            IModuleFactory moduleFactory,
-            string? upgrade = null,
-            string? upgradeModule = null,
-            bool camelCaseStoreNames = false) : base(databaseName, currentVersionNumber, moduleFactory, camelCaseStoreNames)
-        {
-            Versions = InitStoresAndGetVersionDefinitions(previousVersions, Properties, PropertyGetterDictionary, upgrade, upgradeModule);
-        }
-
-        static Db()
-        {
-            Properties = typeof(TConcrete).GetProperties(BindingFlags.Instance | BindingFlags.Public);
-            PropertyGetterDictionary = Properties.ToDictionary(p => p.PropertyType, p => PropertyAccessorDelegateBuilder.BuildPropertyGetter(p));
         }
     }
 }

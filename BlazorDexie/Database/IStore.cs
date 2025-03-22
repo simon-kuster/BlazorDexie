@@ -6,6 +6,6 @@ namespace BlazorDexie.Database
     {
         public string[] SchemaDefinitions { get; }
 
-        public void Init(Db db, string storeName, CollectionCommandExecuterJsInterop commandExecuterJsInterop);
+        public void Init(IDb db, string storeName, CollectionCommandExecuterJsInterop commandExecuterJsInterop);
     }
 }

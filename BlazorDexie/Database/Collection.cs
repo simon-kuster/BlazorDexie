@@ -4,7 +4,7 @@ namespace BlazorDexie.Database
 {
     public class Collection<T, TKey>
     {
-        protected Db Db = null!;
+        protected IDb Db = null!;
         protected CollectionCommandExecuterJsInterop CommandExecuterJsInterop = null!;
         protected string StoreName = null!;
         protected virtual List<Command> CurrentCommands { get; } = new List<Command>();
@@ -13,12 +13,12 @@ namespace BlazorDexie.Database
         {
         }
 
-        public Collection(Db db, string storeName, CollectionCommandExecuterJsInterop commandExecuterJsInterop)
+        public Collection(IDb db, string storeName, CollectionCommandExecuterJsInterop commandExecuterJsInterop)
         {
             Init(db, storeName, commandExecuterJsInterop);
         }
 
-        public void Init(Db db, string storeName, CollectionCommandExecuterJsInterop commandExecuterJsInterop)
+        public void Init(IDb db, string storeName, CollectionCommandExecuterJsInterop commandExecuterJsInterop)
         {
             Db = db;
             StoreName = storeName;
