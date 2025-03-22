@@ -1,9 +1,8 @@
-﻿using BlazorDexie.JsModule;
+﻿using BlazorDexie.Options;
 using BlazorDexie.Test.Database;
 using BlazorDexie.Test.TestItems;
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -12,11 +11,11 @@ namespace BlazorDexie.Test
 {
     public class CollectionTest
     {
-        private IModuleFactory _moduleFactory;
+        private BlazorDexieOptions _blazorDexieOptions;
 
-        public CollectionTest(IModuleFactory moduleFactory)
+        public CollectionTest(BlazorDexieOptions blazorDexieOptions)
         {
-            _moduleFactory = moduleFactory;
+            _blazorDexieOptions = blazorDexieOptions;
         }
 
         [Fact]
@@ -283,7 +282,7 @@ namespace BlazorDexie.Test
         private MyDb CreateDb()
         {
             var databaseId = Guid.NewGuid().ToString();
-            return new MyDb(_moduleFactory, databaseId);
+            return new MyDb(_blazorDexieOptions, databaseId);
         }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using BlazorDexie.Database;
 using BlazorDexie.JsModule;
+using BlazorDexie.Options;
 using BlazorDexie.Test.Database;
 using BlazorDexie.Test.TestItems;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using Xunit;
@@ -10,12 +12,12 @@ namespace BlazorDexie.Test
 {
     public class DexieTest
     {
-        private IModuleFactory _moduleFactory;
+        private BlazorDexieOptions _blazorDexieOptions;
         private Dexie _dexie;
 
-        public DexieTest(IModuleFactory moduleFactory, Dexie dexie)
+        public DexieTest(BlazorDexieOptions blazorDexieOptions, Dexie dexie)
         {
-            _moduleFactory = moduleFactory;
+            _blazorDexieOptions = blazorDexieOptions;
             _dexie = dexie;
         }
 
@@ -55,7 +57,7 @@ namespace BlazorDexie.Test
 
         private MyDb CreateDb(string? databaseId = null)
         {
-            return new MyDb(_moduleFactory, databaseId ?? Guid.NewGuid().ToString());
+            return new MyDb(_blazorDexieOptions, databaseId ?? Guid.NewGuid().ToString());
         }
     }
 }

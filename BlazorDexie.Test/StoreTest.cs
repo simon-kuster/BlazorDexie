@@ -5,17 +5,17 @@ using System.Threading.Tasks;
 using Xunit;
 using BlazorDexie.Test.Database;
 using BlazorDexie.Test.TestItems;
-using BlazorDexie.JsModule;
+using BlazorDexie.Options;
 
 namespace BlazorDexie.Test
 {
     public class StoreTest
     {
-        private IModuleFactory _moduleFactory;
+        private BlazorDexieOptions _blazorDexieOptions;
 
-        public StoreTest(IModuleFactory moduleFactory)
+        public StoreTest(BlazorDexieOptions blazorDexieOptions)
         {
-            _moduleFactory = moduleFactory;
+            _blazorDexieOptions = blazorDexieOptions;
         }
 
         [Fact]
@@ -518,7 +518,7 @@ namespace BlazorDexie.Test
         private MyDb CreateDb()
         {
             var databaseId = Guid.NewGuid().ToString();
-            return new MyDb(_moduleFactory, databaseId);
+            return new MyDb(_blazorDexieOptions, databaseId);
         }
     }
 }
