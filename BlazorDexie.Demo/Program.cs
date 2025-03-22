@@ -12,6 +12,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Logging.ClearProviders(); // Remove default providers
 builder.Logging.AddProvider(new SingleLineConsoleLoggerProvider());
+builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddBlazorDexie(camelCaseStoreNames: true);
