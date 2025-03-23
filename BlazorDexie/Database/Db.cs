@@ -27,7 +27,7 @@ namespace BlazorDexie.Database
         protected Db(
             string databaseName,
             int currentVersionNumber,
-            IEnumerable<DbVersion> previousVersions,
+            IEnumerable<IDbVersion> previousVersions,
             BlazorDexieOptions blazorDexieOptions,
             string? upgrade = null,
             string? upgradeModule = null)
@@ -49,7 +49,7 @@ namespace BlazorDexie.Database
         }
 
         protected List<DbVersionDefinition> InitStoresAndGetVersionDefinitions(
-            IEnumerable<DbVersion> previousVersions,
+            IEnumerable<IDbVersion> previousVersions,
             PropertyInfo[] properties,
             Dictionary<Type, Func<object, object?>>? propertyGetterDictionary,
             string? upgrade = null,

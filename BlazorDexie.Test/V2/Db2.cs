@@ -7,7 +7,7 @@ namespace BlazorDexie.Test.V2
         public Store<Friend2, int> Friends { get; set; } = new("++" + nameof(Friend2.Id), nameof(Friend2.Name), nameof(Friend2.BirthDate));
 
         public Db2(BlazorDexieOptions blazorDexieOptions, string databaseId)
-            : base($"VersioningDb{databaseId}", 2, new DbVersion[] { new V1.Version1() }, blazorDexieOptions, GetUpgrade())
+            : base($"VersioningDb{databaseId}", 2, new IDbVersion[] { new V1.Version1() }, blazorDexieOptions, GetUpgrade())
         {
         }
 
