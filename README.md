@@ -12,7 +12,7 @@ nuget package: https://www.nuget.org/packages/BlazorDexie
 
 ### Register Service
 
-``` builder.Services.AddDexieWrapper(); ```
+``` builder.Services.AddBlazorDexie(); ```
 
 ### Example
 The following example is similar to the "Hello World" from Dexie.js, which you can find at the following link: https://dexie.org/docs/Tutorial/Hello-World 
