@@ -4,15 +4,25 @@ BlazorDexie provides an easy way to access the browsers IndexedDb in Blazor appl
 
 nuget package: https://www.nuget.org/packages/BlazorDexie
 
-## Usage
+## Get Started
 
-### Install nuget
+Install Nuget package by:
 
-``` dotnet add package BlazorDexie ```
+```
+dotnet add package BlazorDexie
+```
 
-### Register Service
+Reference dexie.js in index.html:
 
-``` builder.Services.AddBlazorDexie(); ```
+```
+<script src="https://unpkg.com/dexie/dist/dexie.js"></script>
+```
+
+Register services in Program.cs:
+
+```
+builder.Services.AddBlazorDexie();
+```
 
 ### Example
 The following example is similar to the "Hello World" from Dexie.js, which you can find at the following link: https://dexie.org/docs/Tutorial/Hello-World 
