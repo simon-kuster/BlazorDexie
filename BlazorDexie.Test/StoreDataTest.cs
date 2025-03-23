@@ -3,20 +3,20 @@ using Xunit;
 using System;
 using BlazorDexie.Test.Database;
 using BlazorDexie.ObjUrl;
-using BlazorDexie.JsModule;
 using System.Linq;
+using BlazorDexie.Options;
 
 namespace BlazorDexie.Test
 {
     public class StoreDataTest : IAsyncLifetime
     {
-        private IModuleFactory _moduleFactory;
+        BlazorDexieOptions _blazorDexieOptions;
         private ObjectUrlService _objectUrlService;
 
 
-        public StoreDataTest(IModuleFactory moduleFactory, ObjectUrlService objectUrlService)
+        public StoreDataTest(BlazorDexieOptions blazorDexieOptions, ObjectUrlService objectUrlService)
         {
-            _moduleFactory = moduleFactory;
+            _blazorDexieOptions = blazorDexieOptions;
             _objectUrlService = objectUrlService;
         }
 
@@ -190,7 +190,7 @@ namespace BlazorDexie.Test
         private MyDb CreateDb()
         {
             var databaseId = Guid.NewGuid().ToString();
-            return new MyDb(_moduleFactory, databaseId);
+            return new MyDb(_blazorDexieOptions, databaseId);
         }
 
         public async ValueTask DisposeAsync()

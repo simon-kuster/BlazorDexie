@@ -1,5 +1,5 @@
 ﻿using BlazorDexie.Demo.Database;
-using BlazorDexie.JsModule;
+using BlazorDexie.Options;
 
 namespace BlazorDexie.Demo.Persons
 {
@@ -7,9 +7,9 @@ namespace BlazorDexie.Demo.Persons
     {
         private readonly MyDb _db;
 
-        public PersonRepository(IModuleFactory jsModuleFactory)
+        public PersonRepository(BlazorDexieOptions blazorDexieOptions)
         {
-            _db = new MyDb(jsModuleFactory);
+            _db = new MyDb(blazorDexieOptions);
         }
 
         public async Task<List<Person>> GetAll()

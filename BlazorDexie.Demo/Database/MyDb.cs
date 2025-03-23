@@ -1,6 +1,6 @@
 ﻿using BlazorDexie.Database;
 using BlazorDexie.Demo.Persons;
-using BlazorDexie.JsModule;
+using BlazorDexie.Options;
 
 namespace BlazorDexie.Demo.Database
 {
@@ -10,8 +10,8 @@ namespace BlazorDexie.Demo.Database
 
         public Store<byte[], Guid> BlobData { get; set; } = new(string.Empty);
 
-        public MyDb(IModuleFactory jsModuleFactory)
-            : base("MyDatabase", 2, new DbVersion[] { new Version1() }, jsModuleFactory, camelCaseStoreNames : true)
+        public MyDb(BlazorDexieOptions blazorDexieOptions)
+            : base("MyDatabase", 2, new DbVersion[] { new Version1() }, blazorDexieOptions)
         {
         }
     }

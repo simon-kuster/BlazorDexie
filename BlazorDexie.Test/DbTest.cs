@@ -2,19 +2,19 @@
 using System;
 using Xunit;
 using BlazorDexie.Test.Database;
-using BlazorDexie.JsModule;
 using BlazorDexie.Test.TestItems;
 using BlazorDexie.Database;
+using BlazorDexie.Options;
 
 namespace BlazorDexie.Test
 {
     public class DbTest
     {
-        private IModuleFactory _moduleFactory;
+        private BlazorDexieOptions _blazorDexieOptions;
 
-        public DbTest(IModuleFactory moduleFactory)
+        public DbTest(BlazorDexieOptions blazorDexieOptions)
         {
-            _moduleFactory = moduleFactory;
+            _blazorDexieOptions = blazorDexieOptions;
         }
 
         [Fact]
@@ -28,14 +28,14 @@ namespace BlazorDexie.Test
             await db.Delete(TestContext.Current.CancellationToken);
 
             // assert
-            var exists = await new Dexie(_moduleFactory).Exits(db.DatabaseName, TestContext.Current.CancellationToken);
+            var exists = await new Dexie(_blazorDexieOptions).Exits(db.DatabaseName, TestContext.Current.CancellationToken);
             Assert.False(exists);
         }
 
         private MyDb CreateDb()
         {
             var databaseId = Guid.NewGuid().ToString();
-            return new MyDb(_moduleFactory, databaseId);
+            return new MyDb(_blazorDexieOptions, databaseId);
         }
     }
 }

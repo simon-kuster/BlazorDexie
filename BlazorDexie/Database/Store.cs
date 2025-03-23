@@ -221,7 +221,7 @@ namespace BlazorDexie.Database
 
         protected override Collection<T, TKey> CreateNewColletion()
         {
-            return new Collection<T, TKey>(Db, StoreName, CommandExecuterJsInterop);
+            return new Collection<T, TKey>(Db, StoreName, CommandExecuterJsInterop, _logger);
         }
     }
 }

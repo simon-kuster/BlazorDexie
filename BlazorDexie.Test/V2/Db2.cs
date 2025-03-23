@@ -1,14 +1,13 @@
 ﻿using BlazorDexie.Database;
-using BlazorDexie.JsModule;
-
+using BlazorDexie.Options;
 namespace BlazorDexie.Test.V2
 {
     public class Db2 : Db<Db2>
     {
         public Store<Friend2, int> Friends { get; set; } = new("++" + nameof(Friend2.Id), nameof(Friend2.Name), nameof(Friend2.BirthDate));
 
-        public Db2(IModuleFactory jsModuleFactory, string databaseId)
-            : base($"VersioningDb{databaseId}", 2, new DbVersion[] { new V1.Version1() }, jsModuleFactory, GetUpgrade(), camelCaseStoreNames: true)
+        public Db2(BlazorDexieOptions blazorDexieOptions, string databaseId)
+            : base($"VersioningDb{databaseId}", 2, new DbVersion[] { new V1.Version1() }, blazorDexieOptions, GetUpgrade())
         {
         }
 

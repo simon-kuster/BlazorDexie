@@ -1,18 +1,11 @@
 export async function executeNonQuery(c) {
-    const startTime = performance.now();
-
     switch (c.cmd) {
         case "transaction":
-            console.log(`BlazorDexie: Beginn transaction`);
             await executeTransaction(c.parameters[0], c.parameters[1], c.parameters[2], c.parameters[3], c.parameters[4]);
-            console.log(`BlazorDexie: End transaction`);
             break;
 
         default:
             Dexie[c.cmd](...c.parameters);
-            const endTime = performance.now();
-            console.log(`BlazorDexie: Dexie.${c.cmd}(${c.parameters})} [${(endTime - startTime).toFixed(0)}ms]`);
-
             break;
     }
 }

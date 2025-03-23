@@ -3,6 +3,7 @@ using BlazorDexie.Demo.Database;
 using BlazorDexie.Demo.Persons;
 using BlazorDexie.JsModule;
 using BlazorDexie.ObjUrl;
+using BlazorDexie.Options;
 using Microsoft.AspNetCore.Components;
 
 namespace BlazorDexie.Demo.Pages
@@ -13,7 +14,14 @@ namespace BlazorDexie.Demo.Pages
 
         [Inject] public PersonRepository PersonRepository { get; set; } = null!;
         [Inject] public IModuleFactory ModuleFactory { get; set; } = null!;
+        [Inject] public ILoggerFactory LoggerFactory { get; set; } = null!;
         [Inject] public ObjectUrlService ObjectUrlService { get; set; } = null!;
+        [Inject] public BlazorDexieOptions BlazorDexieOptions { get; set; } = null!;
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+        }
 
         private async Task CreatePersonClicked()
         {
@@ -57,7 +65,7 @@ namespace BlazorDexie.Demo.Pages
 
         private async Task AddBlob()
         {
-            await using var db = new MyDb(ModuleFactory);
+            await using var db = new MyDb(BlazorDexieOptions);
 
             // act
             var initalData = new byte[] { 213, 23, 55, 234, 11 };
@@ -70,7 +78,7 @@ namespace BlazorDexie.Demo.Pages
 
         private async Task BulkAddBlob()
         {
-            await using var db = new MyDb(ModuleFactory);
+            await using var db = new MyDb(BlazorDexieOptions);
 
             // act
             var initialDatas = new byte[][] { [213, 23, 55, 234, 54], [23, 23, 44], [11, 22, 33] };
@@ -86,7 +94,7 @@ namespace BlazorDexie.Demo.Pages
 
         private async Task PutBlob()
         {
-            await using var db = new MyDb(ModuleFactory);
+            await using var db = new MyDb(BlazorDexieOptions);
 
             // act
             var initalData = new byte[] { 213, 23, 55, 234, 22 };
@@ -99,7 +107,7 @@ namespace BlazorDexie.Demo.Pages
 
         private async Task AddObjectUrl()
         {
-            await using var db = new MyDb(ModuleFactory);
+            await using var db = new MyDb(BlazorDexieOptions);
 
             // act
             var initalData = new byte[] { 213, 23, 55, 234, 33 };
@@ -116,7 +124,7 @@ namespace BlazorDexie.Demo.Pages
 
         private async Task PutObjectUrl()
         {
-            await using var db = new MyDb(ModuleFactory);
+            await using var db = new MyDb(BlazorDexieOptions);
 
             // act
             var initalData = new byte[] { 213, 23, 55, 234, 44 };
@@ -130,19 +138,19 @@ namespace BlazorDexie.Demo.Pages
 
         private async Task DeleteDb()
         {
-            await using var db = new MyDb(ModuleFactory);
+            await using var db = new MyDb(BlazorDexieOptions);
             var test = await db.Persons.ToList();
 
             await db.DisposeAsync();
 
 
-            await new Dexie(ModuleFactory).Delete("MyDatabase");
+            await new Dexie(BlazorDexieOptions).Delete("MyDatabase");
         }
 
         private async Task TransactionCompleted()
         {
             // arrange
-            await using var db = new MyDb(ModuleFactory);
+            await using var db = new MyDb(BlazorDexieOptions);
             var key = await db.Persons.Put(new Person() { Id = Guid.NewGuid(), FirstName = "Hans", Birthday = new DateTime(1970, 1, 1) });
 
             // act
@@ -166,7 +174,7 @@ namespace BlazorDexie.Demo.Pages
         private async Task TransactionFailed()
         {
             // arrange
-            await using var db = new MyDb(ModuleFactory);
+            await using var db = new MyDb(BlazorDexieOptions);
             var key = await db.Persons.Put(new Person() { FirstName = "Hans", Birthday = new DateTime(1970, 1, 1) });
 
             // act
@@ -190,12 +198,12 @@ namespace BlazorDexie.Demo.Pages
 
         private async Task ChangeDb()
         {
-            await using var db = new MyDb(ModuleFactory);
+            await using var db = new MyDb(BlazorDexieOptions);
         }
 
         private async Task Test()
         {
-            await using var db = new MyDb(ModuleFactory);
+            await using var db = new MyDb(BlazorDexieOptions);
             await db.Persons.Where(nameof(Person.Id)).IsEqual(1).ToArray();
         }
     }

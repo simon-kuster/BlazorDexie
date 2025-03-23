@@ -1,5 +1,5 @@
 ﻿using BlazorDexie.Database;
-using BlazorDexie.JsModule;
+using BlazorDexie.Options;
 using BlazorDexie.Test.TestItems;
 using System;
 
@@ -19,8 +19,8 @@ namespace BlazorDexie.Test.Database
 
         public Store<byte[], Guid> BlobData { get; set; } = new(string.Empty);
 
-        public MyDb(IModuleFactory jsModuleFactory, string databaseId)
-            : base($"MyDatabase_{databaseId}", 1, Array.Empty<DbVersion>(), jsModuleFactory, camelCaseStoreNames: true)
+        public MyDb(BlazorDexieOptions blazorDexieOptions, string databaseId)
+            : base($"MyDatabase_{databaseId}", 1, Array.Empty<DbVersion>(), blazorDexieOptions)
         {
         }
     }

@@ -6,6 +6,15 @@ nuget package: https://www.nuget.org/packages/BlazorDexie
 
 ## Usage
 
+### Install nuget
+
+``` dotnet add package BlazorDexie ```
+
+### Register Service
+
+``` builder.Services.AddBlazorDexie(); ```
+
+### Example
 The following example is similar to the "Hello World" from Dexie.js, which you can find at the following link: https://dexie.org/docs/Tutorial/Hello-World 
 
 The Friend class represents the object to be stored in the IndexedDb
@@ -25,22 +34,21 @@ public class MyDb : Db
 {
     public Store<Friend, int> Friends { get; set; } = new(nameof(Friend.Id), nameof(Friend.Name), nameof(Friend.Age));
 
-    public MyDb(IModuleFactory moduleFactory)
-        : base("FriendDatabase", 1, new DbVersion[] { }, moduleFactory)
+    public MyDb(BlazorDexieOptions blazorDexieOptions)
+        : base("FriendDatabase", 1, new DbVersion[] { }, blazorDexieOptions)
     {
     }
 }
 ```
-Usage in Blazor
+#### Usage in Blazor
 ```
     public partial class Index
     {
-        [Inject] public IJSRuntime JSRuntime { get; set; } = null!;
+        [Inject] public BlazorDexieOptions BlazorDexieOptions { get; set; } = null!;
 
         protected override async Task OnInitializedAsync()
         {
-            var moduleFactory = new EsModuleFactory(JSRuntime);
-            var db = new MyDb(moduleFactory);
+            var db = new MyDb(BlazorDexieOptions);
 
             await db.Friends.BulkPut(new Friend[]
             {
@@ -125,8 +133,8 @@ public class MyDb : Db
 {
     public Store<Friend1, int> Friends { get; set; } = new("++" + nameof(Friend.Id), nameof(Friend.Name), nameof(Friend.Age));
 
-    public MyDb(IModuleFactory jsModuleFactory)
-        : base("TestDb", 1, new DbVersion[0], jsModuleFactory)
+    public MyDb(BlazorDexieOptions blazorDexieOptions)
+        : base("TestDb", 1, new DbVersion[0], blazorDexieOptions)
     {
     }
 }
@@ -157,8 +165,8 @@ public class MyDb : Db
 {
     public Store<Friend, int> Friends { get; set; } = new("++" + nameof(Friend.Id), nameof(Friend.Name), nameof(Friend.BirthDate));
 
-    public MyDb(IModuleFactory jsModuleFactory)
-        : base("TestDb", 2, new DbVersion[] { new Version1() }, jsModuleFactory, GetUpgrade())
+    public MyDb(BlazorDexieOptions blazorDexieOptions)
+        : base("TestDb", 2, new DbVersion[] { new Version1() }, blazorDexieOptions, GetUpgrade())
     {
     }
 
@@ -186,8 +194,8 @@ public class MyDb : Db
 {
     public Store<Friend, int> Friends { get; set; } = new("++" + nameof(Friend.Id), nameof(Friend.Name), nameof(Friend.BirthDate));
 
-    public MyDb(IModuleFactory jsModuleFactory)
-        : base("TestDb", 2, new DbVersion[] { new V1.Version1() }, jsModuleFactory, upgradeModule: "dbUpgrade2.js")
+    public MyDb(BlazorDexieOptions blazorDexieOptions)
+        : base("TestDb", 2, new DbVersion[] { new V1.Version1() }, blazorDexieOptions, upgradeModule: "dbUpgrade2.js")
     {
     }
 }
@@ -205,6 +213,58 @@ export default function update(tx) {
 Note: Depending on whether the camelCaseStoreNames parameter is set to true or false (default) when creating a Db instance, either 
 tx.table(\"Friends\") ... or tx.table(\"friends\") ...
 must be written.
+
+## Version 2.0.0
+
+### Breaking Changes:
+#### 1. **Service Registration Method Renamed**
+
+**Old:**  
+```
+AddDexieWrapper(IServiceCollection services, string userModuleBasePath = "")
+```
+**New:**  
+```
+AddBlazorDexie(IServiceCollection services, bool camelCaseStoreNames = false)
+```
+**Impact:** The method name has changed, and the new method now includes the parameter ```camelCaseStoreNames``` and the parameter ```userModuleBasePath``` has been removed. 
+
+#### 2. **Update Db Constructor Signature**
+
+**Old:**  
+```
+protected Db(
+    string databaseName,
+    int currentVersionNumber,
+    IEnumerable<DbVersion> previousVersions,
+    IModuleFactory moduleFactory,
+    string? upgrade = null,
+    string? upgradeModule = null,
+    bool camelCaseStoreNames = false)
+```
+**New:**  
+```
+protected Db(
+    string databaseName,
+    int currentVersionNumber,
+    IEnumerable<DbVersion> previousVersions,
+    BlazorDexieOptions blazorDexieOptions,
+    string? upgrade = null,
+    string? upgradeModule = null)
+```
+**Impact:** The parameter ```moduleFactory``` and ```camelCaseStoreNames``` have been replaced with the parameter ```blazorDexieOptions```, which includes both functionalities.
+
+#### 3. **Update Dexie Constructor Signature**
+
+**Old:**  
+```
+public Dexie(BlazorDexieOptions blazorDexieOptions)
+```
+**New:**  
+```
+public Dexie(IModuleFactory jsModuleFactory)
+```
+**Impact:** The parameter ```jsModuleFactory``` has been replaced with the parameter ```blazorDexieOptions```, which includes the ```jsModuleFactory``` functionality.
 
 ## Version 1.6.0
 - Add support for .NET 9.0

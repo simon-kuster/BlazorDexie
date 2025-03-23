@@ -1,28 +1,32 @@
 ﻿using BlazorDexie.JsInterop;
+using BlazorDexie.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace BlazorDexie.Database
 {
     public class Collection<T, TKey>
     {
-        protected Db Db = null!;
+        protected IDb Db = null!;
         protected CollectionCommandExecuterJsInterop CommandExecuterJsInterop = null!;
         protected string StoreName = null!;
         protected virtual List<Command> CurrentCommands { get; } = new List<Command>();
+        protected ILogger _logger = null!;
 
         protected Collection()
         {
         }
 
-        public Collection(Db db, string storeName, CollectionCommandExecuterJsInterop commandExecuterJsInterop)
+        public Collection(IDb db, string storeName, CollectionCommandExecuterJsInterop commandExecuterJsInterop, ILogger logger)
         {
-            Init(db, storeName, commandExecuterJsInterop);
+            Init(db, storeName, commandExecuterJsInterop, logger);
         }
 
-        public void Init(Db db, string storeName, CollectionCommandExecuterJsInterop commandExecuterJsInterop)
+        public void Init(IDb db, string storeName, CollectionCommandExecuterJsInterop commandExecuterJsInterop, ILogger logger)
         {
             Db = db;
             StoreName = storeName;
             CommandExecuterJsInterop = commandExecuterJsInterop;
+            _logger = logger;
         }
 
         public void AddCommand(string command, params object?[] parameters)
@@ -117,29 +121,38 @@ namespace BlazorDexie.Database
 
             await Db.Init(cancellationToken);
 
+            var commandLogger = new StoreCommandLogger(_logger, LogLevel.Information);
+            commandLogger.Start();
+
             if (typeof(TRet) == typeof(Guid))
             {
-                string retString;
-
+                string returnString;
                 if (Db.DbJsReference != null)
                 {
-                    retString = await CommandExecuterJsInterop.Execute<string>(Db.DbJsReference, StoreName, commands, cancellationToken);
+                    returnString = await CommandExecuterJsInterop.Execute<string>(Db.DbJsReference, StoreName, commands, cancellationToken);
                 }
                 else
                 {
-                    retString = await CommandExecuterJsInterop.InitDbAndExecute<string>(Db.DatabaseName, Db.Versions, StoreName, commands, cancellationToken);
+                    returnString = await CommandExecuterJsInterop.InitDbAndExecute<string>(Db.DatabaseName, Db.Versions, StoreName, commands, cancellationToken);
                 }
 
-                return (TRet)(object)Guid.Parse(retString);
+                commandLogger.Log(StoreName, commands);
+                return (TRet)(object)Guid.Parse(returnString);
             }
             else
             {
+                TRet returnValue;
                 if (Db.DbJsReference != null)
                 {
-                    return await CommandExecuterJsInterop.Execute<TRet>(Db.DbJsReference, StoreName, commands, cancellationToken);
+                    returnValue = await CommandExecuterJsInterop.Execute<TRet>(Db.DbJsReference, StoreName, commands, cancellationToken);
+                }
+                else
+                {
+                    returnValue = await CommandExecuterJsInterop.InitDbAndExecute<TRet>(Db.DatabaseName, Db.Versions, StoreName, commands, cancellationToken);
                 }
 
-                return await CommandExecuterJsInterop.InitDbAndExecute<TRet>(Db.DatabaseName, Db.Versions, StoreName, commands, cancellationToken);
+                commandLogger.Log(StoreName, commands);
+                return returnValue;
             }
         }
 
@@ -150,6 +163,9 @@ namespace BlazorDexie.Database
 
             await Db.Init(cancellationToken);
 
+            var commandLogger = new StoreCommandLogger(_logger, LogLevel.Information);
+            commandLogger.Start();
+
             if (Db.DbJsReference != null)
             {
                 await CommandExecuterJsInterop.ExecuteNonQuery(Db.DbJsReference, StoreName, commands, cancellationToken);
@@ -158,6 +174,8 @@ namespace BlazorDexie.Database
             {
                 await CommandExecuterJsInterop.InitDbAndExecuteNonQuery(Db.DatabaseName, Db.Versions, StoreName, commands, cancellationToken);
             }
+
+            commandLogger.Log(StoreName, commands);
         }
     }
 }

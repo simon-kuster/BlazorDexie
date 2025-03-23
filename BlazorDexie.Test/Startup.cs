@@ -10,9 +10,9 @@ namespace BlazorDexie.Test
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddNodeJS();
-            services.AddDexieWrapper(p => new CommonJsModuleFactory(p.GetRequiredService<INodeJSService>(), 
+            services.AddBlazorDexie(p => new CommonJsModuleFactory(p.GetRequiredService<INodeJSService>(), 
                 "../../../BlazorDexie/wwwroot", 
-                "../../../BlazorDexie.Test/wwwroot/"));
+                "../../../BlazorDexie.Test/wwwroot/"), true);
         }
     }
 }
