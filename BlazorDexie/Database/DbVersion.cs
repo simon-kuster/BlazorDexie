@@ -35,10 +35,7 @@ namespace BlazorDexie.Database
             {
                 if (typeof(IStore).IsAssignableFrom(property.PropertyType))
                 {
-                    var store = PropertyGetterDictionary != null
-                        ? (IStore?)PropertyGetterDictionary[property.PropertyType](this)
-                        : (IStore?)property.GetValue(this);
-
+                    var store = (IStore?)PropertyGetterDictionary[property.PropertyType](this);
                     if (store != null)
                     {
                         var storeName = camelCaseStoreNames ? Camelizer.ToCamelCase(property.Name) : property.Name;
