@@ -8,7 +8,6 @@ using System.Reflection;
 
 namespace BlazorDexie.Database
 {
-    /// <typeparam name="TConcrete">Concrete class that inherits form Db<TConcrete></typeparam>
     public abstract class Db<TConcrete> : IAsyncDisposable, IDb
     {
         private static PropertyInfo[] Properties;
@@ -27,7 +26,7 @@ namespace BlazorDexie.Database
         protected Db(
             string databaseName,
             int currentVersionNumber,
-            IEnumerable<DbVersion> previousVersions,
+            IEnumerable<IDbVersion> previousVersions,
             BlazorDexieOptions blazorDexieOptions,
             string? upgrade = null,
             string? upgradeModule = null)
@@ -39,7 +38,7 @@ namespace BlazorDexie.Database
             _staticCommandExecuterJsInterop = new StaticCommandExecuterJsInterop(blazorDexieOptions.ModuleFactory);
             _logger = blazorDexieOptions.LoggerFactory.CreateLogger("BlazorDexie.Database.Db");
 
-            Versions = InitStoresAndGetVersionDefinitions(previousVersions, Properties, PropertyGetterDictionary, upgrade, upgradeModule);
+            Versions = InitStoresAndGetVersionDefinitions(previousVersions, upgrade, upgradeModule);
         }
 
         static Db()
@@ -48,23 +47,18 @@ namespace BlazorDexie.Database
             PropertyGetterDictionary = Properties.ToDictionary(p => p.PropertyType, p => PropertyAccessorDelegateBuilder.BuildPropertyGetter(p));
         }
 
-        protected List<DbVersionDefinition> InitStoresAndGetVersionDefinitions(
-            IEnumerable<DbVersion> previousVersions,
-            PropertyInfo[] properties,
-            Dictionary<Type, Func<object, object?>>? propertyGetterDictionary,
+        private List<DbVersionDefinition> InitStoresAndGetVersionDefinitions(
+            IEnumerable<IDbVersion> previousVersions,
             string? upgrade = null,
             string? upgradeModule = null)
         {
             var latestVersion = new DbVersionDefinition(VersionNumber, upgrade, upgradeModule);
 
-            foreach (var property in properties)
+            foreach (var property in Properties)
             {
                 if (typeof(IStore).IsAssignableFrom(property.PropertyType))
                 {
-                    var store = propertyGetterDictionary != null
-                        ? (IStore?)propertyGetterDictionary[property.PropertyType](this)
-                        : (IStore?)property.GetValue(this);
-
+                    var store = (IStore?)PropertyGetterDictionary[property.PropertyType](this);
                     if (store != null)
                     {
                         var storeName = _blazorDexieOptions.CamelCaseStoreNames ? Camelizer.ToCamelCase(property.Name) : property.Name;

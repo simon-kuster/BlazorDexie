@@ -11,7 +11,7 @@ namespace BlazorDexie.Demo.Database
         public Store<byte[], Guid> BlobData { get; set; } = new(string.Empty);
 
         public MyDb(BlazorDexieOptions blazorDexieOptions)
-            : base("MyDatabase", 2, new DbVersion[] { new Version1() }, blazorDexieOptions)
+            : base("MyDatabase", 2, new IDbVersion[] { new Version1() }, blazorDexieOptions)
         {
         }
     }
