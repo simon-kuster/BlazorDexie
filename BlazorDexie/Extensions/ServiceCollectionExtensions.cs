@@ -10,11 +10,14 @@ namespace BlazorDexie.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static void AddBlazorDexie(this IServiceCollection services, string userModuleBasePath = "", bool camelCaseStoreNames = false)
+        public static void AddBlazorDexie(this IServiceCollection services, bool camelCaseStoreNames = false)
         {
-            services.AddBlazorDexie(p => new EsModuleFactory(p.GetRequiredService<IJSRuntime>(), userModuleBasePath), camelCaseStoreNames);
+            services.AddBlazorDexie(p => new EsModuleFactory(p.GetRequiredService<IJSRuntime>()), camelCaseStoreNames);
         }
 
+        /// <summary>
+        /// This constructor is only for testing and internal use.
+        /// </summary>
         public static void AddBlazorDexie(this IServiceCollection services, Func<IServiceProvider, IModuleFactory> moduleFactoryFactory, bool camelCaseStoreNames = false)
         {
             services.AddScoped(p => moduleFactoryFactory(p));
