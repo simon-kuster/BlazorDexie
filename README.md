@@ -226,55 +226,65 @@ must be written.
 
 ## Version 2.0.0
 
-### Breaking Changes:
+## Breaking Changes:
 #### 1. **Service Registration Method Renamed**
 
-**Old:**  
+Old:
 ```
 AddDexieWrapper(IServiceCollection services, string userModuleBasePath = "")
 ```
-**New:**  
+New:
 ```
 AddBlazorDexie(IServiceCollection services, bool camelCaseStoreNames = false)
 ```
-**Impact:** The method name has changed, and the new method now includes the parameter ```camelCaseStoreNames``` and the parameter ```userModuleBasePath``` has been removed. 
+Impact: The method name has changed, and the new method now includes the parameter ```camelCaseStoreNames``` and the parameter ```userModuleBasePath``` has been removed. 
 
-#### 2. **Update Db Constructor Signature**
+#### 2. **Update Class Db**
 
-**Old:**  
+The new ```Db``` class is generic, and its generic parameter ```TConcrete``` represents the concrete class that extends it. For example:
+
+``` public class MyDb : Db<MyDb> {}```
+
+Old Constructor: 
 ```
 protected Db(
     string databaseName,
     int currentVersionNumber,
-    IEnumerable<DbVersion> previousVersions,
+    IEnumerable<IDbVersion> previousVersions,
     IModuleFactory moduleFactory,
     string? upgrade = null,
     string? upgradeModule = null,
     bool camelCaseStoreNames = false)
 ```
-**New:**  
+New Constructor:
 ```
 protected Db(
     string databaseName,
     int currentVersionNumber,
-    IEnumerable<DbVersion> previousVersions,
+    IEnumerable<IDbVersion> previousVersions,
     BlazorDexieOptions blazorDexieOptions,
     string? upgrade = null,
     string? upgradeModule = null)
 ```
-**Impact:** The parameter ```moduleFactory``` and ```camelCaseStoreNames``` have been replaced with the parameter ```blazorDexieOptions```, which includes both functionalities.
+Impact: The parameter ```moduleFactory``` and ```camelCaseStoreNames``` have been replaced with the parameter ```blazorDexieOptions```, which includes both functionalities. The parameter ```previousVersions``` has new the type ```IEnumerable<IDbVersion>```
 
-#### 3. **Update Dexie Constructor Signature**
+#### 3. **Update Class Dexie**
 
-**Old:**  
+Old Constructor:  
 ```
 public Dexie(BlazorDexieOptions blazorDexieOptions)
 ```
-**New:**  
+New Constructor:
 ```
 public Dexie(IModuleFactory jsModuleFactory)
 ```
-**Impact:** The parameter ```jsModuleFactory``` has been replaced with the parameter ```blazorDexieOptions```, which includes the ```jsModuleFactory``` functionality.
+Impact: The parameter ```jsModuleFactory``` has been replaced with the parameter ```blazorDexieOptions```, which includes the ```jsModuleFactory``` functionality.
+
+#### 3. **Update Class DbVersion**
+
+The new ```DbVersion``` class is generic, and its generic parameter ```TConcrete``` represents the concrete class that extends it. For example:
+
+``` public class Version1 : DbVersion<Version1> {}```
 
 ## Version 1.6.0
 - Add support for .NET 9.0
