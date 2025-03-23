@@ -45,7 +45,7 @@ public class MyDb : Db<MyDb>
     public Store<Friend, int> Friends { get; set; } = new(nameof(Friend.Id), nameof(Friend.Name), nameof(Friend.Age));
 
     public MyDb(BlazorDexieOptions blazorDexieOptions)
-        : base("FriendDatabase", 1, new DbVersion[] { }, blazorDexieOptions)
+        : base("FriendDatabase", 1, new IDbVersion[] { }, blazorDexieOptions)
     {
     }
 }
@@ -144,7 +144,7 @@ public class MyDb : Db<MyDb>
     public Store<Friend1, int> Friends { get; set; } = new("++" + nameof(Friend.Id), nameof(Friend.Name), nameof(Friend.Age));
 
     public MyDb(BlazorDexieOptions blazorDexieOptions)
-        : base("TestDb", 1, new DbVersion[0], blazorDexieOptions)
+        : base("TestDb", 1, new IDbVersion[0], blazorDexieOptions)
     {
     }
 }
@@ -167,7 +167,7 @@ public class Version1 : DbVersion<Version1>
 ```
 - Change the Properties in MyDb
 - Increase the VersionNumber.
-- Add an instance of Version1 to DbVersion Array passed to the base contructor
+- Add an instance of Version1 to parameter ```previousVersions``` passed to the base constructor
 - An upgrade function can be pass to the base constructor if needed. The uprade function is a string with JavaScript code. The parameter tx (transaction) will be pass to the function from the framework.
 
 ```
@@ -176,7 +176,7 @@ public class MyDb : Db<MyDb>
     public Store<Friend, int> Friends { get; set; } = new("++" + nameof(Friend.Id), nameof(Friend.Name), nameof(Friend.BirthDate));
 
     public MyDb(BlazorDexieOptions blazorDexieOptions)
-        : base("TestDb", 2, new DbVersion[] { new Version1() }, blazorDexieOptions, GetUpgrade())
+        : base("TestDb", 2, new IDbVersion[] { new Version1() }, blazorDexieOptions, GetUpgrade())
     {
     }
 
@@ -205,7 +205,7 @@ public class MyDb : Db<MyDb>
     public Store<Friend, int> Friends { get; set; } = new("++" + nameof(Friend.Id), nameof(Friend.Name), nameof(Friend.BirthDate));
 
     public MyDb(BlazorDexieOptions blazorDexieOptions)
-        : base("TestDb", 2, new DbVersion[] { new V1.Version1() }, blazorDexieOptions, upgradeModule: "dbUpgrade2.js")
+        : base("TestDb", 2, new IDbVersion[] { new V1.Version1() }, blazorDexieOptions, upgradeModule: "dbUpgrade2.js")
     {
     }
 }
