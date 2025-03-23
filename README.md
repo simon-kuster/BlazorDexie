@@ -206,6 +206,58 @@ Note: Depending on whether the camelCaseStoreNames parameter is set to true or f
 tx.table(\"Friends\") ... or tx.table(\"friends\") ...
 must be written.
 
+## Version 2.0.0
+
+### Breaking Changes:
+#### 1. **Service Registration Method Renamed**
+
+**Old:**  
+```
+AddDexieWrapper(IServiceCollection services, string userModuleBasePath = "")
+```
+**New:**  
+```
+AddBlazorDexie(IServiceCollection services, bool camelCaseStoreNames = false)
+```
+**Impact:** The method name has changed, and the new method now includes the parameter ```camelCaseStoreNames``` and the parameter ```userModuleBasePath``` has been removed. 
+
+#### 2. **Update Db Constructor Signature**
+
+**Old:**  
+```
+protected Db(
+    string databaseName,
+    int currentVersionNumber,
+    IEnumerable<DbVersion> previousVersions,
+    IModuleFactory moduleFactory,
+    string? upgrade = null,
+    string? upgradeModule = null,
+    bool camelCaseStoreNames = false)
+```
+**New:**  
+```
+protected Db(
+    string databaseName,
+    int currentVersionNumber,
+    IEnumerable<DbVersion> previousVersions,
+    BlazorDexieOptions blazorDexieOptions,
+    string? upgrade = null,
+    string? upgradeModule = null)
+```
+**Impact:** The parameter ```moduleFactory``` and ```camelCaseStoreNames``` have been replaced with the parameter ```blazorDexieOptions```, which includes both functionalities.
+
+#### 3. **Update Dexie Constructor Signature**
+
+**Old:**  
+```
+public Dexie(BlazorDexieOptions blazorDexieOptions)
+```
+**New:**  
+```
+public Dexie(IModuleFactory jsModuleFactory)
+```
+**Impact:** The parameter ```jsModuleFactory``` has been replaced with the parameter ```blazorDexieOptions```, which includes the ```jsModuleFactory``` functionality.
+
 ## Version 1.6.0
 - Add support for .NET 9.0
 - Remove support for .NET 6.0 and .NET 7.0
