@@ -4,13 +4,17 @@ BlazorDexie provides an easy way to access the browsers IndexedDb in Blazor appl
 
 nuget package: https://www.nuget.org/packages/BlazorDexie
 
-## Usage
+## Get Started
 
-### Install nuget
+Install Nuget package by:
 
 ``` dotnet add package BlazorDexie ```
 
-### Register Service
+Reference dexie.js in wwwroot/index.html:
+
+```<script src="https://unpkg.com/dexie/dist/dexie.js"></script>```
+
+Register service in Program.cs:
 
 ``` builder.Services.AddBlazorDexie(); ```
 
@@ -30,7 +34,7 @@ public class Friend
 MyDb with single table "friends" with primary key "id" and
 indices on properties "name" and "age"
 ```
-public class MyDb : Db
+public class MyDb : Db<MyDb>
 {
     public Store<Friend, int> Friends { get; set; } = new(nameof(Friend.Id), nameof(Friend.Name), nameof(Friend.Age));
 
@@ -94,7 +98,7 @@ public class Friend
 ```
 
 ```
-public class MyDb : Db
+public class MyDb : Db<MyDb>
 {
     public Store<Friend, int> Friends { get; set; } = new($"++{nameof(Friend.Id)}", nameof(Friend.Name), nameof(Friend.Age));
     ...
@@ -129,7 +133,7 @@ catch (Exception e)
 - The database is defined in in the class MyDb
 
 ```
-public class MyDb : Db
+public class MyDb : Db<MyDb>
 {
     public Store<Friend1, int> Friends { get; set; } = new("++" + nameof(Friend.Id), nameof(Friend.Name), nameof(Friend.Age));
 
@@ -146,7 +150,7 @@ public class MyDb : Db
 - Maybe the nameofs should be replaced by string literals because the properties used in the nameof can be changed.
 
 ```
-public class Version1 : DbVersion
+public class Version1 : DbVersion<Version1>
 {
     public Store<Friend1, int> Friends { get; set; } = new("++id", "name" + "age");
 
@@ -161,7 +165,7 @@ public class Version1 : DbVersion
 - An upgrade function can be pass to the base constructor if needed. The uprade function is a string with JavaScript code. The parameter tx (transaction) will be pass to the function from the framework.
 
 ```
-public class MyDb : Db
+public class MyDb : Db<MyDb>
 {
     public Store<Friend, int> Friends { get; set; } = new("++" + nameof(Friend.Id), nameof(Friend.Name), nameof(Friend.BirthDate));
 
@@ -190,7 +194,7 @@ must be written.
 - Instead of pass the code as string it is also possible to create a ES-Module with the upgrade function an pass the path of the module to the constructor
 
 ```
-public class MyDb : Db
+public class MyDb : Db<MyDb>
 {
     public Store<Friend, int> Friends { get; set; } = new("++" + nameof(Friend.Id), nameof(Friend.Name), nameof(Friend.BirthDate));
 
