@@ -10,9 +10,9 @@ namespace BlazorDexie.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static void AddBlazorDexie(this IServiceCollection services, bool camelCaseStoreNames = false)
+        public static void AddBlazorDexie(this IServiceCollection services, string userModuleBasePath = "", bool camelCaseStoreNames = false)
         {
-            services.AddBlazorDexie(p => new EsModuleFactory(p.GetRequiredService<IJSRuntime>()), camelCaseStoreNames);
+            services.AddBlazorDexie(p => new EsModuleFactory(p.GetRequiredService<IJSRuntime>(), userModuleBasePath), camelCaseStoreNames);
         }
 
         /// <summary>
