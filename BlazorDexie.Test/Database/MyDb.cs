@@ -18,6 +18,7 @@ namespace BlazorDexie.Test.Database
              CompoundIndex);
 
         public Store<byte[], Guid> BlobData { get; set; } = new(string.Empty);
+        public Store<byte[], Guid> BlobData2 { get; set; } = new(string.Empty);
 
         public MyDb(BlazorDexieOptions blazorDexieOptions, string databaseId)
             : base($"MyDatabase_{databaseId}", 1, Array.Empty<IDbVersion>(), blazorDexieOptions)

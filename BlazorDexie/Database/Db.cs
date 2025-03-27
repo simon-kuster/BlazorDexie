@@ -11,7 +11,7 @@ namespace BlazorDexie.Database
     public abstract class Db<TConcrete> : IAsyncDisposable, IDb
     {
         private static PropertyInfo[] Properties;
-        private static Dictionary<Type, Func<object, object?>> PropertyGetterDictionary;
+        private static Dictionary<string, Func<object, object?>> PropertyGetterDictionary;
 
         private readonly CollectionCommandExecuterJsInterop _collectionCommandExecuterJsInterop;
         private readonly StaticCommandExecuterJsInterop _staticCommandExecuterJsInterop;
@@ -43,8 +43,11 @@ namespace BlazorDexie.Database
 
         static Db()
         {
-            Properties = typeof(TConcrete).GetProperties(BindingFlags.Instance | BindingFlags.Public);
-            PropertyGetterDictionary = Properties.ToDictionary(p => p.PropertyType, p => PropertyAccessorDelegateBuilder.BuildPropertyGetter(p));
+            Properties = typeof(TConcrete).GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                .Where(p => typeof(IStore).IsAssignableFrom(p.PropertyType))
+                .ToArray();
+
+            PropertyGetterDictionary = Properties.ToDictionary(p => p.Name, p => PropertyAccessorDelegateBuilder.BuildPropertyGetter(p));
         }
 
         private List<DbVersionDefinition> InitStoresAndGetVersionDefinitions(
@@ -56,16 +59,13 @@ namespace BlazorDexie.Database
 
             foreach (var property in Properties)
             {
-                if (typeof(IStore).IsAssignableFrom(property.PropertyType))
+                var store = (IStore?)PropertyGetterDictionary[property.Name](this);
+                if (store != null)
                 {
-                    var store = (IStore?)PropertyGetterDictionary[property.PropertyType](this);
-                    if (store != null)
-                    {
-                        var storeName = _blazorDexieOptions.CamelCaseStoreNames ? Camelizer.ToCamelCase(property.Name) : property.Name;
-                        store.Init(this, storeName, _collectionCommandExecuterJsInterop, _blazorDexieOptions.LoggerFactory.CreateLogger("BlazorDexie.Database.Collection"));
-                        latestVersion.Stores.Add(new StoreDefinition(storeName, store.SchemaDefinitions));
-                    }
-                }
+                    var storeName = _blazorDexieOptions.CamelCaseStoreNames ? Camelizer.ToCamelCase(property.Name) : property.Name;
+                    store.Init(this, storeName, _collectionCommandExecuterJsInterop, _blazorDexieOptions.LoggerFactory.CreateLogger("BlazorDexie.Database.Collection"));
+                    latestVersion.Stores.Add(new StoreDefinition(storeName, store.SchemaDefinitions));
+                }                
             }
 
             var versions = new List<DbVersionDefinition>() { latestVersion };

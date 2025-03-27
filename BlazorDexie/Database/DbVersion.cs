@@ -7,7 +7,7 @@ namespace BlazorDexie.Database
     public class DbVersion<TConcrete> : IDbVersion
     {
         private static readonly PropertyInfo[] Properties;
-        private static readonly Dictionary<Type, Func<object, object?>> PropertyGetterDictionary;
+        private static readonly Dictionary<string, Func<object, object?>> PropertyGetterDictionary;
 
         private string? _upgrade;
         private string? _upgradeModule;
@@ -16,8 +16,11 @@ namespace BlazorDexie.Database
 
         static DbVersion()
         {
-            Properties = typeof(TConcrete).GetProperties(BindingFlags.Instance | BindingFlags.Public);
-            PropertyGetterDictionary = Properties.ToDictionary(p => p.PropertyType, p => PropertyAccessorDelegateBuilder.BuildPropertyGetter(p));
+            Properties = typeof(TConcrete).GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                .Where(p => typeof(IStore).IsAssignableFrom(p.PropertyType))
+                .ToArray();
+
+            PropertyGetterDictionary = Properties.ToDictionary(p => p.Name, p => PropertyAccessorDelegateBuilder.BuildPropertyGetter(p));
         }
 
         public DbVersion(int versionNumber, string? upgrade = null, string? upgradeModule = null)
@@ -33,14 +36,11 @@ namespace BlazorDexie.Database
 
             foreach (var property in Properties)
             {
-                if (typeof(IStore).IsAssignableFrom(property.PropertyType))
+                var store = (IStore?)PropertyGetterDictionary[property.Name](this);
+                if (store != null)
                 {
-                    var store = (IStore?)PropertyGetterDictionary[property.PropertyType](this);
-                    if (store != null)
-                    {
-                        var storeName = camelCaseStoreNames ? Camelizer.ToCamelCase(property.Name) : property.Name;
-                        currentVersion.Stores.Add(new StoreDefinition(storeName, store.SchemaDefinitions));
-                    }
+                    var storeName = camelCaseStoreNames ? Camelizer.ToCamelCase(property.Name) : property.Name;
+                    currentVersion.Stores.Add(new StoreDefinition(storeName, store.SchemaDefinitions));
                 }
             }
 
