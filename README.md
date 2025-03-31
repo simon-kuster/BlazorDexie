@@ -14,7 +14,9 @@ dotnet add package BlazorDexie
 
 Reference dexie.js in wwwroot/index.html:
 
-```<script src="https://unpkg.com/dexie/dist/dexie.js"></script>```
+```
+<script src="https://unpkg.com/dexie/dist/dexie.js"></script>
+```
 
 Register services in Program.cs:
 
