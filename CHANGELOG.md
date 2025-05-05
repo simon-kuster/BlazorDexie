@@ -1,6 +1,6 @@
 ## Version 2.0.0
 
-## Breaking Changes:
+### Breaking Changes:
 #### 1. **Service Registration Method Renamed**
 
 Old:
