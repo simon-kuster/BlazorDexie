@@ -134,7 +134,7 @@ catch (Exception e)
 ```
 ### Database Versioning
 
-**Note:** Starting with Dexie 3.0, you only need to keep versions that include an upgrade function or upgrade module. If a version doesn’t include either, you can simply increase the version number without keeping the previous version definitions. For more info, see: [Dexie Database Versioning](https://dexie.org/docs/Versioning)
+**Note:** Starting with Dexie 3.0, you only need to keep versions that include an upgrade function or upgrade module. If a version doesn’t include either, you can simply increase the version number without keeping the previous version definitions. For more info, see: [Dexie Database Versioning]([https://dexie.org/docs/Versioning](https://dexie.org/docs/Tutorial/Design#database-versioning))
 
 **Version 1**
 
