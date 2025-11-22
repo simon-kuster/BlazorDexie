@@ -1,4 +1,5 @@
-﻿using BlazorDexie.Definitions;
+﻿using BlazorDexie.Database.Transaction;
+using BlazorDexie.Definitions;
 using BlazorDexie.JsInterop;
 using BlazorDexie.Options;
 using BlazorDexie.Utils;
@@ -110,12 +111,38 @@ namespace BlazorDexie.Database
         public async Task Transaction(string mode, string[] storeNames, int timeout, Func<Task> transactionBody, CancellationToken cancellationToken = default)
         {
             var transformedStoreNames = _blazorDexieOptions.CamelCaseStoreNames ? storeNames.Select(Camelizer.ToCamelCase).ToArray() : storeNames;
-            var transactionBodyWrapper = new TransactionBodyWrapper(transactionBody);
+            var transactionBodyWrapper = new TransactionBodyWrapper(transactionBody, cancellationToken);
+
+            var stores = storeNames.ToDictionary(
+                name => name,
+                name => (IStore)(PropertyGetterDictionary[name](this) ?? throw new InvalidOperationException($"Store with name {name} not found!"))
+            );
+
+            foreach (var store in stores)
+            {
+                store.Value.SetTransactionWrapper(transactionBodyWrapper);
+            }
+
             var command = new Command("transaction", DbJsReference, mode, transformedStoreNames, timeout, DotNetObjectReference.Create(transactionBodyWrapper));
 
-            _logger.LogInformation("Beginn transaction");
-            await _staticCommandExecuterJsInterop.ExecuteNonQuery(command, cancellationToken);
-            _logger.LogInformation("End transaction");
+            try
+            {
+                _logger.LogInformation("Beginn transaction");
+                await _staticCommandExecuterJsInterop.ExecuteNonQuery(command, CancellationToken.None);
+                _logger.LogInformation("End transaction");
+            }
+            catch (Exception e) 
+            {
+                _logger.LogWarning(e.Message);
+                throw;
+            }
+            finally
+            {
+                foreach (var store in stores)
+                {
+                    store.Value.ClearTransactionWrapper();
+                }
+            }
         }
 
         public async ValueTask DisposeAsync()

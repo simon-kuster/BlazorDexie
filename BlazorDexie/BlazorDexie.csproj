@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+    <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <PackageId>BlazorDexie</PackageId>
-    <Version>2.0.2</Version>
+    <Version>2.1.0</Version>
     <Authors>Simon Kuster</Authors>
     <Product>BlazorDexie</Product>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -31,6 +31,7 @@
   <ItemGroup>
 	<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.0" Condition="'$(TargetFramework)' == 'net8.0'" />
 	<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.3" Condition="'$(TargetFramework)' == 'net9.0'" />
+	<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.0" Condition="'$(TargetFramework)' == 'net10.0'" />
   </ItemGroup>
 
 </Project>

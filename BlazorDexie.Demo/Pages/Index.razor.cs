@@ -11,6 +11,7 @@ namespace BlazorDexie.Demo.Pages
     public partial class Index
     {
         private Person? _person;
+        private ILogger _logger = null!;
 
         [Inject] public PersonRepository PersonRepository { get; set; } = null!;
         [Inject] public IModuleFactory ModuleFactory { get; set; } = null!;
@@ -20,12 +21,13 @@ namespace BlazorDexie.Demo.Pages
 
         protected override void OnInitialized()
         {
+            _logger = LoggerFactory.CreateLogger<Index>();
             base.OnInitialized();
         }
 
         private async Task CreatePersonClicked()
         {
-            _person = new Person()
+             _person = new Person()
             {
                 Id = Guid.NewGuid(),
                 FirstName = "Dario",
@@ -169,6 +171,7 @@ namespace BlazorDexie.Demo.Pages
             }
 
             var check = await db.Persons.Get(key) ?? throw new InvalidOperationException();
+            _logger.LogInformation(check.Birthday.ToString());
         }
 
         private async Task TransactionFailed()
@@ -177,6 +180,8 @@ namespace BlazorDexie.Demo.Pages
             await using var db = new MyDb(BlazorDexieOptions);
             var key = await db.Persons.Put(new Person() { FirstName = "Hans", Birthday = new DateTime(1970, 1, 1) });
 
+            CancellationTokenSource cts = new CancellationTokenSource();
+
             // act
             try
             {
@@ -184,9 +189,9 @@ namespace BlazorDexie.Demo.Pages
                 {
                     var person = await db.Persons.Get(key) ?? throw new InvalidOperationException();
                     person.Birthday = new DateTime(1971, 1, 1);
-                    await db.Persons.Put(person);
-                    await db.BlobData.Get(key);
-                });
+                    await db.Persons.Put(person); 
+                    throw new InvalidOperationException("Test failed transaction");
+                }, cts.Token);
             }
             catch (Exception)
             {
@@ -194,6 +199,7 @@ namespace BlazorDexie.Demo.Pages
             }
 
             var check = await db.Persons.Get(key) ?? throw new InvalidOperationException();
+            _logger.LogInformation(check.Birthday.ToString());
         }
 
         private async Task ChangeDb()

@@ -1,4 +1,5 @@
-﻿using BlazorDexie.JsInterop;
+﻿using BlazorDexie.Database.Transaction;
+using BlazorDexie.JsInterop;
 using BlazorDexie.Logging;
 using Microsoft.Extensions.Logging;
 
@@ -8,6 +9,7 @@ namespace BlazorDexie.Database
     {
         protected IDb Db = null!;
         protected CollectionCommandExecuterJsInterop CommandExecuterJsInterop = null!;
+        protected TransactionBodyWrapper? TransactionBodyWrapper;
         protected string StoreName = null!;
         protected virtual List<Command> CurrentCommands { get; } = new List<Command>();
         protected ILogger _logger = null!;
@@ -27,6 +29,16 @@ namespace BlazorDexie.Database
             StoreName = storeName;
             CommandExecuterJsInterop = commandExecuterJsInterop;
             _logger = logger;
+        }
+
+        public void SetTransactionWrapper(TransactionBodyWrapper transactionBodyWrapper)
+        {
+            TransactionBodyWrapper = transactionBodyWrapper;
+        }
+
+        public void ClearTransactionWrapper()
+        {
+            TransactionBodyWrapper = null;
         }
 
         public void AddCommand(string command, params object?[] parameters)
@@ -119,38 +131,23 @@ namespace BlazorDexie.Database
             var commands = CurrentCommands.ToList();
             commands.Add(new Command(command, parameters));
 
-            await Db.Init(cancellationToken);
+            if (TransactionBodyWrapper == null)
+            {
+                await Db.Init(cancellationToken);
+            }
 
             var commandLogger = new StoreCommandLogger(_logger, LogLevel.Information);
             commandLogger.Start();
 
             if (typeof(TRet) == typeof(Guid))
             {
-                string returnString;
-                if (Db.DbJsReference != null)
-                {
-                    returnString = await CommandExecuterJsInterop.Execute<string>(Db.DbJsReference, StoreName, commands, cancellationToken);
-                }
-                else
-                {
-                    returnString = await CommandExecuterJsInterop.InitDbAndExecute<string>(Db.DatabaseName, Db.Versions, StoreName, commands, cancellationToken);
-                }
-
+                string returnString = await ExecuteInternal<string>(commands, cancellationToken);
                 commandLogger.Log(StoreName, commands);
                 return (TRet)(object)Guid.Parse(returnString);
             }
             else
             {
-                TRet returnValue;
-                if (Db.DbJsReference != null)
-                {
-                    returnValue = await CommandExecuterJsInterop.Execute<TRet>(Db.DbJsReference, StoreName, commands, cancellationToken);
-                }
-                else
-                {
-                    returnValue = await CommandExecuterJsInterop.InitDbAndExecute<TRet>(Db.DatabaseName, Db.Versions, StoreName, commands, cancellationToken);
-                }
-
+                TRet returnValue = await ExecuteInternal<TRet>(commands, cancellationToken);
                 commandLogger.Log(StoreName, commands);
                 return returnValue;
             }
@@ -166,7 +163,11 @@ namespace BlazorDexie.Database
             var commandLogger = new StoreCommandLogger(_logger, LogLevel.Information);
             commandLogger.Start();
 
-            if (Db.DbJsReference != null)
+            if (TransactionBodyWrapper != null)
+            {
+                await TransactionBodyWrapper.ExecuteNonQuery(StoreName, commands, cancellationToken);
+            }
+            else if (Db.DbJsReference != null)
             {
                 await CommandExecuterJsInterop.ExecuteNonQuery(Db.DbJsReference, StoreName, commands, cancellationToken);
             }
@@ -176,6 +177,22 @@ namespace BlazorDexie.Database
             }
 
             commandLogger.Log(StoreName, commands);
+        }
+
+        private Task<TRet> ExecuteInternal<TRet>(List<Command> commands, CancellationToken cancellationToken)
+        {
+            if (TransactionBodyWrapper != null)
+            {
+                return TransactionBodyWrapper.Execute<TRet>(StoreName, commands, cancellationToken);
+            }
+            else if (Db.DbJsReference != null)
+            {
+                return CommandExecuterJsInterop.Execute<TRet>(Db.DbJsReference, StoreName, commands, cancellationToken);
+            }
+            else
+            {
+                return CommandExecuterJsInterop.InitDbAndExecute<TRet>(Db.DatabaseName, Db.Versions, StoreName, commands, cancellationToken);
+            }
         }
     }
 }
