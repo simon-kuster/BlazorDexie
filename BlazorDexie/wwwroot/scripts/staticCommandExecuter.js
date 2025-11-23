@@ -53,7 +53,7 @@ async function executeTransaction(db, mode, storeNames, timeout, transactionBody
                         lastCommandId = response.nextCommand.id;
                     }
 
-                    await Dexie.waitFor(new Promise(function (resolve) { setTimeout(resolve, 20); }));
+                    await Dexie.waitFor(Promise.resolve());
                     break;
 
                 case 1:
