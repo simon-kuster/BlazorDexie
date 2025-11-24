@@ -1,3 +1,6 @@
+## Version 2.1.0
+- Add .NET 10 support
+
 ## Version 2.0.0
 
 ### Breaking Changes:
