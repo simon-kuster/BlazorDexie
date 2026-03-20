@@ -82,14 +82,14 @@ namespace BlazorDexie.Database
 
         public async Task Init(CancellationToken cancellationToken)
         {
+            await _collectionCommandExecuterJsInterop.SetUserModuleBasePath(cancellationToken);
+
             if (DbJsReference == null && _collectionCommandExecuterJsInterop.RunInBrowser)
             {
                 // Optimized code for Blazor
                 // Create Dexie object only once
                 DbJsReference = await _collectionCommandExecuterJsInterop.InitDb(DatabaseName, Versions, cancellationToken);
             }
-
-            await _collectionCommandExecuterJsInterop.SetUserModuleBasePath(cancellationToken);
         }
 
         public async Task Close(CancellationToken cancellationToken = default)
