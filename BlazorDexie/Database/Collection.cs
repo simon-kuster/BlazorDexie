@@ -75,6 +75,11 @@ namespace BlazorDexie.Database
             return await Execute<TIndex[]>("keys", cancellationToken);
         }
 
+        public async Task<TIndex[]> UniqueKeys<TIndex>(CancellationToken cancellationToken = default)
+        {
+            return await Execute<TIndex[]>("uniqueKeys", cancellationToken);
+        }
+
         public Collection<T, TKey> Limit(int count)
         {
             var collection = CreateNewColletion();

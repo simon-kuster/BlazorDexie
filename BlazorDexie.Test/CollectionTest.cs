@@ -104,7 +104,7 @@ namespace BlazorDexie.Test
                 new TestItem() { Id = Guid.NewGuid(), Name = "AA" },
                 new TestItem() { Id = Guid.NewGuid(), Name = "BB" },
                 new TestItem() { Id = Guid.NewGuid(), Name = "CC" },
-                new TestItem() { Id = Guid.NewGuid(), Name = "DD" }
+                new TestItem() { Id = Guid.NewGuid(), Name = "CC" }
             };
 
             await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
@@ -115,12 +115,32 @@ namespace BlazorDexie.Test
                 .Keys<string>(TestContext.Current.CancellationToken);
 
             // assert
-            var initialNames = initialItems.Select(i => i.Name).ToList();
-            Assert.Equal(initialItems.Length, names.Length);
-            foreach (var name in names)
+            Assert.Equal(["AA", "BB", "CC", "CC"], names);
+        }
+
+        [Fact]
+        public async Task UniqueKeys()
+        {
+            // arrange
+            await using var db = CreateDb();
+
+            var initialItems = new TestItem[]
             {
-                Assert.Contains(name, initialNames);
-            }
+                new TestItem() { Id = Guid.NewGuid(), Name = "AA" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "BB" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "CC" },
+                new TestItem() { Id = Guid.NewGuid(), Name = "CC" }
+            };
+
+            await db.TestItems.BulkPut(initialItems, TestContext.Current.CancellationToken);
+
+            // act
+            var names = await db.TestItems
+                .OrderBy(nameof(TestItem.Name))
+                .UniqueKeys<string>(TestContext.Current.CancellationToken);
+
+            // assert
+            Assert.Equal(["AA", "BB", "CC"], names);
         }
 
         [Fact]
